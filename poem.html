@@ -1,44 +1,193 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
+<head>
 
-        <meta charset="UTF-8">
-        <meta name="author" content="Starle">
-        <meta name="description" content="這裡是我的個人網站，歡迎大家來訪！">
-        <meta name="keywords" content="Starle, 個人網站, 小說心得, 程式碼">
-        <meta name="revised" content="2026/1/23">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title>Starle的冒險筆記—詩詞推薦</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Starle">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Starle的冒險筆記—詩詞推薦</title>
 
-    </head>
+    <!-- 引入中文字型 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- 定義網頁風格 -->
+    <style>
 
-    <body>
+        /* 全局樣式 */
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            font-family: 'Noto Serif TC', "serif", "PMingLiU", "新細明體";
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 2;
+            background-image: radial-gradient(#2f4f4f 0.4px, transparent 0.8px);
+            background-size: 30px 30px;
+            background-attachment: fixed;
+        }
 
-        <div style="text-align:center;">
 
-            <h1>詩詞推薦</h1>
-            <a href="index.html">返回主頁</a>
+        /* 容器樣式 */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
 
-            <br/><br/><br/><br/>
-            <h2>示兒 — 陸游</h2>
+        /* 標題樣式 */
+        h1 {
+            font-size: 3em;
+            font-weight: 1000;
+            color: #2f4f4f;
+            border-bottom: 3px solid #2f4f4f;
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-bottom: 50px;
+        }
+
+        /* 返回主頁連結樣式 */
+        .back-link {
+            display: block;
+            margin-bottom: 50px;
+            color: #708090;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.5s ease;
+        }
+
+        /* 返回主頁連結懸停效果 */
+        .back-link:hover {
+            color: #2f4f4f;
+            text-decoration: underline;
+        }
+
+        /* 詩詞卡片樣式 */
+        .poem-card {
+            background-color: white;
+            padding: 30px;
+            margin-bottom: 60px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-left: 5px solid #2f4f4f;
+            border-right: 5px solid #2f4f4f;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            animation: fadeInUp 1s ease-out forwards;
+            position: relative;
+        }
+
+        /* 詩詞卡片懸停效果 */
+        .poem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);
+        }
+
+        .poem-card:after {
+            content: "◈";
+            display: block;
+            margin-top: 40px;
+            color: #2f4f4f;
+            opacity: 0.3;
+            font-size: 1.5em;
+        } 
+
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                top: 20px;
+            }
+            to {
+                opacity: 1;
+                top: 0;
+            }
+        }
+
+        /* 詩詞標題樣式 */
+        h2 {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #444;
+        }
+
+        /* 詩詞標題佈局 */
+        .poem-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .poem-title span:not(.divider) {
+            flex: 1;
+        }
+
+        .poem-title .title-text {
+            text-align: right;
+        }
+        
+        .poem-title .author {
+            text-align: left;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .divider {
+            flex: 0 0 45px;
+            height: 1px;
+            background-color: #2f4f4f;
+        }
+        
+
+        /* 詩詞內容樣式 */
+        p {
+            font-size: 1.2em;
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>詩詞推薦</h1>
+        <a href="index.html" class="back-link">← 返回主頁</a>
+
+        <div class="poem-card">
+            <h2 class="poem-title">
+                <span class="title-text">《 示兒 》</span>
+                <span class="divider"></span>
+                <span class="author">&nbsp陸游</span> 
+            </h2>
             <p>
-                死去原知萬事空，但悲不見九州同。
-                <br/>
-                王師北定中原日，家祭無忘告乃翁。
+                死去原知萬事空，但悲不見九州同<br/>
+                王師北定中原日，家祭無忘告乃翁
             </p>
-
-            <br/>
-            <h2>春望 — 杜甫</h2>
-            <p>
-                國破山河在，城春草木深。感時花濺淚，恨別鳥驚心。
-                <br/>
-                烽火連三月，家書抵萬金。白頭搔更短，渾欲不勝簪。
-            </p>
-
         </div>
+
+        <div class="poem-card">
+            <h2 class="poem-title">
+                <span class="title-text">《 春望 》</span>
+                <span class="divider"></span>
+                <span class="author">&nbsp杜甫</span> 
+            </h2>
+            <p>
+                國破山河在，城春草木深<br/>
+                感時花濺淚，恨別鳥驚心<br/>
+                烽火連三月，家書抵萬金<br/>
+                白頭搔更短，渾欲不勝簪
+            </p>
+        </div>
+
+    </div>
         
-        
-    </body>
+</body>
 
 </html>
