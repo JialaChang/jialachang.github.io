@@ -1,0 +1,201 @@
+/* 全局樣式 */
+body {
+    margin: 0;  /* 移除默認邊距 */
+    padding: 0; /* 移除默認內距 */
+    width: 100vw;   /* 設置寬度為視窗寬度 */
+    height: 100vh;  /* 設置高度為視窗高度 */
+    display: flex;  /* 使用彈性盒模型 */
+    align-items: center;    /* 垂直居中 */
+    justify-content: center;    /* 水平居中 */
+    font-family: 'Trebuchet MS', '微軟正黑體', 'Microsoft JhengHei', sans-serif;    /* 設置字體 */
+    overflow: hidden;   /* 隱藏溢出內容 */
+    color: white;   /* 設置文字顏色為白色 */
+    background: #020205;    /* 設置背景顏色 */
+    perspective: 1000px;    /* 設置透視效果 */
+    position: relative;     /* 設置相對定位 */
+}
+
+/* 星雲背景 */
+.nebula {
+    position: fixed;    /* 固定定位 */
+    top: -50%; left: -50%;    /* 擴展到視窗外 */
+    width: 200%; height: 200%;    /* 擴展到視窗外 */
+    /* 星雲漸變背景 */
+    background:
+        radial-gradient(circle at 30% 30%, #7d049b 0%, transparent 50%),    /* 紫色星雲 */
+        radial-gradient(circle at 70% 70%, #0395a8 0%, transparent 50%),    /* 藍色星雲 */
+        radial-gradient(circle at 50% 50%, #15002a 0%, transparent 60%);    /* 深色背景 */
+    filter: blur(60px) contrast(1.2);    /* 模糊和對比度 */
+    mix-blend-mode: screen;    /* 混合模式 */
+    animation: flow 20s linear infinite;    /* 星雲流動動畫 */
+    opacity: 0.7;   /* 設置透明度 */
+    z-index: -3;    /* 設置層級 */
+    pointer-events: none;   /* 禁止鼠標事件 */
+    transition: transform 0.1s ease-out;   /* 平滑過渡效果 */
+}
+
+/* 星雲流動動畫 */
+@keyframes flow {
+    /* 旋轉並放大 */
+    from {transform: rotate(0deg) scale(1);}
+    to {transform: rotate(360deg) scale(1.1);}
+}
+
+/* 星星背景 */
+.stars {
+    position: fixed;    /* 固定定位 */
+    top: 0; left: 0;    /* 頂部和左側對齊 */
+    width: 1.5px; height: 1.5px;    /* 設置寬高 */
+    pointer-events: none;   /* 禁止鼠標事件 */
+    z-index: -2;    /* 設置層級 */
+    animation: twinkle 5s infinite;   /* 星星閃爍動畫 */
+    transition: transform 0.1s ease-out;   /* 平滑過渡效果 */
+}
+
+/* 星星閃爍動畫 */
+@keyframes twinkle {
+    /* 透明度變化 */
+    0%, 100% {opacity: 0.5;}
+    50% {opacity: 1}
+}
+
+/* 流星背景 */
+.shootingstars {
+    position: fixed;    /* 固定定位 */
+    height: 2px;    /* 設置高度 */
+    background: linear-gradient(-45deg, #ffffff, rgba(0, 212, 255, 0));   /* 流星漸變背景 */
+    filter: drop-shadow(0 0 6px #ffffff);   /* 流星光暈效果 */
+    z-index: -1;    /* 設置層級 */
+    pointer-events: none;   /* 禁止鼠標事件 */
+    animation: tail 3s linear infinite, shooting 3s linear infinite;  /* 流星動畫 */
+}
+
+/* 流星尾巴動畫 */
+@keyframes tail {
+    /* 尾巴長度變化 */
+    0% {width: 0;}
+    50% {width: 200px;}
+    100% {width: 350px;}
+}
+
+/* 流星移動動畫 */
+@keyframes shooting {
+    /* 從右上角移動到左下角 */
+    0% {
+        transform: rotate(135deg) translateX(0) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(135deg) translateX(1000px) translateY(0);
+        opacity: 0;
+    }
+}
+
+/* 玻璃面板 */
+.glass-panel {
+    z-index: 10;    /* 設置層級 */
+    position: relative;   /* 設置相對定位 */
+    background: rgba(255, 255, 255, 0.03);  /* 透明背景 */
+    backdrop-filter: blur(15px) saturate(80%);  /* 背景模糊和飽和度 */
+    -webkit-backdrop-filter: blur(15px);    /* Safari支持 */
+    border: 1px solid rgba(255, 255, 255, 0.1);     /* 半透明邊框 */
+    border-radius: 40px;    /* 圓角邊框 */
+    padding: 30px;   /* 內邊距 */
+    width: 85%;     /* 設置寬度 */
+    max-width: 450px;   /* 最大寬度 */
+    text-align: center;    /* 文字居中 */
+    /* 陰影效果 */
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.5),
+        inset 0 0 10px rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;   /* 防止縮小 */
+}
+
+/* 導航項目樣式 */
+.nav-item {
+    display: block;    /* 區塊顯示 */
+    text-decoration: none;  /* 移除下劃線 */
+    color: white;   /* 文字顏色為白色 */
+    font-size: 1.2em;   /* 字體大小 */
+    font-weight: 600;   /* 字體粗細 */
+    margin: 30px;  /* 外邊距 */
+    padding: 12px;  /* 內邊距 */
+    background: rgba(255, 255, 255, 0.05);  /* 半透明背景 */
+    border: 1px solid rgba(255, 255, 255, 0.1);     /* 半透明邊框 */
+    border-radius: 50px;    /* 圓角邊框 */
+    transition: all 0.4s ease;  /* 過渡效果 */
+}
+
+/* 導航項目懸停效果 */
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.2);   /* 更亮的背景 */
+    transform: scale(1.05);  /* 放大效果 */
+    box-shadow: 0 0 20px rgba(165, 216, 255, 0.4);  /* 發光效果 */
+}
+
+/* 網頁主標題樣式 */
+h1 {
+    position: relative;  /* 設置相對定位 */
+    display: inline-block;  /* 行內區塊顯示 */
+    cursor: pointer;    /* 指針樣式 */
+    margin-top: 30px;  /* 頂部外邊距 */
+    margin-bottom: 30px;  /* 底部外邊距 */
+    font-size: 2.5em;   /* 字體大小 */
+    font-weight: 700;   /* 字體粗細 */
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);  /* 過渡效果 */
+}
+
+/* 主標題懸停效果 */
+h1:hover {
+    transform: scale(1.05);  /* 放大效果 */
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.8),
+        0 0 30px rgba(165, 216, 255, 0.6);  /* 發光效果 */
+}
+
+/* 主標題在流星雨期間的強行放大 (加上 .keep-scale 類別) */
+h1.keep-scale {
+    transform: scale(1.05) !important;   /* !important 確保壓過滑鼠移開後的縮小 */
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.8),
+        0 0 30px rgba(165, 216, 255, 0.6)
+        !important;  /* !important 確保壓過滑鼠移開後的取消發光 */
+}
+
+/* 主標題點擊反饋效果 */
+h1.clicked {
+    transform: scale(0.95) !important;  /* 點擊後縮小 */
+}
+
+/* 使用偽元素製作星星符號 (預設隱形) */
+h1::before, h1::after {
+    content: "✧";  /* 星星符號 */
+    position: absolute;  /* 絕對定位 */
+    top: 50%;   /* 垂直居中 -> 頂邊下拉 h1 的 50% */
+    transform: translateY(-50%);    /* 垂直居中 -> 以自身高度往上移動 50% */
+    opacity: 0;           /* 初始隱形 */
+    transition: all 0.5s ease;  /* 過渡效果 */
+
+    background: linear-gradient(135deg, #3de7fd, #dd56ff);  /* 漸變背景 */
+    -webkit-background-clip: text;  /* 背景裁剪到文字上 */
+    background-clip: text;  /* 背景裁剪到文字上 */
+    color: transparent;  /* 文字透明 */
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));  /* 星星光暈效果 */
+}
+
+/* 左邊的星星 */
+h1::before { left: -80px; }
+/* 右邊的星星 */
+h1::after { right: -80px; }
+
+/* 當標題被加上 .active 類別時，星星顯現並發光 */
+h1.active::before, h1.active::after {
+    opacity: 1;  /* 顯示星星 */
+    transform: translateY(-50%) scale(1.2);  /* 放大星星 */
+}
+
+/* 網頁副標題樣式 */
+.subtitle {
+    font-size: 1.2em;   /* 字體大小 */
+    font-weight: 400;   /* 字體粗細 */
+    margin-bottom: 30px;    /* 底部外邊距 */
+}
