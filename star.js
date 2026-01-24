@@ -113,7 +113,7 @@ title.addEventListener('click', () => {
     title.classList.add('keep-scale');  // 讓標題保持放大
 
     // 噴發流星雨
-    const meteorDuration = 2000; // 流星雨噴發過程 2 秒
+    const meteorDuration = 3000; // 流星雨噴發過程 3 秒
     for (let i = 0; i < 20; i++) {  // 20 顆流星
         let randomDelay = Math.random() * meteorDuration;
         setTimeout(() => { createShootingStar(); }, randomDelay);

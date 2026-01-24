@@ -174,8 +174,12 @@ h1::before, h1::after {
     transform: translateY(-50%);    /* 垂直居中 -> 以自身高度往上移動 50% */
     opacity: 0;           /* 初始隱形 */
     transition: all 0.5s ease;  /* 過渡效果 */
-    color: #a5d8ff;  /* 星星顏色 */
-    text-shadow: 0 0 10px #a5d8ff;  /* 星星發光效果 */
+
+    background: linear-gradient(135deg, #3de7fd, #dd56ff);  /* 漸變背景 */
+    -webkit-background-clip: text;  /* 背景裁剪到文字上 */
+    background-clip: text;  /* 背景裁剪到文字上 */
+    color: transparent;  /* 文字透明 */
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));  /* 星星光暈效果 */
 }
 
 /* 左邊的星星 */
