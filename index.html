@@ -3,43 +3,47 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="author" content="Starle">
-    <meta name="description" content="這裡是我的個人網站，歡迎大家來訪！">
-    <meta name="keywords" content="Starle, 個人網站, 小說心得, 程式碼">
-    <meta name="revised" content="2026/1/23">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Starle的冒險筆記</title>
+    <!-- 網頁標籤 -->
+    <meta charset="UTF-8">  <!-- 字元編碼 -->
+    <meta name="author" content="Starle">   <!-- 作者資訊 -->
+    <meta name="description" content="這裡是我的個人網站，歡迎大家來訪！">  <!-- 網頁描述 -->
+    <meta name="keywords" content="Starle, 個人網站, 小說心得, 程式碼"> <!-- 關鍵字 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">    <!-- 響應式設計 -->
+    <meta name="revised" content="2026/1/23">   <!-- 最後修改日期 -->
+    <title>Starle OS</title> <!-- 網頁標題 -->
+
+    <!-- 引入網頁風格 -->
+    <link rel="stylesheet" href="index.css">    
 
 </head>
 
 <body>
 
-    <div style="text-align:center;">
+    <div class="nebula"></div>  <!-- 星雲背景 -->
+    <div class="stars"></div>   <!-- 星星背景 -->
 
-        <br/><br/>
-        <h1>歡迎來到Starle的個人網站</h1>
-        <br/>
-        <p>這裡記錄了我的日常生活、學習心得以及其他有趣的內容。</p>
-        <p>歡迎你們的到來！</p>
+    <div class="glass-panel">   <!-- 玻璃面板 -->
+
+        <header>
+
+            <h1>Starle OS</h1>  <!-- 網頁主標題 -->
+            <div class="subtitle">✧ 歡迎你們的到來！ ✧<br/><br/>✧ 我會努力更新內容的 ✧</div>  <!-- 網頁副標題 -->
+
+        </header>
+
+        <div class="nav-list">  <!-- 導覽列 -->
+
+            <a href="code.html" class="nav-item">程式學習</a>
+            <a href="poem.html" class="nav-item">詩詞推薦</a>
+            <a href="novel.html" class="nav-item">小說心得</a>
+            <a href="music.html" class="nav-item">音樂分享</a>
+
+        </div>
 
     </div>
 
-    <div style="text-align:center;">
-
-        <br/>
-        <h2 >網站導航</h2>
-        <br/>
-        <a href="code.html">程式學習</a>
-        <br/><br/>
-        <a href="poem.html">詩詞推薦</a>
-        <br/><br/>
-        <a href="novel.html">小說心得</a>
-
-
-    </div>
-        
-
+    <script src="star.js" ></script> <!-- 引入星星動畫腳本 -->
+    
 </body>
 
 </html>
