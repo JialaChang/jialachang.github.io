@@ -1,78 +1,81 @@
 /* 全局樣式 */
 body {
-    margin: 0;  /* 移除默認邊距 */
-    min-height: 100vh;  /* 設置最小高度為視窗高度 */
-    background-color: #f4f7f6;  /* 淺色背景 */
-    color: #333;    /* 深色文字 */
-    font-family: 'Noto Serif TC', "PMingLiU", "標楷體", cursive;    /* 設置字體 */
-    padding: 40px 20px; /* 內邊距 */
-    line-height: 2;  /* 行距 */
-    background-image: radial-gradient(#2f4f4f 0.4px, transparent 0.8px);    /* 背景網格 */
-    background-size: 30px 30px;     /* 網格大小 */
-    background-attachment: fixed;   /* 固定背景 */
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #333;
+    font-family: 'Noto Serif TC', "PMingLiU", "標楷體", cursive;
+    background-color: #f4f7f6;
+    background-image: radial-gradient(#2f4f4f 0.4px, transparent 0.8px);
+    background-size: 30px 30px;
+    background-attachment: fixed;
 }
 
-
-/* 容器樣式 */
-.container {
-    max-width: 600px;   /* 最大寬度 */
-    margin: 0 auto;  /* 水平居中 */
-    text-align: center;  /* 文字居中 */
-}
 
 /* 標題樣式 */
 h1 {
-    font-size: 3em;     /* 字體大小 */
-    font-weight: 1000;  /* 字體粗細 */
-    color: #2f4f4f;  /* 深色文字 */
-    border-bottom: 3px solid #2f4f4f;   /* 底部邊框 */
-    display: inline-block;  /* 行內元素 */
-    padding-bottom: 5px;    /* 底部內邊距 */
-    margin-bottom: 50px;    /* 底部外邊距 */
+    font-size: 4rem;
+    font-weight: 1000;
+    letter-spacing: 0.5rem;
+    color: #2f4f4f;
+    border-bottom: 0.25rem solid #2f4f4f;
+    display: inline-block;  /* 讓底線寬度符合文字寬度 */
+    padding-bottom: 0.3rem;
+    margin: 5rem;
 }
+
 
 /* 返回主頁連結樣式 */
 .back-link {
-    display: block;     /* 區塊元素 */
-    margin-bottom: 50px;    /* 底部外邊距 */
-    color: #708090;     /* 淺色文字 */
-    text-decoration: none;  /* 移除下劃線 */
-    font-size: 1em;     /* 字體大小 */
-    transition: color 0.5s ease;    /* 顏色過渡效果 */
+    font-size: 1rem;
+    text-decoration: none;    /* 移除下劃線 */
+    color: #708090;
+    margin-bottom: 5rem;
+    transition: color 0.5s ease;
 }
+
 
 /* 返回主頁連結懸停效果 */
 .back-link:hover {
-    color: #2f4f4f;     /* 深色文字 */
-    text-decoration: underline; /* 添加下劃線 */
+    color: #2f4f4f;
+    text-decoration: underline;
 }
+
 
 /* 詩詞卡片樣式 */
 .poem-card {
-    background-color: white;    /* 白色背景 */
-    padding: 30px;  /* 內邊距 */
-    margin-bottom: 60px;    /* 底部外邊距 */
-    border-radius: 8px;   /* 圓角邊框 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);  /* 陰影效果 */
-    border-left: 5px solid #2f4f4f;     /* 左側邊框 */
-    border-right: 5px solid #2f4f4f;    /* 右側邊框 */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;  /* 懸停效果 */
-    animation: fadeInUp 1s ease-out forwards;   /* 淡入上升動畫 */
-    position: relative;   /* 相對定位 */
+    position: relative;
+    width: 30vw;
+    padding: 5rem;
+    margin-bottom: 5rem;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-left: 5px solid #2f4f4f;
+    border-right: 5px solid #2f4f4f;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: fadeInUp 1s ease-out forwards;
 }
+
 
 /* 詩詞卡片懸停效果 */
 .poem-card:hover {
-    transform: translateY(-5px);    /* 向上移動 */
-    box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);  /* 更深的陰影 */
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);
 }
+
 
 /* 詩詞卡片上升動畫 */
 @keyframes fadeInUp {
     /* 從透明到不透明，從下到上 */
     from {
         opacity: 0;
-        top: 20px;
+        top: 1.5rem;
     }
     to {
         opacity: 1;
@@ -80,59 +83,67 @@ h1 {
     }
 }
 
+
 /* 詩詞卡片裝飾符號 */
 .poem-card:after {
-    content: "◈";   /* 裝飾符號 */
-    display: block;   /* 區塊元素 */
-    margin-top: 40px;   /* 頂部外邊距 */
-    color: #2f4f4f;   /* 深色文字 */
-    opacity: 0.3;   /* 透明度 */
-    font-size: 1.5em;   /* 字體大小 */
+    content: "◈";
+    display: block;
+    margin-top: 2rem;
+    color: #2f4f4f;
+    opacity: 0.5;
+    font-size: 1.5em;
 } 
+
 
 /* 詩詞標題樣式 */
 h2 {
-    font-size: 1.5em;
+    font-size: 1.7rem;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 2rem;
     color: #444;
 }
 
+
 /* 詩詞標題佈局 */
 .poem-title {
-    display: flex;  /* 彈性佈局 */
-    align-items: center;    /* 垂直居中 */
-    justify-content: center;    /* 水平居中 */
-    gap: 15px;  /* 元素間距 */
-    width: 100%;    /* 寬度100% */
+    display: flex;
+    letter-spacing: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
+
 
 .poem-title span:not(.divider) {
     flex: 1;    /* 平分空間 */
 }
 
+
 .poem-title .title-text {
     text-align: right;  /* 文字向右對齊 */
 }
 
+
 .poem-title .author {
     text-align: left;   /* 文字向左對齊 */
-    font-size: 0.9em;   /* 字體大小 */
-    opacity: 0.8;   /* 透明度 */
+    font-size: 0.9em;
+    opacity: 0.8;
 }
+
 
 .divider {
     flex: 0 0 45px; /* 固定寬度 */
     height: 1px;    /* 高度1px -> 劃一條線 */
-    background-color: #2f4f4f;  /* 分隔線顏色 */
+    background-color: #2f4f4f;
 }
 
 
 /* 詩詞內容樣式 */
 p {
-    font-size: 1.2em;   /* 字體大小 */
-    font-weight: 400;   /* 字體粗細 */
-    letter-spacing: 3px;    /* 文字間距 */
-    margin-top: 20px;   /* 頂部外邊距 */
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.3rem;
+    margin-top: 1.5rem;
+    line-height: 4rem;
 }
 

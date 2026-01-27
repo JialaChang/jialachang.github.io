@@ -57,14 +57,14 @@ function createShootingStar() {
     sstar.className = 'shootingstars'
 
     // 隨機決定起點
-    let startTop = Math.random() * window.innerHeight * 0.5;    // 只出現在螢幕上半部
-    let startLeft = Math.random() * window.innerWidth + 200;    // 稍微偏右
+    let startTop = Math.random() * 50;    // 只出現在螢幕上半部
+    let startLeft = Math.random() * 90 + 10;    // 稍微偏右
 
-    sstar.style.top = `${startTop}px`;
-    sstar.style.left = `${startLeft}px`;
+    sstar.style.top = `${startTop}vh`;
+    sstar.style.left = `${startLeft}vw`;
 
     // 隨機動畫速度
-    let duration = Math.random() * 2 + 1;
+    let duration = Math.random() * 2 + 1.5;
     sstar.style.animationDuration = `${duration}s`;
 
     // 把這顆流星塞回網頁 body 裡面
