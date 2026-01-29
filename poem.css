@@ -1,0 +1,150 @@
+/* 全局樣式 */
+body {
+    width: 100vw; height: 100vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #333;
+    font-family: 'Noto Serif TC', "PMingLiU", "標楷體", cursive;
+    background-color: #f4f7f6;
+    /* 加入背景點點 */
+    background-image: radial-gradient(#2f4f4f 0.4px, transparent 0.8px);
+    background-size: 30px 30px;
+    background-attachment: fixed;
+}
+
+
+/* 標題樣式 */
+h1 {
+    font-size: 4rem;
+    font-weight: 1000;
+    letter-spacing: 0.5rem;
+    color: #2f4f4f;
+    border-bottom: 0.25rem solid #2f4f4f;
+    display: inline-block;  /* 讓底線寬度符合文字寬度 */
+    padding-bottom: 0.3rem;
+    margin: 5rem;
+}
+
+
+/* 返回主頁連結樣式 */
+.back-link {
+    font-size: 1rem;
+    text-decoration: none;    /* 移除下劃線 */
+    color: #708090;
+    margin-bottom: 5rem;
+    transition: color 0.5s ease;
+}
+
+
+/* 返回主頁連結懸停效果 */
+.back-link:hover {
+    color: #2f4f4f;
+    text-decoration: underline;
+}
+
+
+/* 詩詞卡片樣式 */
+.poem-card {
+    position: relative;
+    width: 30vw;
+    padding: 5rem;
+    margin-bottom: 5rem;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-left: 5px solid #2f4f4f;
+    border-right: 5px solid #2f4f4f;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+
+/* 詩詞卡片懸停效果 */
+.poem-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);
+}
+
+
+/* 詩詞卡片上升動畫 */
+@keyframes fadeInUp {
+    /* 從透明到不透明，從下到上 */
+    from {
+        opacity: 0;
+        top: 1.5rem;
+    }
+    to {
+        opacity: 1;
+        top: 0;
+    }
+}
+
+
+/* 詩詞卡片裝飾符號 */
+.poem-card:after {
+    content: "◈";
+    display: block;
+    margin-top: 2rem;
+    color: #2f4f4f;
+    opacity: 0.5;
+    font-size: 1.5em;
+} 
+
+
+/* 詩詞標題樣式 */
+h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #444;
+}
+
+
+/* 詩詞標題佈局 */
+.poem-title {
+    display: flex;
+    letter-spacing: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.poem-title span:not(.divider) {
+    flex: 1;    /* 平分空間 */
+}
+
+
+.poem-title .title-text {
+    text-align: right;  /* 文字向右對齊 */
+}
+
+
+.poem-title .author {
+    text-align: left;   /* 文字向左對齊 */
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+.divider {
+    flex: 0 0 45px; /* 固定寬度 */
+    height: 1px;    /* 高度1px -> 劃一條線 */
+    background-color: #2f4f4f;
+}
+
+
+/* 詩詞內容樣式 */
+p {
+    font-size: 1.3rem;
+    font-weight: 400;
+    letter-spacing: 0.3rem;
+    margin-top: 1.5rem;
+    line-height: 4rem;
+}
+
