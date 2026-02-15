@@ -9,27 +9,15 @@ body {
     overflow: hidden;
     font-size: 16px;
     font-family: 'Segoe UI', Roboto, sans-serif;
+    color: white;
     background-color: rgba(14, 17, 22, 0.95);
-}
-
-
-/* 標題樣式 */
-h1 {
-    font-size: 4rem;
-    font-weight: 1000;
-    color: rgb(0, 246, 255);
-    letter-spacing: 0.5rem;
-    padding-bottom: 0.3rem;
-    margin: 5rem;
-    filter: drop-shadow(-6px 6px 0px rgba(194, 40, 250, 0.8));
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
 }
 
 
 /* 紫光容器 */
 .purple-light {
     overflow: hidden;
-    z-index: 1;
+    z-index: -2;
     pointer-events: none;
 }
 
@@ -41,6 +29,7 @@ h1 {
     right: 0;
     width: 20vw;
     height: 100vh;
+    opacity: 0.8;
     /* 左右紫線 */
     border-left: 2px solid rgb(187, 0, 255);
     border-right: 2px solid rgb(187, 0, 255);
@@ -54,5 +43,134 @@ h1 {
     /* 上下透明漸變 */
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
-    transform: skew(-25deg);    /* 斜切效果 */
+    transform: skew(-30deg);    /* 斜切效果 */
 }
+
+
+/* 左中紫光 */
+.purple-light-2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18vw;
+    height: 80vh;
+    /* 左右紫線 */
+    border-left: 2px solid rgb(187, 0, 255);
+    border-right: 2px solid rgb(187, 0, 255);
+    /* 漸層背景 */
+    background: linear-gradient(
+        90deg,
+        rgba(187, 0, 255, 0) 0%, 
+        rgba(187, 0, 255, 0.05) 50%, 
+        rgba(187, 0, 255, 0.15) 100%
+        );
+    /* 上下透明漸變 */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+    transform: skew(50deg);    /* 斜切效果 */
+}
+
+
+/* 左上紫光 */
+.purple-light-3 {
+    position: absolute;
+    top: 0;
+    left: 15vw;
+    width: 10vw;
+    height: 60vh;
+    opacity: 0.5;
+    /* 左右紫線 */
+    border-left: 2px solid rgb(187, 0, 255);
+    border-right: 2px solid rgb(187, 0, 255);
+    /* 漸層背景 */
+    background: linear-gradient(
+        90deg,
+        rgba(187, 0, 255, 0) 0%, 
+        rgba(187, 0, 255, 0.05) 50%, 
+        rgba(187, 0, 255, 0.15) 100%
+        );
+    /* 上下透明漸變 */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+    transform: skew(-30deg);    /* 斜切效果 */
+}
+
+
+/* 藍線 SVG 容器 */
+.svg-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    filter: drop-shadow(0 0 3px rgb(0, 246, 255));
+}
+
+
+/* 藍線路徑樣式 */
+.blue-line {
+    fill: none;    /* 無填充 */
+    stroke: rgb(0, 246, 255);   /* 線條顏色 */
+    stroke-width: 1.5;    /* 線條寬度 */
+    opacity: 0.8;
+}
+
+
+/* 終端機介面 */
+.terminal-panel {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+    max-width: 1000px;
+    height: 70%;
+    max-height: 650px;
+    padding: 0;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border: 0.5rem solid rgba(255, 255, 255, 0.2);
+    border-radius: 2rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+
+/* 頂部工具列 */
+.title-bar {
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+
+/* 視窗按鈕容器 */
+.control-container {
+    display: flex;
+    gap: 0.7rem;
+}
+
+
+/* 視窗按鈕 */
+.control-button {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid rgba(0, 255, 255, 0.5);
+}
+
+
+/* 各按鈕顏色 */
+.min-button {background: rgba(60, 255, 0, 0.1);;}
+.max-button { background: rgba(0, 220, 255, 0.1); }
+.close-button { background: rgba(255, 0, 255, 0.2); border-color: #ff00ff; }

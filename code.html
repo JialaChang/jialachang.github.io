@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Starle OS — 程式學習</title>
 
-    <!-- 引入網頁風格 -->
+    <!-- 引入CSS -->
     <link rel="stylesheet" href="code.css">
 
 </head>
@@ -22,25 +22,37 @@
         <div class="purple-light-3"></div>	<!-- 左上 -->
 
     </div>
-    
-    <header>	<!-- 標題 -->
 
-        <h1>程式學習</h1>
-        <a href="index.html" class="back-link">← 返回主頁</a>
+    <svg class="svg-lines" viewBox="0 0 1920 1080" preserveAspectRatio="none">    <!-- 藍線 SVG -->
 
-    </header>
+        <!-- 個別畫出藍線路徑 -->
+        <path class="blue-line" d="M -200 80 L 100 80 L 160 20 L 350 20 L 410 80 L 850 80 L 890 40 L 1000 40 L 1100 -60" />
+        <path class="blue-line" d="M 1300 100 L 1500 100 L 1550 150 L 1700 150 L 1800 50 L 2200 50" />
+        <path class="blue-line" d="M -200 280 L 800 280" />
+        <path class="blue-line" d="M 600 400 L 1200 400 L 1320 280 L 2200 280" />
+        <path class="blue-line" d="M -200 900 L 500 900 L 625 1025 L 1000 1025 L 1125 900 L 2200 900" />
 
-    <main class="main">
+    </svg>
 
-        <div class="card">
+    <main class="terminal-panel">
 
-            <h3>C 語言</h3>
-            <p>指標</p>
+        <div class="title-bar">
+
+            <span class="terminal-name">>> terminal : C:/ProgramLearning</span>
+
+            <div class="control-container">
+
+                <span class="control-button min-button"></span>
+                <span class="control-button max-button"></span>
+                <span class="control-button close-button"></span>
+
+            </div>
 
         </div>
 
     </main>
         
+    <script src="code.js" ></script> <!-- 引入JavaScript -->
         
 </body>
 
