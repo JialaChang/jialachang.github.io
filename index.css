@@ -98,6 +98,9 @@ body {
     /* 從右上角移動到左下角 */
     0% {
         transform: rotate(135deg) translateX(0);
+        opacity: 0;
+    }
+    10% {
         opacity: 1;
     }
     100% {
@@ -106,19 +109,27 @@ body {
     }
 }
 
+/* 容器 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100vw;
+    height: 100vh;
+}
+
 
 /* 玻璃面板 */
 .glass-panel {
-    z-index: 10;
-    position: fixed;
+    position: relative;
     text-align: center;
-    top: 55%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;     /* 預設寬度 -> 手機 */
-    max-width: 450px;   /* 最大寬度 -> 電腦 */
-    height: 60%;    /* 預設高度 -> 手機 */
-    max-height: 550px;  /* 最大高度 -> 電腦 */
-    padding: clamp(1.5rem, 5vw, 2.5rem);    /* 動態內邊距 -> clamp(min, default, max) */
+    margin: 0 auto;
+    width: 80%;     /* 預設寬度 */
+    max-width: 450px;   /* 最大寬度 */
+    height: fit-content;    /* 預設高度 */
+    padding: clamp(2rem, 2.5vw, 3rem);    /* 動態內邊距 -> clamp(min, default, max) */
     border-radius: 2.5rem;
     background: rgba(255, 255, 255, 0.03);  /* 透明背景 */
     -webkit-backdrop-filter: blur(16px) saturate(80%);  /* 支援舊版 WebKit 瀏覽器 */
@@ -135,8 +146,7 @@ body {
 /* 玻璃面板隱藏 */
 .glass-panel.hidden {
     opacity: 0;
-    transform: translate(-50%, 100%) scale(0.9);    /* X 要 -50% 是因為原本的會被覆蓋 */
-    pointer-events: none;
+    transform: translateY(100%) scale(0.9);
 }
 
 
@@ -170,7 +180,6 @@ h1 {
     position: relative;
     display: inline-block;  /* 行內區塊顯示 */
     cursor: pointer;    /* 鼠標改成指針樣式 */
-    margin: 2rem 2rem;
     font-size: clamp(1.8rem, 8vw, 3rem);
     font-weight: 1000;
     letter-spacing: 2px;
@@ -246,11 +255,7 @@ h1.active::before, h1.active::after {
 
 /* 時鐘樣式 */
 .clock {
-    z-index: 10;
-    position: fixed;
-    top: 7.5vh;
-    left: 50vw;
-    transform: translateX(-50%);
+    position: relative;
     font-family: 'Courier New', monospace;
     font-weight: 1000;
     color: rgba(255, 255, 255, 0.7);
@@ -277,7 +282,7 @@ h1.active::before, h1.active::after {
 
 /* 時鐘展開樣式 */
 .clock.expanded {
-    top: 30vh;
+    transform: translateY(40vh);
 }
 
 
