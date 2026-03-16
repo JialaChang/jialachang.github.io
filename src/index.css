@@ -6,7 +6,7 @@
     --text-secondary: rgba(255, 255, 255, 0.8);
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --glow--blue: rgba(165, 216, 255, 0.65);
+    --glow-blue: rgba(165, 216, 255, 0.65);
 }
 
 /* 全局樣式 */
@@ -95,7 +95,7 @@ body {
     justify-content: center;
     width: 100vw;
     height: 100vh;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 /* 玻璃面板 */
@@ -112,7 +112,7 @@ body {
     background: var(--glass-bg);
     -webkit-backdrop-filter: blur(16px) saturate(80%);
     backdrop-filter: blur(16px) saturate(80%);  /* 背景模糊和飽和度 */
-    border: 1px solid --glass-border;
+    border: 1px solid var(--glass-border);
     text-align: center;
     /* 陰影效果 */
     box-shadow: 0 0 80px rgba(0, 0, 0, 0.5),
@@ -163,7 +163,7 @@ h1 {
     font-size: clamp(1.8rem, 8vw, 3rem);
     font-weight: 1000;
     letter-spacing: 2px;
-    text-shadow: 0 0 20px var(--glow--blue);
+    text-shadow: 0 0 20px var(--glow-blue);
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -173,7 +173,7 @@ h1:hover, h1.keep-scale {
     transform: scale(1.05) !important;
     text-shadow: 
         0 0 15px var(--text-secondary),
-        0 0 30px var(--glow--blue)
+        0 0 30px var(--glow-blue)
         !important;  /* !important 確保壓過滑鼠移開後的取消發光 */
 }
 
@@ -184,11 +184,11 @@ h1.clicked {
 
 /* 使用偽元素製作星星符號 (預設隱形) */
 h1::before, h1::after {
+    content: "✧";
     position: absolute;
     top: 50%;                                                   /* 垂直居中 -> 頂邊下拉 h1 的 50% */
     transform: translateY(-50%);                                /* 垂直居中 -> 以自身高度往上移動 50% */
 
-    content: "✧";
     color: transparent;
     opacity: 0;
     
@@ -200,8 +200,8 @@ h1::before, h1::after {
 }
 
 /* 左右邊的星星 */
-h1::before {left: -3rem;}
-h1::after {right: -3rem;}
+h1::before {left: -4rem;}
+h1::after {right: -4rem;}
 
 /* 星星加上 .active 類別時 */
 h1.active::before, h1.active::after {
@@ -255,7 +255,7 @@ h1.active::before, h1.active::after {
 .clock.expanded .time {
     font-size: clamp(3.5rem, 15vw, 8rem);
     color: var(--text-secondary);
-    text-shadow: 0 0 20px var(--glow--blue);
+    text-shadow: 0 0 20px var(--glow-blue);
 }
 
 /* 時鐘日期展開樣式 */
@@ -264,6 +264,55 @@ h1.active::before, h1.active::after {
     opacity: 1;
     font-size: clamp(1.2rem, 5vw, 2rem);
     margin: 2.5rem;
+}
+
+/* 三體圖案大圓 */
+.three-body {
+    display: flex;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+
+    bottom: 2rem;
+    left: 2rem;
+    width: 100px;
+    height: 100px;
+
+    opacity: 0.5;
+    cursor: pointer;
+    border: 2px solid var(--text-secondary);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+/* 三體圖案中圓 */
+.three-body::before {
+    content: "";
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+
+    width: 50%;
+    height: 50%;
+    left: -2%;
+    border: 2px solid var(--text-secondary);
+    border-radius: 50%;
+}
+
+/* 三體圖案小圓 */
+.three-body::after {
+    content: "";
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+
+    width: 25%;
+    height: 25%;
+    left: 23%;
+    border: 2px solid var(--text-secondary);
+    border-radius: 50%;
 }
 
 

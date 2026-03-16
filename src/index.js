@@ -140,7 +140,7 @@ function updateClock() {
     timeDisplay.innerHTML = `${hours}:${minutes}:${seconds}`;
 
     // 格式化日期
-    const year = now.getFullYear();
+    const year = now.getFullYear() - 1911;  // 中華民國萬歲
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
 

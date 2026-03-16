@@ -85,9 +85,9 @@ h1 {
 
 /* 詩詞卡片裝飾符號 */
 .poem-card:after {
+    content: "◈";
     display: block;
     margin-top: 2rem;
-    content: "◈";
     color: var(--text-main);
     opacity: 0.5;
     font-size: 1.5em;
