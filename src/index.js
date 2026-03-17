@@ -9,7 +9,7 @@ const dateDisplay = document.querySelector('.date');
 
 // ===== 2. 星空隨機生成 =====
 let starsArray = [];    // 儲存星星的座標
-const numStars = 150;   // 星星的數量
+const numStars = 100;   // 星星的數量
 
 for (let i = 0; i < numStars; i++) {
 
@@ -29,21 +29,29 @@ stars.style.boxShadow = starsArray.join(', ');
 
 
 // ===== 3.背景視差移動 =====
-function handleParallax(clientX, clientY){   // 當滑鼠移動時觸發
+let lock = false;                            // 頻率鎖
+function handleParallax(clientX, clientY) {  // 當滑鼠移動時觸發
+    if (!lock) {
+        // 使用 requestAnimationFrame 將頻率鎖定在螢幕刷新率
+        window.requestAnimationFrame(() => {
+            // 計算滑鼠位置相對於螢幕中心的偏移量
+            // clientX 是滑鼠橫向位置，window.innerWidth / 2 是螢幕中心點
+            let mouseX = clientX - window.innerWidth / 2;
+            let mouseY = clientY - window.innerHeight / 2;
 
-    // 計算滑鼠位置相對於螢幕中心的偏移量
-    // clientX 是滑鼠橫向位置，window.innerWidth / 2 是螢幕中心點
-    let mouseX = clientX - window.innerWidth / 2;
-    let mouseY = clientY - window.innerHeight / 2;
+            // 設定移動係數
+            const starSpeed = 0.02;
+            const nebulaSpeed = 0.01;
 
-    // 設定移動係數
-    const starSpeed = 0.02;
-    const nebulaSpeed = 0.01;
+            // 透過 transform 改變位置，使用反向移動 (-mouseX)
+            if (stars) stars.style.transform = `translate3d(${-mouseX * starSpeed}px, ${-mouseY * starSpeed}px, 0)`;
+            if (nebula) nebula.style.transform = `translate3d(${-mouseX * nebulaSpeed}px, ${-mouseY * nebulaSpeed}px, 0)`;
 
-    // 透過 transform 改變位置，使用反向移動 (-mouseX)
-    if (stars) stars.style.transform = `translate(${-mouseX * starSpeed}px, ${-mouseY * starSpeed}px)`;
-    if (nebula) nebula.style.transform = `translate(${-mouseX * nebulaSpeed}px, ${-mouseY * nebulaSpeed}px)`;
-
+            lock = false;
+        });
+        lock = true;
+    }
+    
 }
 
 window.addEventListener('pointermove', (e) => handleParallax(e.clientX, e.clientY))
@@ -110,7 +118,8 @@ title.addEventListener('click', () => {     // 點擊標題時觸發
 
     // 噴發流星雨
     const meteorDuration = 5000;
-    for (let i = 0; i < 100; i++) {
+    const meteorNums = 50
+    for (let i = 0; i < meteorNums; i++) {
         let randomDelay = Math.random() * meteorDuration;
         setTimeout(() => { createShootingStar(); }, randomDelay);
     }

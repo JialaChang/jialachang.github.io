@@ -94,7 +94,7 @@ h1 {
 } 
 
 /* 詩詞標題樣式 */
-h2 {
+.poem-card h2 {
     margin-bottom: 2rem;
     font-size: 1.7rem;
     font-weight: 700;
@@ -124,14 +124,14 @@ h2 {
     opacity: 0.8;
 }
 
-.divider {
+.poem-title .divider {
     flex: 0 0 45px; /* 固定寬度 */
     height: 1px;    /* 高度1px -> 劃一條線 */
     background-color: var(--text-main);
 }
 
 /* 詩詞內容樣式 */
-p {
+.poem-card p {
     margin-top: 1.5rem;
     font-size: 1.3rem;
     font-weight: 400;

@@ -41,7 +41,6 @@ body {
 /* 讓紫光容器裡的 div 都繼承 */
 .purple-light > div {
     position: absolute;
-    mix-blend-mode: screen;
     filter: blur(1px);
     /* 左右紫線 */
     border-left: var(--purple-line);
@@ -106,7 +105,6 @@ body {
     stroke: var(--blue-line);  /* 線條顏色 */
     stroke-width: 1.5;         /* 線條寬度 */
     opacity: 0.8;
-    mix-blend-mode: screen;
     filter: blur(1px);
 }
 
@@ -126,15 +124,15 @@ body {
     
     overflow: hidden;
     background: rgba(255, 255, 255, 0.03);
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     border: 0.5rem solid rgba(255, 255, 255, 0.2);
     border-radius: 2rem;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 255, 0.1);
 }
 
 /* 頂部工具列 */
-.title-bar {
+.terminal-panel .title-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -147,13 +145,13 @@ body {
 }
 
 /* 視窗按鈕容器 */
-.control-container {
+.terminal-panel .control-container {
     display: flex;
     gap: 0.7rem;
 }
 
 /* 視窗按鈕 */
-.control-button {
+.terminal-panel .control-button {
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
@@ -162,6 +160,6 @@ body {
 }
 
 /* 各按鈕顏色 */
-.min-button {background: rgba(60, 255, 0, 0.3); border-color: rgba(60, 255, 0, 0.5);}
-.max-button {background: rgba(0, 220, 255, 0.3); border-color: rgba(0, 220, 255, 0.5);}
-.close-button {background: rgba(255, 0, 255, 0.3); border-color: rgba(255, 0, 255, 0.5);}
+.terminal-panel .min-button {background: rgba(60, 255, 0, 0.3); border-color: rgba(60, 255, 0, 0.5);}
+.terminal-panel .max-button {background: rgba(0, 220, 255, 0.3); border-color: rgba(0, 220, 255, 0.5);}
+.terminal-panel .close-button {background: rgba(255, 0, 255, 0.3); border-color: rgba(255, 0, 255, 0.5);}
