@@ -328,7 +328,7 @@ header .subtitle {
     border: 2px solid var(--text-secondary);
     border-radius: 50%;
 
-    animation: three-body-rotate 5s linear infinite reverse;
+    animation: three-body-rotate 3s linear infinite reverse;
 }
 
 /* 三體圖案小圓 */
