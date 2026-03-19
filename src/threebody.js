@@ -21,37 +21,37 @@ renderer.domElement.style.display = 'block';
 // 將渲染器的 <canvas> 標籤放回 <body>
 document.body.appendChild(renderer.domElement);
 // 相機位置
-camera.position.set(0, 0, 500);
+camera.position.set(0, 0, 3);
 
 
 // ====== 2. 物理參數 ======
 // 萬有引力常數
-const Gconst = 10000;
+const Gconst = 1;
 // 時間步長
-const dt = 0.005;
+const dt = 0.003;
 
 // 星體參數
-const star1Mass = 200; 
-const star1Pos = [20, 0, 0];
-const star1Vel = [0, 111.8, 0];
+const star1Mass = 1; 
+const star1Pos = [-1.2, 0, 0.3];
+const star1Vel = [0.4, 0.2, 0];
 
-const star2Mass = 200;
-const star2Pos = [-20, 0, 0];
-const star2Vel = [0, -111.8, 0];
+const star2Mass = 1;
+const star2Pos = [1.2, 0.5, 0];
+const star2Vel = [0, -0.2, -0.3];
 
-const star3Mass = 500;
-const star3Pos = [400, 0, 0];
-const star3Vel = [0, 70.7, 0];
+const star3Mass = 1;
+const star3Pos = [0.5, 0, -2];
+const star3Vel = [0.2, 0, 0.1];
 
 // 最大軌跡數
-const pointsMax = 50000;
+const pointsMax = 5000;
 
 
 // ====== 3. 星體類別 ======
 class Star {
 
     // 建構子
-    constructor(mass ,color, position, velocity) {
+    constructor(color, mass ,position, velocity) {
         this.mass = mass;
         // 擴展運算子 ... => 將矩陣轉成獨立數字
         this.velocity = new THREE.Vector3(...velocity);
@@ -62,7 +62,7 @@ class Star {
 
         // 建立 3D 球體
         // 球體骨架 (半徑, 水平分段數, 垂直分段數)
-        const starGeo = new THREE.SphereGeometry(8, 32, 32);
+        const starGeo = new THREE.SphereGeometry(0.05, 32, 32);
         // 球體皮膚
         const starMat = new THREE.MeshPhongMaterial({color: color, emissive: color, emissiveIntensity: 5});
         // 融合骨架和皮膚並設定位置
@@ -113,15 +113,16 @@ class Star {
 
 // ====== 4. 初始化星體 ======
 const stars = [
-    new Star(star1Mass, 0xff4444, star1Pos, star1Vel),  // 紅星
-    new Star(star2Mass, 0x44ff44, star2Pos, star2Vel),  // 綠星
-    new Star(star3Mass, 0x4444ff, star3Pos, star3Vel)   // 藍星
+    new Star(0xff4444, star1Mass, star1Pos, star1Vel),  // 紅星
+    new Star(0x44ff44, star2Mass, star2Pos, star2Vel),  // 綠星
+    new Star(0x4444ff, star3Mass, star3Pos, star3Vel)   // 藍星
 ];
 
 
 // ====== 5. 動畫與物理計算的迴圈 ======
 const vector = new THREE.Vector3();  // 計算位移矢量
 const accG = new THREE.Vector3();  // 計算加速度
+
 function animate() {
     // 在下一次繪製螢幕時會執行這個函式 => 無限迴圈
     requestAnimationFrame(animate);
@@ -135,11 +136,11 @@ function animate() {
             if (i == j) return;
 
             // 位移矢量 r⭢
-            vector.subVectors(b.mesh.position, a.mesh.position);
+            vector.subVectors(b.currPos, a.currPos);
             // 距離平方 r²
             const DistSq = vector.lengthSq();
             // 軟化常數平方 ε² => 避免距離太小時數值溢出
-            const epsilonSq = 0.00001;
+            const epsilonSq = 1e-12;
 
             // 重力加速度 a = GM / r² = (GM / r²) * r^ = (GM / r²) * (r⭢ / r) = (GM / r³) * r⭢
             // 先算出 1 / (r² + ε²) ^ 1.5 ≈ 1 / r³
@@ -152,12 +153,44 @@ function animate() {
 
     // 等全部都算好再套用
     stars.forEach(s => s.update(s.nextAcc));
+
+    // 計算質心 Rcm⭢ = Σ(m * r⭢) / Σm
+    let totalMass = 0;
+    let centerMassPos = new THREE.Vector3(0, 0, 0);
+    stars.forEach(s => {
+        totalMass += s.mass
+        centerMassPos.add(s.currPos.clone().multiplyScalar(s.mass));
+    });
+    centerMassPos.divideScalar(totalMass)
+    // 質心修正
+    stars.forEach(s => {
+        s.currPos.sub(centerMassPos);
+        s.oldPos.sub(centerMassPos);
+        s.mesh.position.copy(s.currPos);
+    });
+
     // 讓滑鼠能拖曳視角
     controls.update();
     // 執行渲染
     renderer.render(scene, camera);
 }
 
+// 執行質心修正
+let totalM = 0;
+let cMPos = new THREE.Vector3();
+stars.forEach(s => {
+    totalM += s.mass;
+    cMPos.add(s.currPos.clone().multiplyScalar(s.mass));
+});
+cMPos.divideScalar(totalM);
+stars.forEach(s => {
+    s.currPos.sub(cMPos);
+    s.oldPos.sub(cMPos);
+    s.mesh.position.copy(s.currPos);
+});
+// 把軌跡清空
+stars.forEach(s => s.points = []);
+// 開始動畫
 animate();
 
 

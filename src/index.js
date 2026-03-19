@@ -5,6 +5,7 @@ const title = document.querySelector('h1');
 const clock = document.querySelector('.clock');
 const timeDisplay = document.querySelector('.time');
 const dateDisplay = document.querySelector('.date');
+const threeBody = document.querySelector('.three-body')
 
 
 // ===== 2. 星空隨機生成 =====
@@ -171,3 +172,9 @@ clock.addEventListener('click', () => {
 
 setInterval(updateClock, 1000);     // 每秒更新一次時鐘
 updateClock();
+
+
+// ===== 6. 點擊三體圖案跳轉 =====
+threeBody.addEventListener('click', () => {
+    window.location.href = "./src/threebody.html";
+});

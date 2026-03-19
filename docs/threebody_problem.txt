@@ -1,0 +1,21 @@
+<== Figure-8 8字型
+
+// 萬有引力常數
+const Gconst = 1;
+// 時間步長
+const dt = 0.005;
+
+// 星體參數
+const star1Mass = 1; 
+const star1Pos = [0.970004, -0.243087, 0];
+const star1Vel = [0.466203, 0.432365, 0];
+
+const star2Mass = 1;
+const star2Pos = [-0.970004, 0.243087, 0];
+const star2Vel = [0.466203, 0.432365, 0];
+
+const star3Mass = 1;
+const star3Pos = [0, 0, 0];
+const star3Vel = [-0.932406, -0.86473, 0];
+
+==>
