@@ -28,7 +28,25 @@ document.body.appendChild(renderer.domElement);
 camera.position.set(0, 0, 3);
 
 
-// ====== 2. 物理參數 ======
+// ====== 2. UI 交互 ======
+const pauseBtn = document.querySelector('.pause-button');
+const pauseIcon = pauseBtn?.querySelector('.material-icons');
+const settingBtn = document.querySelector('.setting-button');
+const homeBtn = document.querySelector('.home-button');
+
+let isPause = false;
+
+// 按鈕交互
+pauseBtn?.addEventListener('click', () => {
+    isPause = !isPause;
+    pauseIcon.textContent = isPause ? 'play_arrow' : 'pause';
+});
+
+homeBtn?.addEventListener('click', () => {
+    window.location.href = "../index.html";
+});
+
+// ====== 3. 物理參數 ======
 // 萬有引力常數
 const Gconst = 1;
 // 時間步長
@@ -51,7 +69,7 @@ const star3Vel = [0.2, 0, 0.1];
 const pointsMax = 2000;
 
 
-// ====== 3. 添加背景星星 ======
+// ====== 4. 添加背景星星 ======
 const maxStarNum = 5000;  // 星星數量
 const createBackgroundStars = () => {
     // 儲存星星座標
@@ -91,7 +109,7 @@ const createBackgroundStars = () => {
 createBackgroundStars();
 
 
-// ====== 4. 星體建構及更新加速度 ======
+// ====== 5. 星體建構及更新加速度 ======
 class Star {
 
     // 建構子
@@ -160,7 +178,7 @@ class Star {
 }
 
 
-// ====== 5. 初始化星體 ======
+// ====== 6. 初始化星體 ======
 const stars = [
     new Star(0xff6600, star1Mass, star1Pos, star1Vel),  // 橘星
     new Star(0x66ccff, star2Mass, star2Pos, star2Vel),  // 藍星
@@ -168,7 +186,7 @@ const stars = [
 ];
 
 
-// ====== 6. 設置後期處理 ======
+// ====== 7. 設置後期處理 ======
 const renderScene = new RenderPass(scene, camera);
 const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
@@ -182,7 +200,7 @@ composer.addPass(renderScene);
 composer.addPass(bloomPass);
 
 
-// ====== 7. 動畫與物理計算的迴圈 ======
+// ====== 8. 動畫與物理計算的迴圈 ======
 const vector = new THREE.Vector3();  // 計算位移矢量
 const accG = new THREE.Vector3();    // 計算加速度
 
@@ -190,48 +208,50 @@ function animate() {
     // 在下一次繪製螢幕時會執行這個函式 => 無限迴圈
     requestAnimationFrame(animate);
 
-    // 計算星體間的萬有引力
-    stars.forEach((a, i) => {
-        if (!a.nextAcc) a.nextAcc = new THREE.Vector3();
-        a.nextAcc.set(0, 0, 0)
+    if (!isPause) {
+        // 計算星體間的萬有引力
+        stars.forEach((a, i) => {
+            if (!a.nextAcc) a.nextAcc = new THREE.Vector3();
+            a.nextAcc.set(0, 0, 0)
 
-        stars.forEach((b, j) => {
-            if (i == j) return;
+            stars.forEach((b, j) => {
+                if (i == j) return;
 
-            // 位移矢量 r⭢
-            vector.subVectors(b.currPos, a.currPos);
-            // 距離平方 r²
-            const DistSq = vector.lengthSq();
-            // 軟化常數平方 ε² => 避免距離太小時數值溢出
-            const epsilonSq = 1e-12;
+                // 位移矢量 r⭢
+                vector.subVectors(b.currPos, a.currPos);
+                // 距離平方 r²
+                const DistSq = vector.lengthSq();
+                // 軟化常數平方 ε² => 避免距離太小時數值溢出
+                const epsilonSq = 1e-12;
 
-            // 重力加速度 a = GM / r² = (GM / r²) * r^ = (GM / r²) * (r⭢ / r) = (GM / r³) * r⭢
-            // 先算出 1 / (r² + ε²) ^ 1.5 ≈ 1 / r³
-            const invDistCube = 1 / Math.pow(DistSq + epsilonSq, 1.5);
-            // 乘上 GMr⭢
-            accG.copy(vector).multiplyScalar(Gconst * b.mass * invDistCube);
-            a.nextAcc.add(accG);
+                // 重力加速度 a = GM / r² = (GM / r²) * r^ = (GM / r²) * (r⭢ / r) = (GM / r³) * r⭢
+                // 先算出 1 / (r² + ε²) ^ 1.5 ≈ 1 / r³
+                const invDistCube = 1 / Math.pow(DistSq + epsilonSq, 1.5);
+                // 乘上 GMr⭢
+                accG.copy(vector).multiplyScalar(Gconst * b.mass * invDistCube);
+                a.nextAcc.add(accG);
+            });
         });
-    });
 
-    // 等全部都算好再套用
-    stars.forEach(s => s.update(s.nextAcc));
+        // 等全部都算好再套用
+        stars.forEach(s => s.update(s.nextAcc));
 
-    // 計算質心 Rcm⭢ = Σ(m * r⭢) / Σm
-    let totalMass = 0;
-    let centerMassPos = new THREE.Vector3(0, 0, 0);
-    stars.forEach(s => {
-        totalMass += s.mass
-        centerMassPos.add(s.currPos.clone().multiplyScalar(s.mass));
-    });
-    centerMassPos.divideScalar(totalMass)
-    // 質心修正
-    stars.forEach(s => {
-        s.currPos.sub(centerMassPos);
-        s.oldPos.sub(centerMassPos);
-        s.mesh.position.copy(s.currPos);
-    });
-
+        // 計算質心 Rcm⭢ = Σ(m * r⭢) / Σm
+        let totalMass = 0;
+        let centerMassPos = new THREE.Vector3(0, 0, 0);
+        stars.forEach(s => {
+            totalMass += s.mass
+            centerMassPos.add(s.currPos.clone().multiplyScalar(s.mass));
+        });
+        centerMassPos.divideScalar(totalMass)
+        // 質心修正
+        stars.forEach(s => {
+            s.currPos.sub(centerMassPos);
+            s.oldPos.sub(centerMassPos);
+            s.mesh.position.copy(s.currPos);
+        });
+    }
+    
     // 讓滑鼠能拖曳視角
     controls.update();
     // 執行渲染
@@ -257,7 +277,7 @@ stars.forEach(s => s.points = []);
 animate();
 
 
-// --- 8. 處理視窗縮放 ---
+// ====== 9. 處理視窗縮放 =====
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -266,4 +286,3 @@ window.addEventListener('resize', () => {
     composer.setSize(window.innerWidth, window.innerHeight);
     bloomPass.resolution.set(window.innerWidth, window.innerHeight);
 });
-

@@ -13,6 +13,8 @@ body {
     align-items: center;
     justify-content: center;
 
+    margin: 0;
+    padding: 0;
     width: 100vw;
     height: auto;
 
@@ -125,7 +127,7 @@ body {
     overflow: hidden;
     background: rgba(255, 255, 255, 0.03);
     -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(16px);
     border: 0.5rem solid rgba(255, 255, 255, 0.2);
     border-radius: 2rem;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 255, 0.1);
@@ -145,13 +147,13 @@ body {
 }
 
 /* 視窗按鈕容器 */
-.terminal-panel .control-container {
+.title-bar .control-container {
     display: flex;
     gap: 0.7rem;
 }
 
 /* 視窗按鈕 */
-.terminal-panel .control-button {
+.control-container > span {
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
@@ -160,6 +162,6 @@ body {
 }
 
 /* 各按鈕顏色 */
-.terminal-panel .min-button {background: rgba(60, 255, 0, 0.3); border-color: rgba(60, 255, 0, 0.5);}
-.terminal-panel .max-button {background: rgba(0, 220, 255, 0.3); border-color: rgba(0, 220, 255, 0.5);}
-.terminal-panel .close-button {background: rgba(255, 0, 255, 0.3); border-color: rgba(255, 0, 255, 0.5);}
+.control-container .min-button {background: rgba(60, 255, 0, 0.3); border-color: rgba(60, 255, 0, 0.5);}
+.control-container .max-button {background: rgba(0, 220, 255, 0.3); border-color: rgba(0, 220, 255, 0.5);}
+.control-container .close-button {background: rgba(255, 0, 255, 0.3); border-color: rgba(255, 0, 255, 0.5);}

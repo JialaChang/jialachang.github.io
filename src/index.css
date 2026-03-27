@@ -11,7 +11,6 @@
 
 /* 全局樣式 */
 body {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,12 +182,12 @@ header h1 {
 
 /* 主標題懸停效果 */
 header h1:hover, header h1.keep-scale {
-    /* !important 確保壓過滑鼠移開後的縮小，確保流星雨期間的強行放大*/
+    /* !important 確保壓過滑鼠移開 */
     transform: scale(1.05) !important;
     text-shadow: 
         0 0 15px var(--text-secondary),
         0 0 30px var(--glow-blue)
-        !important;  /* !important 確保壓過滑鼠移開後的取消發光 */
+        !important;
 }
 
 /* 主標題點擊反饋效果 */
@@ -298,6 +297,11 @@ header .subtitle {
     will-change: transform;
     backface-visibility: hidden;
     transform: translate3d(0, 0, 0);
+    transition: all 0.5s ease;
+}
+
+.three-body:hover {
+    opacity: 0.8;
 }
 
 /* 三體圖案大圓 */
@@ -388,4 +392,19 @@ header .subtitle {
 @keyframes three-body-rotate {
     from {transform: rotate(0deg);}
     to {transform: rotate(360deg);}
+}
+
+
+/* ===== 5. 響應式設計 ====== */
+
+/* 當螢幕寬度小於 768px 或高度小於 650px 時觸發 */
+@media screen and (max-width: 768px), screen and (max-height: 650px) {
+
+    .three-body {
+        width: 60px;
+        height: 60px;
+        bottom: 1rem;
+        left: 1rem;
+    }
+
 }

@@ -1,0 +1,57 @@
+/* ===== 1. 基礎設定 ===== */
+
+/* 顏色設定 */
+
+/* 全局樣式 */
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+    color: white;
+    font-size: 16px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* ===== 2. 佈局與元件 ====== */
+
+/* 按鈕容器 */
+.control-container {
+    z-index: 1;
+    position: fixed;
+    top: 2rem;
+    right: 3rem;
+    display: flex;
+    gap: 2.5rem;
+}
+
+/* 按鈕 */
+.control-container > span {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.control-container > span:hover {
+    opacity: 1;
+    scale: 1.1;
+}
+
+.control-container > span:active {
+    scale: 0.9;
+}

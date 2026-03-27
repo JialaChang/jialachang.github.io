@@ -111,7 +111,7 @@ sstarLoop();
 
 
 // ===== 5. 標題點擊產生流星雨 =====
-title.addEventListener('click', () => {     // 點擊標題時觸發
+title?.addEventListener('click', () => {     // 點擊標題時觸發
 
     // 觸發標題旁的星星符號 (切換 class)
     title.classList.add('active');
@@ -163,7 +163,7 @@ function updateClock() {
 }
 
 // 偵測點擊變換時鐘場景 (切換 class)
-clock.addEventListener('click', () => {
+clock?.addEventListener('click', () => {
 
     clock.classList.toggle('expanded');
     document.querySelector('.glass-panel').classList.toggle('hidden');
@@ -175,6 +175,6 @@ updateClock();
 
 
 // ===== 6. 點擊三體圖案跳轉 =====
-threeBody.addEventListener('click', () => {
+threeBody?.addEventListener('click', () => {
     window.location.href = "./src/threebody.html";
 });

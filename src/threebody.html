@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Starle OS — 三體動畫</title>
 
+    <!-- 引入 CSS -->
+    <link rel="stylesheet" href="./threebody.css">
+
+    <!-- 引入 Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <!-- 引入 Three.js -->
     <script type="importmap">
         {
@@ -21,6 +27,23 @@
 </head>
 
 <body>
+
+    <!-- 按鈕控制 -->
+    <div class="control-container">
+
+        <span class="pause-button">
+            <span class="material-icons">pause</span>
+        </span>
+
+        <span class="setting-button">
+            <span class="material-icons">settings</span>
+        </span>
+
+        <span class="home-button">
+            <span class="material-icons">home</span>
+        </span>
+
+    </div>
 
     <!-- 引入 JavaScript -->
     <script type="module" src="./threebody.js"></script>
