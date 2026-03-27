@@ -9,19 +9,19 @@ const threeBody = document.querySelector('.three-body')
 
 
 // ===== 2. 星空隨機生成 =====
-let starsArray = [];    // 儲存星星的座標
-const numStars = 100;   // 星星的數量
+const numStars = 100;
+const starsArray = new Array(numStars);
 
 for (let i = 0; i < numStars; i++) {
 
-    let x = Math.random() * 100;   // 隨機生成 X 座標
-    let y = Math.random() * 100;  // 隨機生成 Y 座標
-    let size = Math.random() * 1 + 0.3;  // 隨機生成星星大小
-    let opacity = Math.random() * 0.5 + 0.5; // 隨機生成星星透明度
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const size = Math.random() * 1 + 0.3;
+    const opacity = Math.random() * 0.5 + 0.5;
 
     // 將每一顆星星組合成 CSS 的 box-shadow 格式
-    // 格式：x偏移 y偏移 模糊半徑(越小越亮) 擴散半徑 顏色
-    starsArray.push(`${x}vw ${y}vh ${size}px 0px rgba(255, 255, 255, ${opacity})`);
+    // 格式 : x偏移 y偏移 模糊半徑(越小越亮) 擴散半徑 顏色
+    starsArray[i] = (`${x}vw ${y}vh ${size}px 0px rgba(255, 255, 255, ${opacity})`);
 
 }
 
@@ -44,7 +44,7 @@ function handleParallax(clientX, clientY) {  // 當滑鼠移動時觸發
             const starSpeed = 0.02;
             const nebulaSpeed = 0.01;
 
-            // 透過 transform 改變位置，使用反向移動 (-mouseX)
+            // 透過 transform 改變位置並反向移動 (-mouseX)
             if (stars) stars.style.transform = `translate3d(${-mouseX * starSpeed}px, ${-mouseY * starSpeed}px, 0)`;
             if (nebula) nebula.style.transform = `translate3d(${-mouseX * nebulaSpeed}px, ${-mouseY * nebulaSpeed}px, 0)`;
 
@@ -66,8 +66,8 @@ function createShootingStar() {
     sstar.className = 'shootingstars'
 
     // 隨機決定起點
-    let startTop = Math.random() * 50;    // 只出現在螢幕上半部
-    let startLeft = Math.random() * 90 + 10;    // 稍微偏右
+    let startTop = Math.random() * 50;        // 只出現在螢幕上半部
+    let startLeft = Math.random() * 90 + 10;  // 稍微偏右
 
     sstar.style.top = `${startTop}vh`;
     sstar.style.left = `${startLeft}vw`;
@@ -87,7 +87,7 @@ function createShootingStar() {
 
 function sstarLoop() {
 
-    const amount = Math.floor(Math.random() * 3) + 1;   // 每次生成 1~3 顆流星
+    const amount = Math.floor(Math.random() * 3) + 1;
 
     for (let i = 0; i < amount; i++) {
 
@@ -101,9 +101,9 @@ function sstarLoop() {
 
     }
 
-    let delay = Math.random() * 2000 + 4000;    // 下一次生成的延遲時間
+    let delay = Math.random() * 2000 + 4000;  // 下一次生成的延遲時間
 
-    setTimeout(sstarLoop, delay);   // 遞迴呼叫自己
+    setTimeout(sstarLoop, delay);  // 遞迴呼叫自己
 
 }
 
@@ -111,7 +111,7 @@ sstarLoop();
 
 
 // ===== 5. 標題點擊產生流星雨 =====
-title?.addEventListener('click', () => {     // 點擊標題時觸發
+title?.addEventListener('click', () => {
 
     // 觸發標題旁的星星符號 (切換 class)
     title.classList.add('active');
@@ -139,9 +139,11 @@ title?.addEventListener('click', () => {     // 點擊標題時觸發
 
 
 //  ===== 6. 實時時鐘顯示 =====
+const weekDaysArr = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
 function updateClock() {
     
-    const now = new Date();     // 取得目前時間
+    const now = new Date();  // 取得目前時間
 
     // 格式化時間
     const hours = String(now.getHours()).padStart(2, '0');
@@ -153,9 +155,7 @@ function updateClock() {
     const year = now.getFullYear() - 1911;  // 中華民國萬歲
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-
     // getDate() 取出來的是數字 0~6
-    const weekDaysArr = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     const weekDays = weekDaysArr[now.getDay()];
 
     dateDisplay.innerHTML = `${year}.${month}.${day}&nbsp;&nbsp;${weekDays}`;
@@ -170,7 +170,8 @@ clock?.addEventListener('click', () => {
 
 })
 
-setInterval(updateClock, 1000);     // 每秒更新一次時鐘
+// 每秒更新一次時鐘
+setInterval(updateClock, 1000);
 updateClock();
 
 

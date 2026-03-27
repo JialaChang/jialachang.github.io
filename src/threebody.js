@@ -66,7 +66,7 @@ const star3Pos = [0.5, 0, -2];
 const star3Vel = [0.2, 0, 0.1];
 
 // 最大軌跡數
-const pointsMax = 2000;
+const pointsMax = 5000;
 
 
 // ====== 4. 添加背景星星 ======
@@ -110,6 +110,10 @@ createBackgroundStars();
 
 
 // ====== 5. 星體建構及更新加速度 ======
+// 建立全域變數，避免一直 new 新物件
+const tmpPos = new THREE.Vector3();
+const capPos = new THREE.Vector3();
+
 class Star {
 
     // 建構子
@@ -121,6 +125,8 @@ class Star {
         this.currPos = new THREE.Vector3(...position);
         // 前一幀的位置 => S₀ = S - v * dt
         this.oldPos = this.currPos.clone().sub(this.velocity.clone().multiplyScalar(dt))
+        // 預先宣告變數
+        this.nextAcc = new THREE.Vector3(0, 0, 0);
 
         // 建立 3D 球體
         // 球體骨架 (半徑, 水平分段數, 垂直分段數)
@@ -156,13 +162,13 @@ class Star {
 
     // 更新速度與位置
     update(acc) {
-        // 暫存位置 => 用 clone() 才不會修改原來數值
-        const tmpPos = this.currPos.clone();
+        // 暫存位置
+        tmpPos.copy(this.currPos);
         // ∆x = x_now - x_prev
-        const posCap = this.currPos.clone().sub(this.oldPos);
+        capPos.subVectors(this.currPos, this.oldPos);
         // Verlet 公式: x_next = 2x_now - x_prev + a * dt²
         // => x_now + (x_now - x_prev) + a * dt²
-        this.currPos.add(posCap).add(acc.clone().multiplyScalar(dt * dt));
+        this.currPos.add(capPos).add(acc.multiplyScalar(dt * dt));
         // 更新舊位置
         this.oldPos.copy(tmpPos);
         // 更新星體位置
@@ -201,8 +207,10 @@ composer.addPass(bloomPass);
 
 
 // ====== 8. 動畫與物理計算的迴圈 ======
-const vector = new THREE.Vector3();  // 計算位移矢量
-const accG = new THREE.Vector3();    // 計算加速度
+const vector = new THREE.Vector3();         // 位移矢量
+const accG = new THREE.Vector3();           // 加速度
+const centerMassPos = new THREE.Vector3();  // 質心位置
+const tmpCMCalc = new THREE.Vector3();      // 質心計算暫存
 
 function animate() {
     // 在下一次繪製螢幕時會執行這個函式 => 無限迴圈
@@ -211,9 +219,6 @@ function animate() {
     if (!isPause) {
         // 計算星體間的萬有引力
         stars.forEach((a, i) => {
-            if (!a.nextAcc) a.nextAcc = new THREE.Vector3();
-            a.nextAcc.set(0, 0, 0)
-
             stars.forEach((b, j) => {
                 if (i == j) return;
 
@@ -238,10 +243,11 @@ function animate() {
 
         // 計算質心 Rcm⭢ = Σ(m * r⭢) / Σm
         let totalMass = 0;
-        let centerMassPos = new THREE.Vector3(0, 0, 0);
+        centerMassPos.set(0, 0, 0);
         stars.forEach(s => {
-            totalMass += s.mass
-            centerMassPos.add(s.currPos.clone().multiplyScalar(s.mass));
+            totalMass += s.mass;
+            tmpCMCalc.copy(s.currPos).multiplyScalar(s.mass);
+            centerMassPos.add(tmpCMCalc);
         });
         centerMassPos.divideScalar(totalMass)
         // 質心修正
@@ -259,16 +265,17 @@ function animate() {
 }
 
 // 執行質心修正
-let totalM = 0;
-let cMPos = new THREE.Vector3();
+let totalMass = 0;
+centerMassPos.set(0, 0, 0);
 stars.forEach(s => {
-    totalM += s.mass;
-    cMPos.add(s.currPos.clone().multiplyScalar(s.mass));
+    totalMass += s.mass;
+    tmpCMCalc.copy(s.currPos).multiplyScalar(s.mass);
+    centerMassPos.add(tmpCMCalc);
 });
-cMPos.divideScalar(totalM);
+centerMassPos.divideScalar(totalMass);
 stars.forEach(s => {
-    s.currPos.sub(cMPos);
-    s.oldPos.sub(cMPos);
+    s.currPos.sub(centerMassPos);
+    s.oldPos.sub(centerMassPos);
     s.mesh.position.copy(s.currPos);
 });
 // 把軌跡清空

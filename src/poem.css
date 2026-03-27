@@ -84,7 +84,7 @@ h1 {
 }
 
 /* 詩詞卡片裝飾符號 */
-.poem-card:after {
+.poem-card::after {
     content: "◈";
     display: block;
     margin-top: 2rem;
@@ -147,10 +147,10 @@ h1 {
     /* 從透明到不透明，從下到上 */
     from {
         opacity: 0;
-        top: 1.5rem;
+        transform: translateY(1.5rem);;
     }
     to {
         opacity: 1;
-        top: 0;
+        transform: translateY(0);;
     }
 }
