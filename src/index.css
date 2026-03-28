@@ -21,7 +21,7 @@ body {
     height: 100vh;
 
     overflow: hidden;
-    background: #020205de;
+    background: #020205d0;
     perspective: 1000px;  /* 設置透視效果 */
 
     font-size: 16px;      /* 基本字體大小 */
@@ -51,7 +51,7 @@ body {
     background:
         radial-gradient(circle at 30% 30%, #7d049b 0%, transparent 50%),  /* 紫色星雲 */
         radial-gradient(circle at 70% 70%, #0395a8 0%, transparent 50%),  /* 藍色星雲 */
-        radial-gradient(circle at 50% 50%, #15002a 0%, transparent 80%);  /* 深色背景 */
+        radial-gradient(circle at 50% 50%, #15002a 0%, transparent 50%);  /* 深色背景 */
     filter: contrast(1.2);
     mix-blend-mode: screen;
     opacity: 0.7;
@@ -126,7 +126,7 @@ body {
     border: 1px solid var(--glass-border);
     text-align: center;
     /* 陰影效果 */
-    box-shadow: 0 0 80px rgba(0, 0, 0, 0.5),
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4),
         inset 0 0 10px rgba(255, 255, 255, 0.05);
     transition: all 1s cubic-bezier(0.34, 1.25, 0.64, 1);
 

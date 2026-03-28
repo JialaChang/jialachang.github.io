@@ -33,40 +33,70 @@ const pauseBtn = document.querySelector('.pause-button');
 const pauseIcon = pauseBtn?.querySelector('.material-icons');
 const settingBtn = document.querySelector('.setting-button');
 const homeBtn = document.querySelector('.home-button');
+const settingPanel = document.querySelector('.setting-panel')
+const valueBtn = document.querySelector('.value-button');
+const answerBtn = document.querySelector('.answer-button');
+const analyzeBtn = document.querySelector('.analyze-button');
 
 let isPause = false;
 
-// 按鈕交互
+// 頂部按鈕交互
 pauseBtn?.addEventListener('click', () => {
     isPause = !isPause;
     pauseIcon.textContent = isPause ? 'play_arrow' : 'pause';
+});
+
+settingBtn?.addEventListener('click', () => {
+    settingPanel.classList.toggle('show')
 });
 
 homeBtn?.addEventListener('click', () => {
     window.location.href = "../index.html";
 });
 
+// 面板按鈕交互
+valueBtn?.addEventListener('click', () => {
+    valueBtn.classList.add('show');
+    answerBtn.classList.remove('show');
+    analyzeBtn.classList.remove('show');
+});
+
+answerBtn?.addEventListener('click', () => {
+    answerBtn.classList.add('show');
+    valueBtn.classList.remove('show');
+    analyzeBtn.classList.remove('show');
+});
+
+analyzeBtn?.addEventListener('click', () => {
+    analyzeBtn.classList.add('show');
+    valueBtn.classList.remove('show');
+    answerBtn.classList.remove('show');
+});
+
+
 // ====== 3. 物理參數 ======
 // 萬有引力常數
 const Gconst = 1;
 // 時間步長
-const dt = 0.003;
+const dt = 0.005;
+// 軟化係數
+const epsilon = 1e-6;
 
 // 星體參數
-const star1Mass = 1; 
-const star1Pos = [-1.2, 0, 0.3];
-const star1Vel = [0.4, 0.2, 0];
+const star1Mass = 1.0;
+const star1Pos = [-1, 0, 0];
+const star1Vel = [0.505639, 0.289239, 0.00634784];
 
-const star2Mass = 1;
-const star2Pos = [1.2, 0.5, 0];
-const star2Vel = [0, -0.2, -0.3];
+const star2Mass = 1.0;
+const star2Pos = [1, 0, 0];
+const star2Vel = [0.505639, 0.289239, -0.00634784];
 
-const star3Mass = 1;
-const star3Pos = [0.5, 0, -2];
-const star3Vel = [0.2, 0, 0.1];
+const star3Mass = 1.1;
+const star3Pos = [0, 0, 0.617173];
+const star3Vel = [-0.919344, -0.525889, 0];
 
 // 最大軌跡數
-const pointsMax = 5000;
+const pointsMax = 1000;
 
 
 // ====== 4. 添加背景星星 ======
@@ -137,6 +167,7 @@ class Star {
             emissive: color,
             emissiveIntensity: 2.5,
             transparent: true,
+            depthWrite: true,
             alphaTest: 0.9,
         });
         // 融合骨架和皮膚並設定位置
@@ -152,7 +183,8 @@ class Star {
         const lineMat = new THREE.LineBasicMaterial({
             color: color,
             transparent: true,
-            opacity: 0.8
+            opacity: 0.8,
+            depthWrite: true
         });
         this.line = new THREE.Line(this.lineGeo, lineMat);
         scene.add(this.line);
@@ -219,6 +251,9 @@ function animate() {
     if (!isPause) {
         // 計算星體間的萬有引力
         stars.forEach((a, i) => {
+
+            a.nextAcc.set(0, 0, 0);
+
             stars.forEach((b, j) => {
                 if (i == j) return;
 
@@ -227,7 +262,7 @@ function animate() {
                 // 距離平方 r²
                 const DistSq = vector.lengthSq();
                 // 軟化常數平方 ε² => 避免距離太小時數值溢出
-                const epsilonSq = 1e-12;
+                const epsilonSq = epsilon * epsilon;
 
                 // 重力加速度 a = GM / r² = (GM / r²) * r^ = (GM / r²) * (r⭢ / r) = (GM / r³) * r⭢
                 // 先算出 1 / (r² + ε²) ^ 1.5 ≈ 1 / r³
@@ -236,6 +271,7 @@ function animate() {
                 accG.copy(vector).multiplyScalar(Gconst * b.mass * invDistCube);
                 a.nextAcc.add(accG);
             });
+
         });
 
         // 等全部都算好再套用

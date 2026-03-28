@@ -1,21 +1,110 @@
-<== Figure-8 8字型
-
-// 萬有引力常數
-const Gconst = 1;
-// 時間步長
-const dt = 0.005;
-
-// 星體參數
+Figure-8 8字型
+==========
 const star1Mass = 1; 
-const star1Pos = [0.970004, -0.243087, 0];
-const star1Vel = [0.466203, 0.432365, 0];
+const star1Pos = [0.97000436, -0.24308753, 0];
+const star1Vel = [0.466203685, 0.43236573, 0];
 
 const star2Mass = 1;
-const star2Pos = [-0.970004, 0.243087, 0];
-const star2Vel = [0.466203, 0.432365, 0];
+const star2Pos = [-0.97000436, 0.24308753, 0];
+const star2Vel = [0.466203685, 0.43236573, 0];
 
 const star3Mass = 1;
 const star3Pos = [0, 0, 0];
-const star3Vel = [-0.932406, -0.86473, 0];
+const star3Vel = [-0.93240737, -0.86473146, 0];
+==========
 
-==>
+
+拉格朗日等邊三角形
+==========
+const star1Mass = 1; 
+const star1Pos = [1, 0, 0];
+const star1Vel = [0, 0.759836, 0];
+
+const star2Mass = 1;
+const star2Pos = [-0.5, 0.866025, 0];
+const star2Vel = [-0.658037, -0.379918, 0];
+
+const star3Mass = 1;
+const star3Pos = [-0.5, -0.866025, 0];
+const star3Vel = [0.658037, -0.379918, 0];
+==========
+
+
+正交階層系統
+==========
+const star1Mass = 1; 
+const star1Pos = [2.666667, 0, 0.5];
+const star1Vel = [0, 0.911231, 0];
+
+const star2Mass = 1;
+const star2Pos = [2.666667, 0, -0.5];
+const star2Vel = [0, -0.502983, 0];
+
+const star3Mass = 1;
+const star3Pos = [-5.333333, 0, 0];
+const star3Vel = [0, -0.408248, 0];
+==========
+
+
+翻轉八字
+==========
+const star1Mass = 1; 
+const star1Pos = [0.97000436, -0.1718888, -0.1718888];
+const star1Vel = [0.466203685, 0.3057287, 0.3057287];
+
+const star2Mass = 1;
+const star2Pos = [-0.97000436, 0.1718888, 0.1718888];
+const star2Vel = [0.466203685, 0.3057287, 0.3057287];
+
+const star3Mass = 1;
+const star3Pos = [0, 0, 0];
+const star3Vel = [-0.93240737, -0.6114574, -0.6114574];
+==========
+
+
+垂直牽引雙星
+==========
+const star1Mass = 1; 
+const star1Pos = [1.333333, 0.5, 0];
+const star1Vel = [-0.707107, 0, 0.288675];
+
+const star2Mass = 1;
+const star2Pos = [1.333333, -0.5, 0];
+const star2Vel = [0.707107, 0, 0.288675];
+
+const star3Mass = 1;
+const star3Pos = [-2.666667, 0, 0];
+const star3Vel = [0, 0, -0.577350];
+==========
+
+
+2022-NA-3body_Table3(b)
+==========
+const star1Mass = 0.5312;
+const star1Pos = [-0.97138, 0, 0];
+const star1Vel = [0, -1.37584, 0];
+
+const star2Mass = 2.2837;
+const star2Pos = [1, 0, 0];
+const star2Vel = [0, -0.34528, 0];
+
+const star3Mass = 1;
+const star3Pos = [0, 0, 0];
+const star3Vel = [0, 1.51936, 0];
+==========
+
+O_26(1.1)
+==========
+const star1Mass = 1.0;
+const star1Pos = [-1, 0, 0];
+const star1Vel = [0.505639, 0.289239, 0.00634784];
+
+const star2Mass = 1.0;
+const star2Pos = [1, 0, 0];
+const star2Vel = [0.505639, 0.289239, -0.00634784];
+
+const star3Mass = 1.1;
+const star3Pos = [0, 0, 0.617173];
+const star3Vel = [-0.919344, -0.525889, 0];
+==========
+
