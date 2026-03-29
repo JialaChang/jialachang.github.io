@@ -96,7 +96,7 @@ const star3Pos = [0, 0, 0.617173];
 const star3Vel = [-0.919344, -0.525889, 0];
 
 // 最大軌跡數
-const pointsMax = 1000;
+const pointsMax = 3000;
 
 
 // ====== 4. 添加背景星星 ======
