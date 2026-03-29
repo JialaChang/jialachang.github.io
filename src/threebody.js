@@ -96,7 +96,7 @@ const star3Pos = [0, 0, 0.617173];
 const star3Vel = [-0.919344, -0.525889, 0];
 
 // 最大軌跡數
-const pointsMax = 3000;
+const pointsMax = 1000;
 
 
 // ====== 4. 添加背景星星 ======
@@ -148,6 +148,7 @@ class Star {
 
     // 建構子
     constructor(color, mass ,position, velocity) {
+        this.lineColor = new THREE.Color(color);
         this.mass = mass;
         // 擴展運算子 ... => 將矩陣轉成獨立數字
         this.velocity = new THREE.Vector3(...velocity);
@@ -155,8 +156,11 @@ class Star {
         this.currPos = new THREE.Vector3(...position);
         // 前一幀的位置 => S₀ = S - v * dt
         this.oldPos = this.currPos.clone().sub(this.velocity.clone().multiplyScalar(dt))
-        // 預先宣告變數
+        // 下一幀的加速度
         this.nextAcc = new THREE.Vector3(0, 0, 0);
+        // 儲存軌跡顏色的陣列
+        this.colorArr = new Float32Array(pointsMax * 3);
+        this.colorArr.fill(1.0);
 
         // 建立 3D 球體
         // 球體骨架 (半徑, 水平分段數, 垂直分段數)
@@ -180,20 +184,24 @@ class Star {
         this.points = [];
         // 建立軌跡線
         this.lineGeo = new THREE.BufferGeometry();
+        this.lineGeo.setAttribute('color', new THREE.BufferAttribute(this.colorArr, 3));
         const lineMat = new THREE.LineBasicMaterial({
-            color: color,
+            vertexColors: true,  // 開啟頂點顏色
             transparent: true,
             opacity: 0.8,
-            depthWrite: true
         });
         this.line = new THREE.Line(this.lineGeo, lineMat);
         scene.add(this.line);
         // 永久渲染軌跡線
         this.line.frustumCulled = false;
+
+        // 更新頻率計數器
+        this.updateTick = 0;
     }
 
     // 更新速度與位置
     update(acc) {
+        this.updateTick++;
         // 暫存位置
         tmpPos.copy(this.currPos);
         // ∆x = x_now - x_prev
@@ -206,11 +214,32 @@ class Star {
         // 更新星體位置
         this.mesh.position.copy(this.currPos);
 
-        // 儲存軌跡
+        // 儲存位置
         this.points.push(this.currPos.clone())
         if (this.points.length > pointsMax) this.points.shift();
         // 把陣列放入軌跡線
         this.lineGeo.setFromPoints(this.points);
+
+        if (this.updateTick >= 10) {
+            // 軌跡漸變
+            const pointCount = this.points.length;
+
+            for (let i = 0; i < pointCount; ++i) {
+                // 目前的點在軌跡線的比例
+                const part = i / (pointCount - 1);
+                // 漸變權重 => 只從最後 20% 開始漸變
+                // 公式 : 下限 + (上限 - 下限) * (目前比例 / 區間長度)
+                let ratio = (part < 0.2) ? (0.1 + (0.9) * (part / 0.2)) : 1.0;
+
+                this.colorArr[i * 3] = this.lineColor.r * ratio;
+                this.colorArr[i * 3 + 1] = this.lineColor.g * ratio;
+                this.colorArr[i * 3 + 2] = this.lineColor.b * ratio;
+            }
+            // 更新 GPU 資料
+            this.lineGeo.attributes.color.needsUpdate = true;
+
+            this.updateTick = 0;
+        }
     }
 
 }
