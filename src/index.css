@@ -57,7 +57,7 @@ body {
     opacity: 0.7;
     pointer-events: none;
 
-    animation: nebula-flow 20s linear infinite;
+    /* animation: nebula-flow 20s linear infinite; */
 
     /* 效能優化 */
     contain: strict;
@@ -73,7 +73,7 @@ body {
     top: 0; left: 0;
     width: 1.5px; height: 1.5px;
     pointer-events: none;
-    animation: star-twinkle 5s infinite;
+    /* animation: star-twinkle 5s infinite; */
 
     will-change: transform;
     backface-visibility: hidden;

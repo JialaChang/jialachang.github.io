@@ -44,9 +44,9 @@ body {
 
 /* 按鈕容器 */
 .control-container {
+    display: flex;
     width: 80%;
     justify-content: flex-end;
-    display: flex;
     gap: 20%;
 }
 
@@ -68,6 +68,7 @@ body {
 
 /* 控制面板 */
 .setting-panel {
+    display: none;
     width: 100%;
     border-radius: 2.5rem;
 
@@ -77,7 +78,6 @@ body {
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 
-    display: none;
     flex-direction: column;
     align-items: center;
 }
@@ -88,12 +88,13 @@ body {
 
 /* 面板按鈕容器 */
 .setting-panel .tab-header {
+    display: flex;
     margin: 1rem;
     width: 60%;
-    display: flex;
     justify-content: space-between;
 }
 
+/* 面板按鈕 */
 .setting-panel .tab-header > span {
     cursor: pointer;
     opacity: 0.4;
@@ -110,4 +111,16 @@ body {
 
 .tab-header > span.show {
     opacity: 0.8;
+}
+
+/* 面板分頁 */
+.value-tab, .solution-tab, .analyze-tab {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.value-tab.active, .solution-tab.active, .analyze-tab.active {
+    display: flex;
 }

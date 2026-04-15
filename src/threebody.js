@@ -35,8 +35,11 @@ const settingBtn = document.querySelector('.setting-button');
 const homeBtn = document.querySelector('.home-button');
 const settingPanel = document.querySelector('.setting-panel')
 const valueBtn = document.querySelector('.value-button');
-const answerBtn = document.querySelector('.answer-button');
+const solutionBtn = document.querySelector('.solution-button');
 const analyzeBtn = document.querySelector('.analyze-button');
+const valueTab = document.querySelector('.value-tab');
+const solutionTab = document.querySelector('.solution-tab');
+const analyzeTab = document.querySelector('.analyze-tab');
 
 let isPause = false;
 
@@ -57,20 +60,32 @@ homeBtn?.addEventListener('click', () => {
 // 面板按鈕交互
 valueBtn?.addEventListener('click', () => {
     valueBtn.classList.add('show');
-    answerBtn.classList.remove('show');
+    solutionBtn.classList.remove('show');
     analyzeBtn.classList.remove('show');
+
+    valueTab.classList.add('active');
+    solutionTab.classList.remove('active');
+    analyzeTab.classList.remove('active');
 });
 
-answerBtn?.addEventListener('click', () => {
-    answerBtn.classList.add('show');
+solutionBtn?.addEventListener('click', () => {
+    solutionBtn.classList.add('show');
     valueBtn.classList.remove('show');
     analyzeBtn.classList.remove('show');
+
+    solutionTab.classList.add('active');
+    valueTab.classList.remove('active');
+    analyzeTab.classList.remove('active');
 });
 
 analyzeBtn?.addEventListener('click', () => {
     analyzeBtn.classList.add('show');
     valueBtn.classList.remove('show');
-    answerBtn.classList.remove('show');
+    solutionBtn.classList.remove('show');
+
+    analyzeTab.classList.add('active');
+    valueTab.classList.remove('active');
+    solutionTab.classList.remove('active');
 });
 
 
