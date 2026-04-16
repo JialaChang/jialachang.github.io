@@ -34,7 +34,7 @@ body {
     top: 2rem;
     right: 2rem;
 
-    width: 25vw;
+    width: 35vw;
     height: 90vh;
     display: flex;
     flex-direction: column;
@@ -45,9 +45,11 @@ body {
 /* 按鈕容器 */
 .control-container {
     display: flex;
-    width: 80%;
+    margin-right: 5%;
+    width: auto;
+    align-self: flex-end;
     justify-content: flex-end;
-    gap: 20%;
+    gap: 50%;
 }
 
 /* 按鈕 */
@@ -123,4 +125,30 @@ body {
 
 .value-tab.active, .solution-tab.active, .analyze-tab.active {
     display: flex;
+}
+
+
+/* ===== 3. 響應式設定  ===== */
+@media screen and (max-width: 768px) {
+
+    /* 調整 UI 容器 */
+    .ui-container {
+        top: 1rem;
+        right: 1rem;
+        width: 80vw;
+        height: auto;
+    }
+
+    /* 調整按鈕容器 */
+    .control-container {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+    /* 調整控制面板 */
+    .setting-panel {
+        height: 80vh;
+        border-radius: 1.5rem;
+    }
 }
