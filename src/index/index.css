@@ -1,0 +1,80 @@
+/* 引入字體 */
+@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('./main.css');
+
+:root {
+    --text-primary: rgb(255, 255, 255);
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-navbg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glow-blue: rgba(165, 216, 255, 0.65);
+    --glow-wblue: rgba(165, 216, 255, 0.3);
+    
+    --font-main: 'Trebuchet MS', 'LXGW WenKai Mono TC', sans-serif;
+    --font-chinese: 'LXGW WenKai Mono TC', serif;
+
+    --layer-background: 1;
+    --layer-content: 2;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+    display: none;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    
+    /* 啟動 Y 軸吸附 */
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    background: #020205d0;
+    perspective: 1000px;
+
+    font-size: 16px;
+    font-family: var(--font-main);
+    color: var(--text-primary);
+
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.page-section {
+    display: flex;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    /* 捲動到此處時自動對齊頂部 */
+    scroll-snap-align: start;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    /* 調換主軸方向呈垂直 */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* 響應式設計 */
+/* 當螢幕寬度小於 768px 或高度小於 650px 時觸發 */
+@media screen and (max-width: 768px), screen and (max-height: 650px) {
+
+}

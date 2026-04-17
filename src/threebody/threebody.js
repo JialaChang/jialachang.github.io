@@ -54,7 +54,7 @@ settingBtn?.addEventListener('click', () => {
 });
 
 homeBtn?.addEventListener('click', () => {
-    window.location.href = "../index.html";
+    window.location.href = "../../index.html";
 });
 
 // 面板按鈕交互

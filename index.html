@@ -8,74 +8,70 @@
     <!-- 作者資訊 -->
     <meta name="author" content="Starle">
     <!-- 網頁描述 -->
-    <meta name="description" content="這裡是我的個人網站，歡迎大家來訪！">
+    <meta name="description" content="">
     <!-- 關鍵字 -->
-    <meta name="keywords" content="Starle, 個人網站, 小說心得, 程式碼">
+    <meta name="keywords" content="">
     <!-- 響應式設計 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 最後修改日期 -->
-    <meta name="revised" content="2026/3/16">
+    <meta name="revised" content="2026/4/17">
     <!-- 網頁標題 -->
     <title>Starle OS</title>
 
-    <!-- 引入字體 -->
-    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <!-- 引入 CSS -->
-    <link rel="stylesheet" href="./src/index.css">    
+    <link rel="stylesheet" href="./src/index/index.css">    
 
 </head>
 
 <body>
 
-    <!-- 星雲背景 -->
-    <div class="nebula"></div>
-    <!-- 星星背景 -->
-    <div class="stars"></div>
-
-    <!-- 容器 -->
-    <div class="container">
-
-        <!-- 時鐘 -->
-        <div class="clock">
-            <div class="time">00:00:00</div>
-            <div class="date">000.00.00</div>
-        </div>
-
-        <!-- 玻璃面板 -->
-        <main class="glass-panel">
-
-            <header>
-                <!-- 網頁主標題 -->
-                <h1>Starle OS</h1>
-                <!-- 網頁副標題 -->
-                <div class="subtitle">
-                    ✧ 陪你看日升月潛 ✧<br/>
-                    ✧ 陪你看滄海變遷 ✧
-                </div>
-            </header>
-
-            <!-- 導覽列 -->
-            <nav class="nav-list">
-                <a href="./src/code.html" class="nav-item">程式學習</a>
-                <a href="./src/poem.html" class="nav-item">詩詞推薦</a>
-                <a href="./src/threebody.html" class="nav-item">三體模擬</a>
-            </nav>
-
-        </main>
-
-    </div>
-
-    <!-- 三體圖標 -->
-    <!-- <div class="three-body">
-        <div class="big-circle">
-            <div class="mid-circle">
-                <div class="small-circle"></div>
+    <section class="page-section">
+        <!-- 星雲背景 -->
+        <div class="nebula"></div>
+        <!-- 星星背景 -->
+        <div class="stars"></div>
+        <!-- 流星 -->
+        <div class="sstar-container"></div>
+        <!-- 容器 -->
+        <div class="container">
+            <!-- 時鐘 -->
+            <div class="clock">
+                <div class="time">00:00:00</div>
+                <div class="date">000.00.00</div>
             </div>
+            <!-- 玻璃面板 -->
+            <main class="glass-panel">
+                <header>
+                    <!-- 網頁主標題 -->
+                    <h1>Starle OS</h1>
+                    <!-- 網頁副標題 -->
+                    <div class="subtitle">
+                        ✧ 陪你看日升月潛 ✧<br/>
+                        ✧ 陪你看滄海變遷 ✧
+                    </div>
+                </header>
+                <!-- 導覽列 -->
+                <nav class="nav-list">
+                    <a href="./src/poem/poem.html" class="nav-item">詩詞推薦</a>
+                    <a href="./src/threebody/threebody.html" class="nav-item">三體模擬</a>
+                </nav>
+            </main>
         </div>
-    </div> -->
+    </section>
 
+    <section class="page-section" id="about">
+
+        <div class="container">
+            <main class="glass-panel">
+                <h1 style="font-family: var(--font-chinese)">關於我</h1>
+                <p>你好啊，，，</p>
+            </main>
+        </div>
+
+    </section>
+    
     <!-- 引入 JavaScript -->
-    <script src="./src/index.js" ></script>
+    <script src="./src/index/index.js" ></script>
     
 </body>
 
