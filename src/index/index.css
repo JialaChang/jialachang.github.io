@@ -1,3 +1,5 @@
+/* ===== 基礎設定 ===== */
+
 /* 引入字體 */
 @import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('./main.css');
@@ -17,6 +19,8 @@
     --layer-background: -1;
     --layer-content: 1;
 }
+
+/* ===== 佈局與元件 ====== */
 
 body::-webkit-scrollbar {
     display: none;
@@ -73,7 +77,8 @@ html, body {
     will-change: transform;
 }
 
-/* 響應式設計 */
+/* ===== 響應式設計 ===== */
+
 /* 當螢幕寬度小於 768px 或高度小於 650px 時觸發 */
 @media screen and (max-width: 768px), screen and (max-height: 650px) {
 

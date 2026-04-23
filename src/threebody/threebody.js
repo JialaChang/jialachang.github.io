@@ -1,4 +1,7 @@
-// ====== 1. 引用模組與基本設定 ======
+console.log("「給歲月以文明，而不是給文明以歲月。」");
+
+// ====== 引用模組與基本設定 ======
+
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 // 後期處理模組
@@ -8,9 +11,9 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 // 建立場景物件
 const scene = new THREE.Scene();
-// 建立相機物件 (POV, 長寬比, 近剪裁面, 遠剪裁面)
+// 建立相機物件
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-// 建立渲染器物件 (反鋸齒)
+// 建立渲染器物件
 const renderer = new THREE.WebGLRenderer({antialias: true});
 // 滑鼠控制視角
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -28,7 +31,24 @@ document.body.appendChild(renderer.domElement);
 camera.position.set(0, 0, 3);
 
 
-// ====== 2. UI 交互 ======
+// ====== 設置後期處理 ======
+
+const renderScene = new RenderPass(scene, camera);
+const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    1.2,  // 強度
+    1.2,  // 半徑
+    0.1   // 閾值
+);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(renderScene);
+composer.addPass(bloomPass);
+
+
+// ====== UI 交互 ======
+
+const refreshBtn = document.querySelector('.refresh-button');
 const pauseBtn = document.querySelector('.pause-button');
 const pauseIcon = pauseBtn?.querySelector('.material-icons');
 const settingBtn = document.querySelector('.setting-button');
@@ -89,15 +109,65 @@ analyzeBtn?.addEventListener('click', () => {
 });
 
 
-// ====== 3. 物理參數 ======
+// ===== UI 參數輸入 ======
+
+refreshBtn?.addEventListener('click', () => {
+    
+    isPause = true;
+    const starConfings = [
+        {prefix: 'star1', index: 0},
+        {prefix: 'star2', index: 1},
+        {prefix: 'star3', index: 2}
+    ]
+
+    // 調整星體參數
+    starConfings.forEach(cfg => {
+        const s = stars[cfg.index];
+
+        const m = parseFloat(document.getElementById(`${cfg.prefix}-mass-input`).value) || 1.0;
+        const px = parseFloat(document.getElementById(`${cfg.prefix}-posX-input`).value) || 0;
+        const py = parseFloat(document.getElementById(`${cfg.prefix}-posY-input`).value) || 0;
+        const pz = parseFloat(document.getElementById(`${cfg.prefix}-posZ-input`).value) || 0;
+        const vx = parseFloat(document.getElementById(`${cfg.prefix}-velX-input`).value) || 0;
+        const vy = parseFloat(document.getElementById(`${cfg.prefix}-velY-input`).value) || 0;
+        const vz = parseFloat(document.getElementById(`${cfg.prefix}-velZ-input`).value) || 0;
+
+        s.mass = m;
+        s.currPos.set(px, py, pz);
+        s.velocity.set(vx, vy, vz);
+
+        // 算出舊位置
+        s.oldPos.copy(s.currPos).sub(s.velocity.clone().multiplyScalar(dt));
+
+        s.points = [];
+        s.updateTick = 0;
+        // 清除 GPU 緩存區
+        s.lineGeo.setFromPoints([]);
+    });
+
+    syncCenterMass();
+    
+    // 小延遲並自動開始
+    setTimeout(() => {
+        isPause = false;
+        pauseIcon.textContent = 'pause';
+    }, 200);
+
+});
+
+
+// ====== 物理參數 ======
+
 // 萬有引力常數
 const Gconst = 1;
 // 時間步長
 const dt = 0.005;
 // 軟化係數
 const epsilon = 1e-6;
+// 最大軌跡數
+const pointsMax = 10000;
 
-// 星體參數
+// 預設星體參數
 const star1Mass = 1.0;
 const star1Pos = [-1, 0, 0];
 const star1Vel = [0.505639, 0.289239, 0.00634784];
@@ -110,51 +180,9 @@ const star3Mass = 1.1;
 const star3Pos = [0, 0, 0.617173];
 const star3Vel = [-0.919344, -0.525889, 0];
 
-// 最大軌跡數
-const pointsMax = 1000;
 
+// ====== 星體建構及更新加速度 ======
 
-// ====== 4. 添加背景星星 ======
-const maxStarNum = 5000;  // 星星數量
-const createBackgroundStars = () => {
-    // 儲存星星座標
-    const array = [];
-    for (let i = 0; i < maxStarNum; ++i) {
-        let x, y, z;
-        do {
-            x = (Math.random() - 0.5) * 2000;
-            y = (Math.random() - 0.5) * 2000;
-            z = (Math.random() - 0.5) * 2000;
-        } while (
-            Math.abs(x) < 100 && Math.abs(y) < 100 && Math.abs(x) < 100
-        );
-        array.push(x, y, z);
-    }
-
-    const geometry = new THREE.BufferGeometry();
-    // GPU 加速
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(array, 3));
-
-    // 使用圓形貼圖
-    const loader = new THREE.TextureLoader();
-    const starTexture = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/sprites/disc.png');
-
-    // 渲染星星
-    const material = new THREE.PointsMaterial({
-        color: 0xffffff,        // 白色
-        size: 1.5,
-        map: starTexture,
-        sizeAttenuation: true,  // 尺寸衰減
-        transparent: true,
-        alphaTest: 0.5,         // 設定渲染門檻
-    });
-    const backgroundStars = new THREE.Points(geometry, material);
-    scene.add(backgroundStars);
-};
-createBackgroundStars();
-
-
-// ====== 5. 星體建構及更新加速度 ======
 // 建立全域變數，避免一直 new 新物件
 const tmpPos = new THREE.Vector3();
 const capPos = new THREE.Vector3();
@@ -235,8 +263,8 @@ class Star {
         // 把陣列放入軌跡線
         this.lineGeo.setFromPoints(this.points);
 
+        // 軌跡漸變
         if (this.updateTick >= 10) {
-            // 軌跡漸變
             const pointCount = this.points.length;
 
             for (let i = 0; i < pointCount; ++i) {
@@ -260,7 +288,8 @@ class Star {
 }
 
 
-// ====== 6. 初始化星體 ======
+// ====== 初始化星體 ======
+
 const stars = [
     new Star(0xff6600, star1Mass, star1Pos, star1Vel),  // 橘星
     new Star(0x66ccff, star2Mass, star2Pos, star2Vel),  // 藍星
@@ -268,28 +297,15 @@ const stars = [
 ];
 
 
-// ====== 7. 設置後期處理 ======
-const renderScene = new RenderPass(scene, camera);
-const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    1.2,  // 強度
-    1.2,  // 半徑
-    0.1   // 閾值
-);
+// ====== 動畫與物理計算 ======
 
-const composer = new EffectComposer(renderer);
-composer.addPass(renderScene);
-composer.addPass(bloomPass);
-
-
-// ====== 8. 動畫與物理計算的迴圈 ======
 const vector = new THREE.Vector3();         // 位移矢量
 const accG = new THREE.Vector3();           // 加速度
 const centerMassPos = new THREE.Vector3();  // 質心位置
 const tmpCMCalc = new THREE.Vector3();      // 質心計算暫存
 
 function animate() {
-    // 在下一次繪製螢幕時會執行這個函式 => 無限迴圈
+    // 在下一次繪製螢幕時會執行這個函式
     requestAnimationFrame(animate);
 
     if (!isPause) {
@@ -318,24 +334,9 @@ function animate() {
 
         });
 
-        // 等全部都算好再套用
         stars.forEach(s => s.update(s.nextAcc));
 
-        // 計算質心 Rcm⭢ = Σ(m * r⭢) / Σm
-        let totalMass = 0;
-        centerMassPos.set(0, 0, 0);
-        stars.forEach(s => {
-            totalMass += s.mass;
-            tmpCMCalc.copy(s.currPos).multiplyScalar(s.mass);
-            centerMassPos.add(tmpCMCalc);
-        });
-        centerMassPos.divideScalar(totalMass)
-        // 質心修正
-        stars.forEach(s => {
-            s.currPos.sub(centerMassPos);
-            s.oldPos.sub(centerMassPos);
-            s.mesh.position.copy(s.currPos);
-        });
+        syncCenterMass();
     }
     
     // 讓滑鼠能拖曳視角
@@ -344,27 +345,75 @@ function animate() {
     composer.render();
 }
 
-// 執行質心修正
-let totalMass = 0;
-centerMassPos.set(0, 0, 0);
-stars.forEach(s => {
-    totalMass += s.mass;
-    tmpCMCalc.copy(s.currPos).multiplyScalar(s.mass);
-    centerMassPos.add(tmpCMCalc);
-});
-centerMassPos.divideScalar(totalMass);
-stars.forEach(s => {
-    s.currPos.sub(centerMassPos);
-    s.oldPos.sub(centerMassPos);
-    s.mesh.position.copy(s.currPos);
-});
+// 質心修正
+function syncCenterMass() {
+    // 計算質心 Rcm⭢ = Σ(m * r⭢) / Σm
+    let totalMass = 0;
+    centerMassPos.set(0, 0, 0);
+    stars.forEach(s => {
+        totalMass += s.mass;
+        tmpCMCalc.copy(s.currPos).multiplyScalar(s.mass);
+        centerMassPos.add(tmpCMCalc);
+    });
+    centerMassPos.divideScalar(totalMass)
+    // 質心修正
+    stars.forEach(s => {
+        s.currPos.sub(centerMassPos);
+        s.oldPos.sub(centerMassPos);
+        s.mesh.position.copy(s.currPos);
+    });
+}
+
+syncCenterMass();
 // 把軌跡清空
 stars.forEach(s => s.points = []);
 // 開始動畫
 animate();
 
 
-// ====== 9. 處理視窗縮放 =====
+// ====== 添加背景星星 ======
+
+const maxStarNum = 5000;  // 星星數量
+const createBackgroundStars = () => {
+    // 儲存星星座標
+    const array = [];
+    for (let i = 0; i < maxStarNum; ++i) {
+        let x, y, z;
+        do {
+            x = (Math.random() - 0.5) * 2000;
+            y = (Math.random() - 0.5) * 2000;
+            z = (Math.random() - 0.5) * 2000;
+        } while (
+            Math.abs(x) < 100 && Math.abs(y) < 100 && Math.abs(x) < 100
+        );
+        array.push(x, y, z);
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    // GPU 加速
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(array, 3));
+
+    // 使用圓形貼圖
+    const loader = new THREE.TextureLoader();
+    const starTexture = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/sprites/disc.png');
+
+    // 渲染星星
+    const material = new THREE.PointsMaterial({
+        color: 0xffffff,        // 白色
+        size: 1.5,
+        map: starTexture,
+        sizeAttenuation: true,  // 尺寸衰減
+        transparent: true,
+        alphaTest: 0.5,         // 設定渲染門檻
+    });
+    const backgroundStars = new THREE.Points(geometry, material);
+    scene.add(backgroundStars);
+};
+createBackgroundStars();
+
+
+// ====== 處理視窗縮放 =====
+
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();

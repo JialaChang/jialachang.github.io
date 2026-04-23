@@ -1,4 +1,4 @@
-// ====== 1. DOM 元素選取 ======
+// ====== DOM 元素選取 ======
 const stars = document.querySelector('.stars');
 const nebula = document.querySelector('.nebula');
 const sstarContainer = document.querySelector('.sstar-container')
@@ -8,7 +8,7 @@ const timeDisplay = document.querySelector('.time');
 const dateDisplay = document.querySelector('.date');
 
 
-// ===== 2. 星空隨機生成 =====
+// ===== 星空隨機生成 =====
 const numStars = 100;
 const starsArray = new Array(numStars);
 
@@ -28,7 +28,7 @@ for (let i = 0; i < numStars; i++) {
 stars.style.boxShadow = starsArray.join(', ');
 
 
-// ===== 3.背景視差移動 =====
+// ===== 背景視差移動 =====
 let lock = false;                            // 頻率鎖
 function handleParallax(clientX, clientY) {
     if (!lock) {
@@ -57,7 +57,7 @@ function handleParallax(clientX, clientY) {
 window.addEventListener('pointermove', (e) => handleParallax(e.clientX, e.clientY))
 
 
-// ===== 4. 流星隨機生成 =====
+// ===== 流星隨機生成 =====
 function createShootingStar() {
 
     // 建立一個新的 div 標籤，並套用 .shooting-star 樣式
@@ -107,7 +107,7 @@ function sstarLoop() {
 sstarLoop();
 
 
-// ===== 5. 標題點擊產生流星雨 =====
+// ===== 標題點擊產生流星雨 =====
 title?.addEventListener('click', () => {
 
     title.classList.add('active');
@@ -132,7 +132,7 @@ title?.addEventListener('click', () => {
 });
 
 
-//  ===== 6. 實時時鐘顯示 =====
+//  ===== 實時時鐘顯示 =====
 const weekDaysArr = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 function updateClock() {

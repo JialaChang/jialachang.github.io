@@ -28,4 +28,4 @@ window.addEventListener('wheel', (e) => {
     setTimeout(() => {
         isScrolling = false;
     }, 1200);
-}, {passive: false});
+}, {passive: false});  // 解除瀏覽器限制的 preventDefault
