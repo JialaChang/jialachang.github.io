@@ -46,6 +46,31 @@ composer.addPass(renderScene);
 composer.addPass(bloomPass);
 
 
+// ====== 物理參數 ======
+
+// 萬有引力常數
+const Gconst = 1;
+// 時間步長
+const dt = 0.005;
+// 軟化係數
+const epsilon = 1e-6;
+// 最大軌跡數
+let pointsMax = 10000;
+
+// 預設星體參數
+const star1Mass = 1.0;
+const star1Pos = [-1, 0, 0];
+const star1Vel = [0.505639, 0.289239, 0.00634784];
+
+const star2Mass = 1.0;
+const star2Pos = [1, 0, 0];
+const star2Vel = [0.505639, 0.289239, -0.00634784];
+
+const star3Mass = 1.1;
+const star3Pos = [0, 0, 0.617173];
+const star3Vel = [-0.919344, -0.525889, 0];
+
+
 // ====== UI 交互 ======
 
 const refreshBtn = document.querySelector('.refresh-button');
@@ -111,6 +136,31 @@ analyzeBtn?.addEventListener('click', () => {
 
 // ===== UI 參數輸入 ======
 
+// 同步參數於輸入框
+function syncInputVar() {
+    const pointIn = document.getElementById('line-input');
+    pointIn.value = pointsMax;
+
+    const starData = [
+        {prefix: 'star1', mass: star1Mass, pos: star1Pos, vel: star1Vel},
+        {prefix: 'star2', mass: star2Mass, pos: star2Pos, vel: star2Vel},
+        {prefix: 'star3', mass: star3Mass, pos: star3Pos, vel: star3Vel}
+    ]
+    starData.forEach(data => {
+        const massIn = document.getElementById(`${data.prefix}-mass-input`);
+        massIn.value = data.mass;
+
+        const Axis = ['X', 'Y', 'Z'];
+        Axis.forEach((axis, i) => {
+            const posIn = document.getElementById(`${data.prefix}-pos${axis}-input`);
+            posIn.value = data.pos[i];
+            const velIn = document.getElementById(`${data.prefix}-vel${axis}-input`);
+            velIn.value = data.vel[i];
+        });
+    });
+}
+syncInputVar();
+
 refreshBtn?.addEventListener('click', () => {
     
     isPause = true;
@@ -147,38 +197,16 @@ refreshBtn?.addEventListener('click', () => {
 
     syncCenterMass();
     
+    camera.position.set(0, 0, 3);
+    settingPanel.classList.remove('show');
+
     // 小延遲並自動開始
     setTimeout(() => {
         isPause = false;
         pauseIcon.textContent = 'pause';
-    }, 200);
+    }, 100);
 
 });
-
-
-// ====== 物理參數 ======
-
-// 萬有引力常數
-const Gconst = 1;
-// 時間步長
-const dt = 0.005;
-// 軟化係數
-const epsilon = 1e-6;
-// 最大軌跡數
-const pointsMax = 10000;
-
-// 預設星體參數
-const star1Mass = 1.0;
-const star1Pos = [-1, 0, 0];
-const star1Vel = [0.505639, 0.289239, 0.00634784];
-
-const star2Mass = 1.0;
-const star2Pos = [1, 0, 0];
-const star2Vel = [0.505639, 0.289239, -0.00634784];
-
-const star3Mass = 1.1;
-const star3Pos = [0, 0, 0.617173];
-const star3Vel = [-0.919344, -0.525889, 0];
 
 
 // ====== 星體建構及更新加速度 ======
