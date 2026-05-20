@@ -77,7 +77,11 @@
 
                 <div class="input-container">
                     <label for="line-input">軌跡時長</label>
-                    <input type="range" id="line-input" min="0" max="60" step="1">
+                    <!-- 軌跡時長拉桿 -->
+                    <div class="range-wrapper">
+                        <input type="range" id="point-time-input" min="0" max="60" step="1">
+                        <span class="range-tooltip">0</span>
+                    </div>
                 </div>
 
                 <div class="input-container">

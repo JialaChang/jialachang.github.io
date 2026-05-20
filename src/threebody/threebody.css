@@ -6,6 +6,7 @@
     --text--input: rgba(255, 255, 255, 0.8);
     --input--color: rgba(255, 255, 255, 0.05);
     --input--border: rgba(255, 255, 255, 0.2);
+    --panel--bg: rgba(255, 255, 255, 0.1);
 }
 
 /* 全局樣式 */
@@ -48,7 +49,7 @@ body {
     gap: 2rem;
 }
 
-/* 按鈕容器 */
+/* 操作按鈕容器 */
 .control-container {
     display: flex;
     margin-right: 5%;
@@ -58,7 +59,7 @@ body {
     gap: 50%;
 }
 
-/* 按鈕 */
+/* 操作按鈕 */
 .control-container > span {
     opacity: 0.5;
     cursor: pointer;
@@ -82,7 +83,7 @@ body {
 
     height: 80vh;
 
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--panel--bg);
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 
@@ -175,6 +176,41 @@ h4 {
     flex-grow: 1;
 }
 
+/* 拉桿容器 */
+.range-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    width: 0;
+}
+
+/* 懸浮數值標籤 */
+.range-wrapper .range-tooltip {
+    position: absolute;
+    top: -1.5rem;
+    left: 0;
+    transform: translateX(-50%);
+    
+    background: var(--panel--bg);
+    border: 1px solid var(--input--color);
+    color: var(--text--color);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    pointer-events: none;
+    
+    opacity: 0; 
+    transition: opacity 0.2s ease;
+}
+
+/* 顯示懸浮數值標籤 */
+.range-wrapper:hover .range-tooltip,
+input[type="range"]:active + .range-tooltip {
+    opacity: 1;
+}
+
 /* 隱藏輸入框上下箭頭 */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -185,7 +221,7 @@ input[type=number] {
   appearance: textfield;
 }
 
-/* 自訂滑軌拉桿 */
+/* 自訂拉桿樣式 */
 /* 清除預設樣式 */
 input[type="range"] {
     -webkit-appearance: none;
@@ -213,6 +249,7 @@ input[type="range"]::-webkit-slider-thumb {
     background: var(--text--color);
     cursor: pointer;
 }
+
 
 /* ===== 響應式設定  ===== */
 @media screen and (max-width: 768px) {

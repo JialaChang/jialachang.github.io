@@ -1,5 +1,3 @@
-console.log("「給歲月以文明，而不是給文明以歲月。」");
-
 // ====== 引用模組與基本設定 ======
 
 import * as THREE from 'three';
@@ -55,7 +53,7 @@ const dt = 0.005;
 // 軟化係數
 const epsilon = 1e-6;
 // 最大軌跡數
-let pointsMax = 10000;
+let pointsMax = 4000;
 
 // 預設星體參數
 const star1Mass = 1.0;
@@ -136,31 +134,62 @@ analyzeBtn?.addEventListener('click', () => {
 
 // ===== UI 參數輸入 ======
 
-// 同步參數於輸入框
+const pointInput = document.querySelector('#point-time-input');
+const pointTooltip = document.querySelector('.range-tooltip')
+
+// 懸浮數值標籤移動
+function updateRangeTooltip() {
+    const val = parseInt(pointInput.value) || 0;
+    const min = parseInt(pointInput.min) || 0;
+    const max = parseInt(pointInput.max) || 60;
+    // 計算百分比與 CSS 修正偏移
+    const percent = (val - min) / (max - min);
+    pointTooltip.textContent = val;
+    pointTooltip.style.left = `calc(${percent * 100}% + ${8 - percent * 16}px)`;
+}
+
+// 監聽拉桿拉動事件
+pointInput?.addEventListener('input', (e) => {
+    updateRangeTooltip();
+    
+    // 將拉桿刻度轉回實際點數
+    pointsMax = parseInt(e.target.value) / dt;
+    
+    // 即時裁切軌跡
+    stars.forEach(s => {
+        while (s.points.length > pointsMax) {
+            s.points.shift();
+        }
+    });
+});
+
+// 同步目前參數於輸入框
 function syncInputVar() {
-    const pointIn = document.getElementById('line-input');
-    pointIn.value = pointsMax;
+    pointInput.value = Math.floor(pointsMax * dt);
+    updateRangeTooltip();
 
     const starData = [
-        {prefix: 'star1', mass: star1Mass, pos: star1Pos, vel: star1Vel},
-        {prefix: 'star2', mass: star2Mass, pos: star2Pos, vel: star2Vel},
-        {prefix: 'star3', mass: star3Mass, pos: star3Pos, vel: star3Vel}
+        {prefix: 'star1', index: 0},
+        {prefix: 'star2', index: 1},
+        {prefix: 'star3', index: 2}
     ]
     starData.forEach(data => {
+        const s = stars[data.index]
+
         const massIn = document.getElementById(`${data.prefix}-mass-input`);
-        massIn.value = data.mass;
+        massIn.value = s.mass;
 
         const Axis = ['X', 'Y', 'Z'];
         Axis.forEach((axis, i) => {
             const posIn = document.getElementById(`${data.prefix}-pos${axis}-input`);
-            posIn.value = data.pos[i];
+            posIn.value = s.currPos.getComponent(i);
             const velIn = document.getElementById(`${data.prefix}-vel${axis}-input`);
-            velIn.value = data.vel[i];
+            velIn.value = s.velocity.getComponent(i);
         });
     });
 }
-syncInputVar();
 
+// 重整按鈕
 refreshBtn?.addEventListener('click', () => {
     
     isPause = true;
@@ -196,6 +225,7 @@ refreshBtn?.addEventListener('click', () => {
     });
 
     syncCenterMass();
+    syncInputVar();
     
     camera.position.set(0, 0, 3);
     settingPanel.classList.remove('show');
@@ -318,7 +348,7 @@ class Star {
 
 // ====== 初始化星體 ======
 
-const stars = [
+let stars = [
     new Star(0xff6600, star1Mass, star1Pos, star1Vel),  // 橘星
     new Star(0x66ccff, star2Mass, star2Pos, star2Vel),  // 藍星
     new Star(0xfff0b3, star3Mass, star3Pos, star3Vel)   // 白星
@@ -393,6 +423,8 @@ function syncCenterMass() {
 }
 
 syncCenterMass();
+syncInputVar();
+
 // 把軌跡清空
 stars.forEach(s => s.points = []);
 // 開始動畫
