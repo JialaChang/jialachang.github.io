@@ -6,6 +6,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {specialSolutions} from './solutions.js';
 
 // 建立場景物件
 const scene = new THREE.Scene();
@@ -85,6 +86,7 @@ const analyzeBtn = document.querySelector('.analyze-button');
 const valueTab = document.querySelector('.value-tab');
 const solutionTab = document.querySelector('.solution-tab');
 const analyzeTab = document.querySelector('.analyze-tab');
+const solutionList = document.querySelector('.solution-list');
 
 let isPause = false;
 
@@ -194,6 +196,28 @@ function syncInputVar() {
         });
     });
 }
+
+// 動態生成特殊解選單的按鈕
+specialSolutions.forEach(solution => {
+    const btn = document.createElement('button');
+    btn.textContent = solution.name;
+    
+    btn.addEventListener('click', () => {
+        // 將預設資料填入對應的輸入框中
+        solution.stars.forEach((starData, index) => {
+            const prefix = `star${index + 1}`;
+            document.getElementById(`${prefix}-mass-input`).value = starData.mass;
+            
+            ['X', 'Y', 'Z'].forEach((axis, i) => {
+                document.getElementById(`${prefix}-pos${axis}-input`).value = starData.pos[i];
+                document.getElementById(`${prefix}-vel${axis}-input`).value = starData.vel[i];
+            });
+        });
+        // 觸發重整按鈕的點擊事件來套用參數並重啟動畫
+        refreshBtn.click();
+    });
+    solutionList?.appendChild(btn);
+});
 
 // 重新載入模擬狀態
 refreshBtn?.addEventListener('click', () => {
