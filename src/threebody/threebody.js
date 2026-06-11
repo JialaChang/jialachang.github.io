@@ -267,6 +267,33 @@ refreshBtn?.addEventListener('click', () => {
 
 });
 
+/**
+ * 實時更新數據監測面板的資料
+ * 只有該分頁啟動時才會執行以節省效能
+ */
+const tmpVelMonitor = new THREE.Vector3();
+function syncAnalyzeData() {
+    // 效能優化：如果沒有打開此面板，則直接 Return
+    if (!analyzeTab.classList.contains('active')) return;
+
+    const doms = [
+        { pos: document.getElementById('monitor-s1-pos'), vel: document.getElementById('monitor-s1-vel') },
+        { pos: document.getElementById('monitor-s2-pos'), vel: document.getElementById('monitor-s2-vel') },
+        { pos: document.getElementById('monitor-s3-pos'), vel: document.getElementById('monitor-s3-vel') }
+    ];
+
+    // 將向量格式化為小數點後 3 位的字串
+    const formatVec = (v) => `${v.x.toFixed(3)}, ${v.y.toFixed(3)}, ${v.z.toFixed(3)}`;
+
+    stars.forEach((s, i) => {
+        // 由於使用 Verlet 積分，真實瞬時速度需藉由: v = (currPos - oldPos) / dt 推導
+        tmpVelMonitor.subVectors(s.currPos, s.oldPos).divideScalar(dt);
+        
+        doms[i].pos.textContent = formatVec(s.currPos);
+        doms[i].vel.textContent = formatVec(tmpVelMonitor);
+    });
+}
+
 
 // ============================================================================
 // 核心物理類別: 星體 (Star Class Definition)
@@ -414,6 +441,9 @@ function animate() {
     
     controls.update();
     composer.render();
+
+    // 更新數據監測面板
+    syncAnalyzeData();
 }
 
 /**

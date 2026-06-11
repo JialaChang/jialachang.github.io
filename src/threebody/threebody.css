@@ -162,6 +162,37 @@ h4 {
 }
 
 /* ==========================================================================
+       數據監測面板樣式 (Data Analyze Cards)
+   ========================================================================== */
+.data-card {
+    width: 70%;
+    background: var(--input-color);
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.data-card .data-title {
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 0.2rem;
+}
+
+.data-card .data-row {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.data-card .data-row span {
+    float: right;
+    color: var(--text-color);
+}
+
+/* ==========================================================================
    表單元件 (Form Components)
    ========================================================================== */
 .input-container {
