@@ -1,12 +1,11 @@
-/* ===== 基礎設定 ===== */
-
-/* 顏色設定 */
+/* ==========================================================================
+   色彩主題與重置 (Theme & Resets)
+   ========================================================================== */
 :root {
     --text-main: rgb(47, 79, 79);
     --text-poem: rgb(68, 68, 68);
 }
 
-/* 全局樣式 */
 body {
     display: flex;
     flex-direction: column;
@@ -17,7 +16,6 @@ body {
     overflow-x: hidden;
 
     background-color: #f4f7f6;
-    /* 加入背景點點 */
     background-image: radial-gradient(var(--text-main) 0.4px, transparent 0.8px);
     background-size: 30px 30px;
     background-attachment: fixed;
@@ -28,9 +26,9 @@ body {
 }
 
 
-/* ===== 佈局與元件 ====== */
-
-/* 標題樣式 */
+/* ==========================================================================
+   頁面元素 (Page Elements)
+   ========================================================================== */
 h1 {
     display: inline-block;  /* 讓底線寬度符合文字寬度 */
     padding-bottom: 0.3rem;
@@ -43,7 +41,6 @@ h1 {
     border-bottom: 0.25rem solid var(--text-main);
 }
 
-/* 返回主頁連結樣式 */
 .back-link {
     margin-bottom: 5rem;
     font-size: 1rem;
@@ -52,13 +49,11 @@ h1 {
     transition: color 0.5s ease;
 }
 
-/* 返回主頁連結懸停效果 */
 .back-link:hover {
     color: var(--text-main);
     text-decoration: underline;
 }
 
-/* 詩詞卡片樣式 */
 .poem-card {
     position: relative;
     padding: 5rem;
@@ -77,13 +72,11 @@ h1 {
     animation: fadeInUp 1s ease-out forwards;
 }
 
-/* 詩詞卡片懸停效果 */
 .poem-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);
 }
 
-/* 詩詞卡片裝飾符號 */
 .poem-card::after {
     content: "◈";
     display: block;
@@ -93,7 +86,6 @@ h1 {
     font-size: 1.5em;
 } 
 
-/* 詩詞標題樣式 */
 .poem-card h2 {
     margin-bottom: 2rem;
     font-size: 1.7rem;
@@ -101,7 +93,6 @@ h1 {
     color: var(--text-poem);
 }
 
-/* 詩詞標題佈局 */
 .poem-title {
     display: flex;
     align-items: center;
@@ -111,26 +102,25 @@ h1 {
 }
 
 .poem-title span:not(.divider) {
-    flex: 1;    /* 平分空間 */
+    flex: 1;
 }
 
 .poem-title .title-text {
-    text-align: right;  /* 文字向右對齊 */
+    text-align: right;
 }
 
 .poem-title .author {
-    text-align: left;   /* 文字向左對齊 */
+    text-align: left;
     font-size: 0.9em;
     opacity: 0.8;
 }
 
 .poem-title .divider {
-    flex: 0 0 45px; /* 固定寬度 */
-    height: 1px;    /* 高度1px -> 劃一條線 */
+    flex: 0 0 45px;
+    height: 1px;
     background-color: var(--text-main);
 }
 
-/* 詩詞內容樣式 */
 .poem-card p {
     margin-top: 1.5rem;
     font-size: 1.3rem;
@@ -140,11 +130,10 @@ h1 {
 }
 
 
-/* ===== 動畫定義 ====== */
-
-/* 詩詞卡片上升動畫 */
+/* ==========================================================================
+   動畫定義 (Animations)
+   ========================================================================== */
 @keyframes fadeInUp {
-    /* 從透明到不透明，從下到上 */
     from {
         opacity: 0;
         transform: translateY(1.5rem);;

@@ -69,14 +69,16 @@ const star3Pos = [0, 0, 0.617173];
 const star3Vel = [-0.919344, -0.525889, 0];
 
 
-// ====== UI 交互 ======
+// ============================================================================
+// UI 控制與事件綁定 (UI Controls & Event Bindings)
+// ============================================================================
 
 const refreshBtn = document.querySelector('.refresh-button');
 const pauseBtn = document.querySelector('.pause-button');
 const pauseIcon = pauseBtn?.querySelector('.material-icons');
 const settingBtn = document.querySelector('.setting-button');
 const homeBtn = document.querySelector('.home-button');
-const settingPanel = document.querySelector('.setting-panel')
+const settingPanel = document.querySelector('.setting-panel');
 const valueBtn = document.querySelector('.value-button');
 const solutionBtn = document.querySelector('.solution-button');
 const analyzeBtn = document.querySelector('.analyze-button');
@@ -93,14 +95,13 @@ pauseBtn?.addEventListener('click', () => {
 });
 
 settingBtn?.addEventListener('click', () => {
-    settingPanel.classList.toggle('show')
+    settingPanel.classList.toggle('show');
 });
 
 homeBtn?.addEventListener('click', () => {
     window.location.href = "../../index.html";
 });
 
-// 面板按鈕交互
 valueBtn?.addEventListener('click', () => {
     valueBtn.classList.add('show');
     solutionBtn.classList.remove('show');
@@ -132,12 +133,16 @@ analyzeBtn?.addEventListener('click', () => {
 });
 
 
-// ===== UI 參數輸入 ======
+// ============================================================================
+// 數據同步與參數控制 (Data Synchronization)
+// ============================================================================
 
 const pointInput = document.querySelector('#point-time-input');
-const pointTooltip = document.querySelector('.range-tooltip')
+const pointTooltip = document.querySelector('.range-tooltip');
 
-// 懸浮數值標籤移動
+/**
+ * 更新軌跡長度拉桿的 Tooltip 顯示位置與數值
+ */
 function updateRangeTooltip() {
     const val = parseInt(pointInput.value) || 0;
     const min = parseInt(pointInput.min) || 0;
@@ -148,11 +153,10 @@ function updateRangeTooltip() {
     pointTooltip.style.left = `calc(${percent * 100}% + ${8 - percent * 16}px)`;
 }
 
-// 監聽拉桿拉動事件
+// 軌跡長度拉桿監聽
 pointInput?.addEventListener('input', (e) => {
     updateRangeTooltip();
     
-    // 將拉桿刻度轉回實際點數
     pointsMax = parseInt(e.target.value) / dt;
     
     // 即時裁切軌跡
@@ -163,7 +167,9 @@ pointInput?.addEventListener('input', (e) => {
     });
 });
 
-// 同步目前參數於輸入框
+/**
+ * 將當前的星體物理狀態 (質量、位置、速度) 反向同步至 UI 輸入面板
+ */
 function syncInputVar() {
     pointInput.value = Math.floor(pointsMax * dt);
     updateRangeTooltip();
@@ -172,9 +178,9 @@ function syncInputVar() {
         {prefix: 'star1', index: 0},
         {prefix: 'star2', index: 1},
         {prefix: 'star3', index: 2}
-    ]
+    ];
     starData.forEach(data => {
-        const s = stars[data.index]
+        const s = stars[data.index];
 
         const massIn = document.getElementById(`${data.prefix}-mass-input`);
         massIn.value = s.mass;
@@ -189,7 +195,7 @@ function syncInputVar() {
     });
 }
 
-// 重整按鈕
+// 重新載入模擬狀態
 refreshBtn?.addEventListener('click', () => {
     
     isPause = true;
@@ -197,7 +203,7 @@ refreshBtn?.addEventListener('click', () => {
         {prefix: 'star1', index: 0},
         {prefix: 'star2', index: 1},
         {prefix: 'star3', index: 2}
-    ]
+    ];
 
     // 調整星體參數
     starConfings.forEach(cfg => {
@@ -215,12 +221,12 @@ refreshBtn?.addEventListener('click', () => {
         s.currPos.set(px, py, pz);
         s.velocity.set(vx, vy, vz);
 
-        // 算出舊位置
+        // 重置為初始動量狀態 S₀ = S - v * dt
         s.oldPos.copy(s.currPos).sub(s.velocity.clone().multiplyScalar(dt));
 
         s.points = [];
         s.updateTick = 0;
-        // 清除 GPU 緩存區
+        // 清理 GPU Buffer
         s.lineGeo.setFromPoints([]);
     });
 
@@ -230,7 +236,6 @@ refreshBtn?.addEventListener('click', () => {
     camera.position.set(0, 0, 3);
     settingPanel.classList.remove('show');
 
-    // 小延遲並自動開始
     setTimeout(() => {
         isPause = false;
         pauseIcon.textContent = 'pause';
@@ -239,34 +244,30 @@ refreshBtn?.addEventListener('click', () => {
 });
 
 
-// ====== 星體建構及更新加速度 ======
-
-// 建立全域變數，避免一直 new 新物件
+// ============================================================================
+// 核心物理類別: 星體 (Star Class Definition)
+// ============================================================================
+// 宣告全域暫存向量，避免在迴圈或渲染週期內頻繁 GC (Garbage Collection)
 const tmpPos = new THREE.Vector3();
 const capPos = new THREE.Vector3();
 
 class Star {
 
-    // 建構子
     constructor(color, mass ,position, velocity) {
         this.lineColor = new THREE.Color(color);
         this.mass = mass;
-        // 擴展運算子 ... => 將矩陣轉成獨立數字
+        
         this.velocity = new THREE.Vector3(...velocity);
-        // 現在的位置
         this.currPos = new THREE.Vector3(...position);
-        // 前一幀的位置 => S₀ = S - v * dt
-        this.oldPos = this.currPos.clone().sub(this.velocity.clone().multiplyScalar(dt))
-        // 下一幀的加速度
+        this.oldPos = this.currPos.clone().sub(this.velocity.clone().multiplyScalar(dt));
         this.nextAcc = new THREE.Vector3(0, 0, 0);
-        // 儲存軌跡顏色的陣列
+        
+        // 預先分配 TypedArray 作為軌跡顏色的記憶體區塊
         this.colorArr = new Float32Array(pointsMax * 3);
         this.colorArr.fill(1.0);
 
-        // 建立 3D 球體
-        // 球體骨架 (半徑, 水平分段數, 垂直分段數)
+        // 建立視覺化球體 (Mesh)
         const starGeo = new THREE.SphereGeometry(0.05, 32, 32);
-        // 球體皮膚
         const starMat = new THREE.MeshStandardMaterial({
             color: color,
             emissive: color,
@@ -278,65 +279,59 @@ class Star {
         // 融合骨架和皮膚並設定位置
         this.mesh = new THREE.Mesh(starGeo, starMat);
         this.mesh.position.copy(this.currPos);
-        // 將球體放入場景
         scene.add(this.mesh);
         
-        // 儲存位置的陣列
         this.points = [];
-        // 建立軌跡線
+        // 初始化軌跡線段 (BufferGeometry 提升效能)
         this.lineGeo = new THREE.BufferGeometry();
         this.lineGeo.setAttribute('color', new THREE.BufferAttribute(this.colorArr, 3));
         const lineMat = new THREE.LineBasicMaterial({
-            vertexColors: true,  // 開啟頂點顏色
+            vertexColors: true, 
             transparent: true,
             opacity: 0.8,
         });
         this.line = new THREE.Line(this.lineGeo, lineMat);
         scene.add(this.line);
-        // 永久渲染軌跡線
+        // 關閉視錐體裁剪，避免軌跡在相機視角邊緣消失
         this.line.frustumCulled = false;
 
         // 更新頻率計數器
         this.updateTick = 0;
     }
 
-    // 更新速度與位置
+    /**
+     * 更新星體物理狀態 (基於 Verlet Integration 韋爾萊積分法)
+     * @param {THREE.Vector3} acc - 當前作用於該星體的加速度向量
+     */
     update(acc) {
         this.updateTick++;
-        // 暫存位置
         tmpPos.copy(this.currPos);
-        // ∆x = x_now - x_prev
+        
         capPos.subVectors(this.currPos, this.oldPos);
-        // Verlet 公式: x_next = 2x_now - x_prev + a * dt²
-        // => x_now + (x_now - x_prev) + a * dt²
+        // Verlet 積分推導: x_next = x_now + (x_now - x_prev) + a * dt²
         this.currPos.add(capPos).add(acc.multiplyScalar(dt * dt));
-        // 更新舊位置
+        
         this.oldPos.copy(tmpPos);
-        // 更新星體位置
         this.mesh.position.copy(this.currPos);
 
-        // 儲存位置
-        this.points.push(this.currPos.clone())
+        this.points.push(this.currPos.clone());
         if (this.points.length > pointsMax) this.points.shift();
-        // 把陣列放入軌跡線
         this.lineGeo.setFromPoints(this.points);
 
-        // 軌跡漸變
+        // 軌跡尾巴漸變淡出運算 (降低頻率以優化效能)
         if (this.updateTick >= 10) {
             const pointCount = this.points.length;
 
             for (let i = 0; i < pointCount; ++i) {
                 // 目前的點在軌跡線的比例
                 const part = i / (pointCount - 1);
-                // 漸變權重 => 只從最後 20% 開始漸變
-                // 公式 : 下限 + (上限 - 下限) * (目前比例 / 區間長度)
                 let ratio = (part < 0.2) ? (0.1 + (0.9) * (part / 0.2)) : 1.0;
 
                 this.colorArr[i * 3] = this.lineColor.r * ratio;
                 this.colorArr[i * 3 + 1] = this.lineColor.g * ratio;
                 this.colorArr[i * 3 + 2] = this.lineColor.b * ratio;
             }
-            // 更新 GPU 資料
+            // 標記為需更新，觸發 Three.js 重新提交資料至 GPU
             this.lineGeo.attributes.color.needsUpdate = true;
 
             this.updateTick = 0;
@@ -346,8 +341,9 @@ class Star {
 }
 
 
-// ====== 初始化星體 ======
-
+// ============================================================================
+// 應用實例化 (Instance Initialization)
+// ============================================================================
 let stars = [
     new Star(0xff6600, star1Mass, star1Pos, star1Vel),  // 橘星
     new Star(0x66ccff, star2Mass, star2Pos, star2Vel),  // 藍星
@@ -355,37 +351,32 @@ let stars = [
 ];
 
 
-// ====== 動畫與物理計算 ======
-
+// ============================================================================
+// 物理模擬主迴圈 (Main Physics Loop)
+// ============================================================================
 const vector = new THREE.Vector3();         // 位移矢量
 const accG = new THREE.Vector3();           // 加速度
 const centerMassPos = new THREE.Vector3();  // 質心位置
 const tmpCMCalc = new THREE.Vector3();      // 質心計算暫存
 
 function animate() {
-    // 在下一次繪製螢幕時會執行這個函式
     requestAnimationFrame(animate);
 
     if (!isPause) {
-        // 計算星體間的萬有引力
+        // N-Body 萬有引力計算 (O(N^2) 複雜度)
         stars.forEach((a, i) => {
 
             a.nextAcc.set(0, 0, 0);
 
             stars.forEach((b, j) => {
-                if (i == j) return;
+                if (i === j) return;
 
-                // 位移矢量 r⭢
                 vector.subVectors(b.currPos, a.currPos);
-                // 距離平方 r²
-                const DistSq = vector.lengthSq();
-                // 軟化常數平方 ε² => 避免距離太小時數值溢出
+                const distSq = vector.lengthSq();
                 const epsilonSq = epsilon * epsilon;
 
-                // 重力加速度 a = GM / r² = (GM / r²) * r^ = (GM / r²) * (r⭢ / r) = (GM / r³) * r⭢
-                // 先算出 1 / (r² + ε²) ^ 1.5 ≈ 1 / r³
-                const invDistCube = 1 / Math.pow(DistSq + epsilonSq, 1.5);
-                // 乘上 GMr⭢
+                // 萬有引力向量化公式: a = (GM / r³) * r⭢ 
+                const invDistCube = 1 / Math.pow(distSq + epsilonSq, 1.5);
                 accG.copy(vector).multiplyScalar(Gconst * b.mass * invDistCube);
                 a.nextAcc.add(accG);
             });
@@ -397,15 +388,15 @@ function animate() {
         syncCenterMass();
     }
     
-    // 讓滑鼠能拖曳視角
     controls.update();
-    // 執行渲染
     composer.render();
 }
 
-// 質心修正
+/**
+ * 系統質心修正 (Center of Mass Drift Correction)
+ * 避免因為數值積分誤差導致整個多體系統朝特定方向漂移
+ */
 function syncCenterMass() {
-    // 計算質心 Rcm⭢ = Σ(m * r⭢) / Σm
     let totalMass = 0;
     centerMassPos.set(0, 0, 0);
     stars.forEach(s => {
@@ -413,8 +404,7 @@ function syncCenterMass() {
         tmpCMCalc.copy(s.currPos).multiplyScalar(s.mass);
         centerMassPos.add(tmpCMCalc);
     });
-    centerMassPos.divideScalar(totalMass)
-    // 質心修正
+    centerMassPos.divideScalar(totalMass);
     stars.forEach(s => {
         s.currPos.sub(centerMassPos);
         s.oldPos.sub(centerMassPos);
@@ -425,46 +415,44 @@ function syncCenterMass() {
 syncCenterMass();
 syncInputVar();
 
-// 把軌跡清空
 stars.forEach(s => s.points = []);
-// 開始動畫
 animate();
 
 
-// ====== 添加背景星星 ======
-
-const maxStarNum = 5000;  // 星星數量
+// ============================================================================
+// 背景星空系統 (Background Star System)
+// ============================================================================
+const maxStarNum = 5000;
 const createBackgroundStars = () => {
     // 儲存星星座標
     const array = [];
     for (let i = 0; i < maxStarNum; ++i) {
         let x, y, z;
         do {
+            // 生成分佈於 2000 單位立方體內的座標，但避開中心 100 單位區域以防穿模
             x = (Math.random() - 0.5) * 2000;
             y = (Math.random() - 0.5) * 2000;
             z = (Math.random() - 0.5) * 2000;
         } while (
-            Math.abs(x) < 100 && Math.abs(y) < 100 && Math.abs(x) < 100
+            Math.abs(x) < 100 && Math.abs(y) < 100 && Math.abs(z) < 100
         );
         array.push(x, y, z);
     }
 
     const geometry = new THREE.BufferGeometry();
-    // GPU 加速
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(array, 3));
 
-    // 使用圓形貼圖
     const loader = new THREE.TextureLoader();
     const starTexture = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/sprites/disc.png');
 
-    // 渲染星星
+    // 使用 Points 材質進行大規模粒子渲染
     const material = new THREE.PointsMaterial({
-        color: 0xffffff,        // 白色
+        color: 0xffffff,
         size: 1.5,
         map: starTexture,
-        sizeAttenuation: true,  // 尺寸衰減
+        sizeAttenuation: true,  // 開啟透視尺寸衰減
         transparent: true,
-        alphaTest: 0.5,         // 設定渲染門檻
+        alphaTest: 0.5,         // 捨棄透明度低於此閾值的像素以節省效能
     });
     const backgroundStars = new THREE.Points(geometry, material);
     scene.add(backgroundStars);
@@ -472,13 +460,13 @@ const createBackgroundStars = () => {
 createBackgroundStars();
 
 
-// ====== 處理視窗縮放 =====
-
+// ============================================================================
+// 視窗事件監聽 (Window Events Binding)
+// ============================================================================
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // 更新後期處理的分辨率
     composer.setSize(window.innerWidth, window.innerHeight);
     bloomPass.resolution.set(window.innerWidth, window.innerHeight);
 });

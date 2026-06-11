@@ -3,18 +3,17 @@
 
 <head>
 
+    <!-- Meta 資訊設定 -->
     <meta charset="UTF-8">
     <meta name="author" content="Starle">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Starle OS — 三體動畫</title>
+    <title>Starle Web — 三體動畫</title>
 
-    <!-- 引入 CSS -->
+    <!-- 樣式表與字體圖示 -->
     <link rel="stylesheet" href="./threebody.css">
-
-    <!-- 引入 Google Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- 引入 Three.js -->
+    <!-- 模組依賴 (Three.js) -->
     <script type="importmap">
         {
             "imports": {
@@ -27,12 +26,11 @@
 </head>
 
 <body>
-
+    <!-- 使用者介面容器 -->
     <div class="ui-container">
 
-        <!-- 按鈕控制 -->
+        <!-- 頂部功能控制列 -->
          <div class="control-container">
-
             <span class="refresh-button">
                 <span class="material-icons">refresh</span>
             </span>
@@ -40,44 +38,36 @@
             <span class="pause-button">
                 <span class="material-icons">pause</span>
             </span>
-
             <span class="setting-button">
                 <span class="material-icons">settings</span>
             </span>
-
             <span class="home-button">
                 <span class="material-icons">home</span>
             </span>
-
         </div>
 
-        <!-- 控制面板 -->
+        <!-- 設定參數面板 -->
         <div class="setting-panel">
 
-            <!-- 面板分頁切換按鈕 -->
+            <!-- 頁籤切換導航 -->
             <div class="tab-header">
-
                 <span class="value-button show">
                     <span class="material-icons">tune</span>
                 </span>
-
                 <span class="solution-button">
                     <span class="material-icons">route</span>
                 </span>
-
                 <span class="analyze-button">
                     <span class="material-icons">radar</span>
                 </span>
-
             </div>
 
-            <!-- 參數調整分頁 -->
+            <!-- 分頁：參數調整 -->
             <div class="value-tab active">
                 <h4>參數調整</h4>
 
                 <div class="input-container">
                     <label for="line-input">軌跡時長</label>
-                    <!-- 軌跡時長拉桿 -->
                     <div class="range-wrapper">
                         <input type="range" id="point-time-input" min="0" max="60" step="1">
                         <span class="range-tooltip">0</span>
@@ -155,12 +145,12 @@
                 
             </div>
 
-            <!-- 特殊解分頁 -->
+            <!-- 分頁：特殊解 -->
             <div class="solution-tab">
                 <h4>特殊解</h4>
             </div>
 
-            <!-- 數據監測分頁 -->
+            <!-- 分頁：數據監測 -->
             <div class="analyze-tab">
                 <h4>數據監測</h4>
             </div>
@@ -169,7 +159,7 @@
 
     </div>
 
-    <!-- 引入 JavaScript -->
+    <!-- 核心應用程式腳本 -->
     <script type="module" src="./threebody.js"></script>
 
 </body>

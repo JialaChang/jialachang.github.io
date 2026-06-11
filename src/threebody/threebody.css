@@ -1,15 +1,14 @@
-/* ===== 基礎設定 ===== */
-
-/* 顏色設定 */
+/* ==========================================================================
+   全域變數與重置 (Globals & Resets)
+   ========================================================================== */
 :root {
-    --text--color: rgba(255, 255, 255, 0.8);
-    --text--input: rgba(255, 255, 255, 0.8);
-    --input--color: rgba(255, 255, 255, 0.05);
-    --input--border: rgba(255, 255, 255, 0.2);
-    --panel--bg: rgba(255, 255, 255, 0.1);
+    --text-color: rgba(255, 255, 255, 0.8);
+    --text-input: rgba(255, 255, 255, 0.8);
+    --input-color: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.2);
+    --panel-bg: rgba(255, 255, 255, 0.1);
 }
 
-/* 全局樣式 */
 body {
     display: flex;
     align-items: center;
@@ -32,9 +31,10 @@ body {
 }
 
 
-/* ===== 佈局與元件 ====== */
-
-/* UI 容器 */
+/* ==========================================================================
+   控制介面佈局 (UI Layout)
+   ========================================================================== */
+/* 主控台容器 */
 .ui-container {
     z-index: 1;
     position: fixed;
@@ -49,7 +49,6 @@ body {
     gap: 2rem;
 }
 
-/* 操作按鈕容器 */
 .control-container {
     display: flex;
     margin-right: 5%;
@@ -59,7 +58,6 @@ body {
     gap: 50%;
 }
 
-/* 操作按鈕 */
 .control-container > span {
     opacity: 0.5;
     cursor: pointer;
@@ -75,7 +73,6 @@ body {
     scale: 0.9;
 }
 
-/* 控制面板 */
 .setting-panel {
     display: none;
     width: 100%;
@@ -83,7 +80,7 @@ body {
 
     height: 80vh;
 
-    background: var(--panel--bg);
+    background: var(--panel-bg);
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 
@@ -95,7 +92,6 @@ body {
     display: flex;
 }
 
-/* 面板按鈕容器 */
 .setting-panel .tab-header {
     display: flex;
     margin: 1rem;
@@ -103,7 +99,6 @@ body {
     justify-content: space-between;
 }
 
-/* 面板按鈕 */
 .setting-panel .tab-header > span {
     cursor: pointer;
     opacity: 0.4;
@@ -122,7 +117,6 @@ body {
     opacity: 0.8;
 }
 
-/* 面板分頁 */
 .value-tab, .solution-tab, .analyze-tab {
     display: none;
     width: 100%;
@@ -134,13 +128,14 @@ body {
     display: flex;
 }
 
-/* 面板分頁標題 */
 h4 {
-    color: var(--text--color);
+    color: var(--text-color);
     margin: 0;
 }
 
-/* 輸入框 */
+/* ==========================================================================
+   表單元件 (Form Components)
+   ========================================================================== */
 .input-container {
     display: flex;
     flex: 1 1;
@@ -159,9 +154,9 @@ h4 {
     width: 0;
     flex-grow: 1;
     height: 1.5rem;
-    border: 1px solid var(--input--border);
-    background: var(--input--color);
-    color: var(--text--input);
+    border: 1px solid var(--input-border);
+    background: var(--input-color);
+    color: var(--text-input);
     border-radius: 8px;
 }
 
@@ -176,7 +171,6 @@ h4 {
     flex-grow: 1;
 }
 
-/* 拉桿容器 */
 .range-wrapper {
     position: relative;
     flex-grow: 1;
@@ -185,16 +179,15 @@ h4 {
     width: 0;
 }
 
-/* 懸浮數值標籤 */
 .range-wrapper .range-tooltip {
     position: absolute;
     top: -1.5rem;
     left: 0;
     transform: translateX(-50%);
     
-    background: var(--panel--bg);
-    border: 1px solid var(--input--color);
-    color: var(--text--color);
+    background: var(--panel-bg);
+    border: 1px solid var(--input-color);
+    color: var(--text-color);
     padding: 2px 8px;
     border-radius: 6px;
     font-size: 0.8rem;
@@ -205,13 +198,11 @@ h4 {
     transition: opacity 0.2s ease;
 }
 
-/* 顯示懸浮數值標籤 */
 .range-wrapper:hover .range-tooltip,
 input[type="range"]:active + .range-tooltip {
     opacity: 1;
 }
 
-/* 隱藏輸入框上下箭頭 */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -221,8 +212,7 @@ input[type=number] {
   appearance: textfield;
 }
 
-/* 自訂拉桿樣式 */
-/* 清除預設樣式 */
+/* Range Slider 自訂樣式 */
 input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
@@ -230,28 +220,27 @@ input[type="range"] {
     border: none;
     outline: none;
 }
-/* 拉桿軌道 */
 input[type="range"]::-webkit-slider-runnable-track {
     width: 100%;
     height: 6px;
     cursor: pointer;
-    background: var(--input--border);
+    background: var(--input-border);
     border-radius: 3px;
 }
-/* 拉桿按鈕 */
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    /* 垂直置中: (軌道高/2) - (控制點高/2) => (6/2) - (16/2) = -5px */
     margin-top: -5px;
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: var(--text--color);
+    background: var(--text-color);
     cursor: pointer;
 }
 
 
-/* ===== 響應式設定  ===== */
+/* ==========================================================================
+   響應式設計 (Responsive Design)
+   ========================================================================== */
 @media screen and (max-width: 768px) {
 
     .ui-container {
