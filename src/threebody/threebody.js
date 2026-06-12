@@ -1,4 +1,6 @@
-// ====== 引用模組與基本設定 ======
+// ============================================================================
+// 引用模組與基本設定 
+// ============================================================================
 
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -30,7 +32,9 @@ document.body.appendChild(renderer.domElement);
 camera.position.set(0, 0, 3);
 
 
-// ====== 設置後期處理 ======
+// ============================================================================
+// 設置後期處理 
+// ============================================================================
 
 const renderScene = new RenderPass(scene, camera);
 const bloomPass = new UnrealBloomPass(
@@ -45,7 +49,9 @@ composer.addPass(renderScene);
 composer.addPass(bloomPass);
 
 
-// ====== 物理參數 ======
+// ============================================================================
+// 設定物理參數
+// ============================================================================
 
 // 萬有引力常數
 const Gconst = 1;
@@ -53,8 +59,8 @@ const Gconst = 1;
 const dt = 0.005;
 // 軟化係數
 const epsilon = 1e-6;
-// 最大軌跡數
-let pointsMax = 4000;
+// 最大軌跡數 (每秒畫 1/dt 個點)
+let pointsMax = 2000;
 
 // 預設星體參數
 const star1Mass = 1.0;
@@ -166,6 +172,15 @@ pointInput?.addEventListener('input', (e) => {
         while (s.points.length > pointsMax) {
             s.points.shift();
         }
+        // 如果新的最大軌跡點數大於現有的顏色陣列容量，則重新分配更大的空間
+        if (s.colorArr.length < pointsMax * 3) {
+            const newColorArr = new Float32Array(pointsMax * 3);
+            newColorArr.fill(1.0);
+            newColorArr.set(s.colorArr); // 複製並保留原有的顏色資料
+            s.colorArr = newColorArr;
+            // 替換為新的 BufferAttribute 讓 WebGL 知道緩衝區大小已改變
+            s.lineGeo.setAttribute('color', new THREE.BufferAttribute(s.colorArr, 3));
+        }
     });
 });
 
@@ -267,11 +282,11 @@ refreshBtn?.addEventListener('click', () => {
 
 });
 
+const tmpVelMonitor = new THREE.Vector3();
 /**
- * 實時更新數據監測面板的資料
+ * 實時更新數據監測面板的資料  
  * 只有該分頁啟動時才會執行以節省效能
  */
-const tmpVelMonitor = new THREE.Vector3();
 function syncAnalyzeData() {
     // 效能優化：如果沒有打開此面板，則直接 Return
     if (!analyzeTab.classList.contains('active')) return;
@@ -313,9 +328,9 @@ class Star {
         this.oldPos = this.currPos.clone().sub(this.velocity.clone().multiplyScalar(dt));
         this.nextAcc = new THREE.Vector3(0, 0, 0);
         
-        // 預先分配 TypedArray 作為軌跡顏色的記憶體區塊
+        // 預先分配 TypedArray 作為軌跡顏色 (RGB 三個單位決定) 的記憶體區塊
         this.colorArr = new Float32Array(pointsMax * 3);
-        this.colorArr.fill(1.0);
+        this.colorArr.fill(1.0);  // 將軌跡陣列填充為白色
 
         // 建立視覺化球體 (Mesh)
         const starGeo = new THREE.SphereGeometry(0.05, 32, 32);
@@ -369,8 +384,8 @@ class Star {
         if (this.points.length > pointsMax) this.points.shift();
         this.lineGeo.setFromPoints(this.points);
 
-        // 軌跡尾巴漸變淡出運算 (降低頻率以優化效能)
-        if (this.updateTick >= 10) {
+        // 軌跡尾巴漸變淡出運算
+        if (this.updateTick >= 10) {  // 降低頻率以優化效能
             const pointCount = this.points.length;
 
             for (let i = 0; i < pointCount; ++i) {
@@ -447,7 +462,7 @@ function animate() {
 }
 
 /**
- * 系統質心修正 (Center of Mass Drift Correction)
+ * 系統質心修正 (Center of Mass Drift Correction)  
  * 避免因為數值積分誤差導致整個多體系統朝特定方向漂移
  */
 function syncCenterMass() {
