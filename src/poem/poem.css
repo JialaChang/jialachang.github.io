@@ -2,27 +2,27 @@
    色彩主題與重置 (Theme & Resets)
    ========================================================================== */
 :root {
-    --text-main: rgb(47, 79, 79);
-    --text-poem: rgb(68, 68, 68);
+  --text-main: rgb(47, 79, 79);
+  --text-poem: rgb(68, 68, 68);
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-    overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  overflow-x: hidden;
 
-    background-color: #f4f7f6;
-    background-image: radial-gradient(var(--text-main) 0.4px, transparent 0.8px);
-    background-size: 30px 30px;
-    background-attachment: fixed;
-    
-    font-size: 16px;
-    color: rgb(51, 51, 51);
-    font-family: 'Noto Serif TC', "PMingLiU", "標楷體", cursive;
+  background-color: #f4f7f6;
+  background-image: radial-gradient(var(--text-main) 0.4px, transparent 0.8px);
+  background-size: 30px 30px;
+  background-attachment: fixed;
+  
+  font-size: 16px;
+  color: rgb(51, 51, 51);
+  font-family: 'Noto Serif TC', "PMingLiU", "標楷體", cursive;
 }
 
 
@@ -30,103 +30,103 @@ body {
    頁面元素 (Page Elements)
    ========================================================================== */
 h1 {
-    display: inline-block;  /* 讓底線寬度符合文字寬度 */
-    padding-bottom: 0.3rem;
-    margin: 5rem;
+  display: inline-block;  /* 讓底線寬度符合文字寬度 */
+  padding-bottom: 0.3rem;
+  margin: 5rem;
 
-    font-size: 4rem;
-    font-weight: 1000;
-    letter-spacing: 0.5rem;
-    color: var(--text-main);
-    border-bottom: 0.25rem solid var(--text-main);
+  font-size: 4rem;
+  font-weight: 1000;
+  letter-spacing: 0.5rem;
+  color: var(--text-main);
+  border-bottom: 0.25rem solid var(--text-main);
 }
 
 .back-link {
-    margin-bottom: 5rem;
-    font-size: 1rem;
-    text-decoration: none;  /* 移除下劃線 */
-    color: #708090;
-    transition: color 0.5s ease;
+  margin-bottom: 5rem;
+  font-size: 1rem;
+  text-decoration: none;  /* 移除下劃線 */
+  color: #708090;
+  transition: color 0.5s ease;
 }
 
 .back-link:hover {
-    color: var(--text-main);
-    text-decoration: underline;
+  color: var(--text-main);
+  text-decoration: underline;
 }
 
 .poem-card {
-    position: relative;
-    padding: 5rem;
-    margin-bottom: 5rem;
+  position: relative;
+  padding: 5rem;
+  margin-bottom: 5rem;
 
-    width: 40vw;
-    border-radius: 8px;
+  width: 40vw;
+  border-radius: 8px;
 
-    background-color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    border-left: 5px solid var(--text-main);
-    border-right: 5px solid var(--text-main);
-    text-align: center;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  border-left: 5px solid var(--text-main);
+  border-right: 5px solid var(--text-main);
+  text-align: center;
 
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    animation: fadeInUp 1s ease-out forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  animation: fadeInUp 1s ease-out forwards;
 }
 
 .poem-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);
 }
 
 .poem-card::after {
-    content: "◈";
-    display: block;
-    margin-top: 2rem;
-    color: var(--text-main);
-    opacity: 0.5;
-    font-size: 1.5em;
+  content: "◈";
+  display: block;
+  margin-top: 2rem;
+  color: var(--text-main);
+  opacity: 0.5;
+  font-size: 1.5em;
 } 
 
 .poem-card h2 {
-    margin-bottom: 2rem;
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: var(--text-poem);
+  margin-bottom: 2rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--text-poem);
 }
 
 .poem-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    letter-spacing: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  letter-spacing: 0.5rem;
 }
 
 .poem-title span:not(.divider) {
-    flex: 1;
+  flex: 1;
 }
 
 .poem-title .title-text {
-    text-align: right;
+  text-align: right;
 }
 
 .poem-title .author {
-    text-align: left;
-    font-size: 0.9em;
-    opacity: 0.8;
+  text-align: left;
+  font-size: 0.9em;
+  opacity: 0.8;
 }
 
 .poem-title .divider {
-    flex: 0 0 45px;
-    height: 1px;
-    background-color: var(--text-main);
+  flex: 0 0 45px;
+  height: 1px;
+  background-color: var(--text-main);
 }
 
 .poem-card p {
-    margin-top: 1.5rem;
-    font-size: 1.3rem;
-    font-weight: 400;
-    letter-spacing: 0.3rem;
-    line-height: 4rem;
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0.3rem;
+  line-height: 4rem;
 }
 
 
@@ -134,12 +134,12 @@ h1 {
    動畫定義 (Animations)
    ========================================================================== */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(1.5rem);;
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);;
-    }
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);;
+  }
 }

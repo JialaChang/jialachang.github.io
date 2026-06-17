@@ -5,19 +5,19 @@
 @import url('./main.css');
 
 :root {
-    --text-primary: rgb(255, 255, 255);
-    --text-secondary: rgba(255, 255, 255, 0.8);
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-navbg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glow-blue: rgba(165, 216, 255, 0.65);
-    --glow-wblue: rgba(165, 216, 255, 0.3);
-    
-    --font-main: 'Trebuchet MS', 'LXGW WenKai Mono TC', sans-serif;
-    --font-chinese: 'LXGW WenKai Mono TC', serif;
+  --text-primary: rgb(255, 255, 255);
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-navbg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glow-blue: rgba(165, 216, 255, 0.65);
+  --glow-wblue: rgba(165, 216, 255, 0.3);
+  
+  --font-main: 'Trebuchet MS', 'LXGW WenKai Mono TC', sans-serif;
+  --font-chinese: 'LXGW WenKai Mono TC', serif;
 
-    --layer-background: -1;
-    --layer-content: 1;
+  --layer-background: -1;
+  --layer-content: 1;
 }
 
 /* ==========================================================================
@@ -26,56 +26,56 @@
 
 /* 隱藏滾動條 */
 body::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 ::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
-    display: none;
+  width: 0;
+  background: transparent;
+  display: none;
 }
 
 html, body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 
-    overflow: hidden;
-    scroll-snap-type: none;
-    touch-action: none;
+  overflow: hidden;
+  scroll-snap-type: none;
+  touch-action: none;
 
-    background: #020205d0;
-    perspective: 1000px;
+  background: #020205d0;
+  perspective: 1000px;
 
-    font-size: 16px;
-    font-family: var(--font-main);
-    color: var(--text-primary);
+  font-size: 16px;
+  font-family: var(--font-main);
+  color: var(--text-primary);
 
-    -webkit-user-select: none;
-    user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* 分頁主容器 (受 JS Transform 控制) */
 .main-wrapper {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    transition: transform 1.2s cubic-bezier(0.34, 1.15, 0.64, 1);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: transform 1.2s cubic-bezier(0.34, 1.15, 0.64, 1);
 }
 
 .page-section {
-    display: flex;
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    overflow: hidden;
-    will-change: transform;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+  will-change: transform;
 }
 
 /* ==========================================================================

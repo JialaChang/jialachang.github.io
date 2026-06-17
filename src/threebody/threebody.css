@@ -2,32 +2,32 @@
    全域變數與重置 (Globals & Resets)
    ========================================================================== */
 :root {
-    --text-color: rgba(255, 255, 255, 0.8);
-    --text-input: rgba(255, 255, 255, 0.8);
-    --input-color: rgba(255, 255, 255, 0.05);
-    --input-border: rgba(255, 255, 255, 0.2);
-    --panel-bg: rgba(255, 255, 255, 0.1);
+  --text-color: rgba(255, 255, 255, 0.8);
+  --text-input: rgba(255, 255, 255, 0.8);
+  --input-color: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.2);
+  --panel-bg: rgba(255, 255, 255, 0.1);
 }
 
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
 
-    overflow: hidden;
-    color: white;
-    font-size: 16px;
-    font-family: 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  color: white;
+  font-size: 16px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
 
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 
@@ -36,230 +36,230 @@ body {
    ========================================================================== */
 /* 主控台容器 */
 .ui-container {
-    z-index: 1;
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
+  z-index: 1;
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
 
-    width: 35vw;
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+  width: 35vw;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
 
 .control-container {
-    display: flex;
-    margin-right: 5%;
-    width: auto;
-    align-self: flex-end;
-    justify-content: flex-end;
-    gap: 50%;
+  display: flex;
+  margin-right: 5%;
+  width: auto;
+  align-self: flex-end;
+  justify-content: flex-end;
+  gap: 50%;
 }
 
 .control-container > span {
-    opacity: 0.5;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .control-container > span:hover {
-    opacity: 1;
-    scale: 1.1;
+  opacity: 1;
+  scale: 1.1;
 }
 
 .control-container > span:active {
-    scale: 0.9;
+  scale: 0.9;
 }
 
 .setting-panel {
-    display: none;
-    width: 100%;
-    border-radius: 2.5rem;
+  display: none;
+  width: 100%;
+  border-radius: 2.5rem;
 
-    height: 80vh;
+  height: 80vh;
 
-    background: var(--panel-bg);
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
+  background: var(--panel-bg);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 
-    flex-direction: column;
-    align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .setting-panel.show {
-    display: flex;
+  display: flex;
 }
 
 .setting-panel .tab-header {
-    display: flex;
-    margin: 1rem;
-    width: 60%;
-    justify-content: space-between;
+  display: flex;
+  margin: 1rem;
+  width: 60%;
+  justify-content: space-between;
 }
 
 .setting-panel .tab-header > span {
-    cursor: pointer;
-    opacity: 0.4;
-    transition: all 0.1s ease;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: all 0.1s ease;
 }
 
 .setting-panel .tab-header > span:hover{
-    scale: 1.05;
+  scale: 1.05;
 }
 
 .setting-panel .tab-header > span:active{
-    scale: 0.95;
+  scale: 0.95;
 }
 
 .tab-header > span.show {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .value-tab, .solution-tab, .analyze-tab {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
 }
 
 .value-tab.active, .solution-tab.active, .analyze-tab.active {
-    display: flex;
+  display: flex;
 }
 
 h4 {
-    color: var(--text-color);
-    margin: 0;
+  color: var(--text-color);
+  margin: 0;
 }
 
 /* ==========================================================================
    特殊解選單樣式 (Solution List)
    ========================================================================== */
 .solution-list {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    padding-bottom: 2rem;
-    overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-bottom: 2rem;
+  overflow-y: auto;
 }
 
 .solution-list button {
-    background: var(--input-color);
-    border: 1px solid var(--input-border);
-    color: var(--text-color);
-    padding: 0.8rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
+  background: var(--input-color);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .solution-list button:hover {
-    background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* ==========================================================================
-       數據監測面板樣式 (Data Analyze Cards)
+     數據監測面板樣式 (Data Analyze Cards)
    ========================================================================== */
 .data-card {
-    width: 70%;
-    background: var(--input-color);
-    border: 1px solid var(--input-border);
-    border-radius: 8px;
-    padding: 1rem;
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  width: 70%;
+  background: var(--input-color);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .data-card .data-title {
-    font-weight: bold;
-    color: var(--text-color);
-    margin-bottom: 0.2rem;
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 0.2rem;
 }
 
 .data-card .data-row {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .data-card .data-row span {
-    float: right;
-    color: var(--text-color);
+  float: right;
+  color: var(--text-color);
 }
 
 /* ==========================================================================
    表單元件 (Form Components)
    ========================================================================== */
 .input-container {
-    display: flex;
-    flex: 1 1;
-    justify-content: center;
-    width: 70%;
-    margin-top: 1rem;
+  display: flex;
+  flex: 1 1;
+  justify-content: center;
+  width: 70%;
+  margin-top: 1rem;
 }
 
 .input-container label {
-    margin-right: 1rem;
-    font-size: 0.9rem;
-    opacity: 0.8;
+  margin-right: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 .input-container input {
-    width: 0;
-    flex-grow: 1;
-    height: 1.5rem;
-    border: 1px solid var(--input-border);
-    background: var(--input-color);
-    color: var(--text-input);
-    border-radius: 8px;
+  width: 0;
+  flex-grow: 1;
+  height: 1.5rem;
+  border: 1px solid var(--input-border);
+  background: var(--input-color);
+  color: var(--text-input);
+  border-radius: 8px;
 }
 
 .input-container .vector-inputs {
-    display: flex;
-    gap: 5px;
-    flex: 1 1;
+  display: flex;
+  gap: 5px;
+  flex: 1 1;
 }
 
 .input-container .vector-inputs input {
-    width: 0;
-    flex-grow: 1;
+  width: 0;
+  flex-grow: 1;
 }
 
 .range-wrapper {
-    position: relative;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    width: 0;
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  width: 0;
 }
 
 .range-wrapper .range-tooltip {
-    position: absolute;
-    top: -1.5rem;
-    left: 0;
-    transform: translateX(-50%);
-    
-    background: var(--panel-bg);
-    border: 1px solid var(--input-color);
-    color: var(--text-color);
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    pointer-events: none;
-    
-    opacity: 0; 
-    transition: opacity 0.2s ease;
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  transform: translateX(-50%);
+  
+  background: var(--panel-bg);
+  border: 1px solid var(--input-color);
+  color: var(--text-color);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  pointer-events: none;
+  
+  opacity: 0; 
+  transition: opacity 0.2s ease;
 }
 
 .range-wrapper:hover .range-tooltip,
 input[type="range"]:active + .range-tooltip {
-    opacity: 1;
+  opacity: 1;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -273,27 +273,27 @@ input[type=number] {
 
 /* Range Slider 自訂樣式 */
 input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    background: transparent;
-    border: none;
-    outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 6px;
-    cursor: pointer;
-    background: var(--input-border);
-    border-radius: 3px;
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  background: var(--input-border);
+  border-radius: 3px;
 }
 input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    margin-top: -5px;
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background: var(--text-color);
-    cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5px;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--text-color);
+  cursor: pointer;
 }
 
 
@@ -302,26 +302,26 @@ input[type="range"]::-webkit-slider-thumb {
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    .ui-container {
-        top: 1rem;
-        right: 1rem;
-        width: 80vw;
-        height: auto;
-    }
+  .ui-container {
+    top: 1rem;
+    right: 1rem;
+    width: 80vw;
+    height: auto;
+  }
 
-    .control-container {
-        width: 100%;
-        justify-content: flex-end;
-        gap: 1rem;
-    }
+  .control-container {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
 
-    .setting-panel {
-        height: 80vh;
-        border-radius: 1.5rem;
-    }
+  .setting-panel {
+    height: 80vh;
+    border-radius: 1.5rem;
+  }
 
-    .input-container input {
-        height: 1rem;
-    }
+  .input-container input {
+    height: 1rem;
+  }
 
 }
