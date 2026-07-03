@@ -1,7 +1,6 @@
 // ============================================================================
 // 引用模組與基本設定
 // ============================================================================
-
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
@@ -27,7 +26,6 @@ camera.position.set(0, 0, 3);
 // ============================================================================
 // 設置後期處理
 // ============================================================================
-
 const renderScene = new RenderPass(scene, camera);
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
@@ -44,11 +42,11 @@ composer.addPass(bloomPass);
 // ============================================================================
 // 設定物理參數
 // ============================================================================
-
 const Gconst = 1;      // 萬有引力常數
 const dt = 0.005;      // 時間步長
 const epsilon = 1e-6;  // 軟化係數
-let pointsMax = 2000;  // 最大軌跡點數 (每秒畫 1/dt 個點)
+let pointsMax = 2000;  // 最大軌跡點數
+const stepInterval = 1 / 120;  // 渲染每步在真實時間中佔多少秒
 
 const starInitConfig = [
   { // 橘星
@@ -77,7 +75,6 @@ const starPrefixes = ['star1', 'star2', 'star3'];
 // ============================================================================
 // UI 控制與事件綁定
 // ============================================================================
-
 const refreshBtn  = document.querySelector('.refresh-button');
 const pauseBtn    = document.querySelector('.pause-button');
 const pauseIcon   = pauseBtn?.querySelector('.material-icons');
@@ -123,7 +120,6 @@ const analyzeTab = tabs[2].tab;
 // ============================================================================
 // 數據同步與參數控制
 // ============================================================================
-
 const pointInput   = document.querySelector('#point-time-input');
 const pointTooltip = document.querySelector('.range-tooltip');
 
@@ -148,7 +144,7 @@ function updateRangeTooltip() {
 
 pointInput?.addEventListener('input', (e) => {
   updateRangeTooltip();
-  pointsMax = parseInt(e.target.value) / dt;
+  pointsMax = parseInt(e.target.value) / stepInterval;
 
   stars.forEach(s => {
     while (s.points.length > pointsMax) s.points.shift();
@@ -169,7 +165,7 @@ pointInput?.addEventListener('input', (e) => {
  * 將當前的星體物理狀態 (質量、位置、速度) 反向同步至 UI 輸入面板
  */
 function syncInputVar() {
-  pointInput.value = Math.floor(pointsMax * dt);
+  pointInput.value = Math.floor(pointsMax * stepInterval);
   updateRangeTooltip();
 
   stars.forEach((s, i) => {
@@ -243,13 +239,16 @@ refreshBtn?.addEventListener('click', () => {
 });
 
 const tmpVelMonitor = new THREE.Vector3();
+let lastAnalyzeTime = 0;
 /**
  * 實時更新數據監測面板的資料
- * 只有該分頁啟動時才會執行以節省效能
+ * 只有該分頁啟動時才會執行
  */
-function syncAnalyzeData() {
+function syncAnalyzeData(timestamp) {
   // 效能優化：面板未開啟時提前返回
   if (!analyzeTab.classList.contains('active')) return;
+  if (timestamp - lastAnalyzeTime < 50) return;  // 每 100ms 更新一次
+  lastAnalyzeTime = timestamp;
 
   const formatVec = (v) => `${v.x.toFixed(3)}, ${v.y.toFixed(3)}, ${v.z.toFixed(3)}`;
 
@@ -365,35 +364,45 @@ const accG         = new THREE.Vector3();  // 加速度
 const centerMassPos = new THREE.Vector3(); // 質心位置
 const tmpCMCalc    = new THREE.Vector3();  // 質心計算暫存
 
-function animate() {
+let lastTime = null;
+
+function animate(timestamp) {
   requestAnimationFrame(animate);
 
+  if (lastTime === null) {lastTime = timestamp;}
+  const elapsed = Math.min((timestamp - lastTime) / 1000, 0.1);
+  lastTime = timestamp;
+
   if (!isPause) {
-    // N-Body 萬有引力計算 (O(N²) 複雜度)
-    stars.forEach((a, i) => {
-      a.nextAcc.set(0, 0, 0);
+    let accumulator = elapsed;
+    while (accumulator >= stepInterval) {
+      // N-Body 萬有引力計算 (O(N²) 複雜度)
+      stars.forEach((a, i) => {
+        a.nextAcc.set(0, 0, 0);
 
-      stars.forEach((b, j) => {
-        if (i === j) return;
+        stars.forEach((b, j) => {
+          if (i === j) return;
 
-        vector.subVectors(b.currPos, a.currPos);
-        const distSq     = vector.lengthSq();
-        const epsilonSq  = epsilon * epsilon;
+          vector.subVectors(b.currPos, a.currPos);
+          const distSq     = vector.lengthSq();
+          const epsilonSq  = epsilon * epsilon;
 
-        // 萬有引力向量化公式: a = (GM / r³) * r⭢
-        const invDistCube = 1 / Math.pow(distSq + epsilonSq, 1.5);
-        accG.copy(vector).multiplyScalar(Gconst * b.mass * invDistCube);
-        a.nextAcc.add(accG);
+          // 萬有引力向量化公式: a = (GM / r³) * r⭢
+          const invDistCube = 1 / Math.pow(distSq + epsilonSq, 1.5);
+          accG.copy(vector).multiplyScalar(Gconst * b.mass * invDistCube);
+          a.nextAcc.add(accG);
+        });
       });
-    });
 
-    stars.forEach(s => s.update(s.nextAcc));
-    syncCenterMass();
+      stars.forEach(s => s.update(s.nextAcc));
+      syncCenterMass();
+      accumulator -= stepInterval;
+    }
   }
 
   controls.update();
   composer.render();
-  syncAnalyzeData();
+  syncAnalyzeData(timestamp);
 }
 
 /**
@@ -420,8 +429,7 @@ syncCenterMass();
 syncInputVar();
 
 stars.forEach(s => s.points = []);
-animate();
-
+requestAnimationFrame(animate);
 
 // ============================================================================
 // 背景星空系統
