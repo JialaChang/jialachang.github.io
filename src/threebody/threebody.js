@@ -1,6 +1,4 @@
-// ============================================================================
-// 引用模組與基本設定
-// ============================================================================
+// ---------- 引用模組與基本設定 ----------
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
@@ -23,9 +21,7 @@ document.body.appendChild(renderer.domElement);
 camera.position.set(0, 0, 3);
 
 
-// ============================================================================
-// 設置後期處理
-// ============================================================================
+// ---------- 設置後期處理 ----------
 const renderScene = new RenderPass(scene, camera);
 const bloomPass = new UnrealBloomPass(
   new THREE.Vector2(window.innerWidth, window.innerHeight),
@@ -39,9 +35,7 @@ composer.addPass(renderScene);
 composer.addPass(bloomPass);
 
 
-// ============================================================================
-// 設定物理參數
-// ============================================================================
+// ---------- 設定物理參數 ----------
 const Gconst = 1;      // 萬有引力常數
 const dt = 0.005;      // 時間步長
 const epsilon = 1e-6;  // 軟化係數
@@ -72,9 +66,7 @@ const starInitConfig = [
 const starPrefixes = ['star1', 'star2', 'star3'];
 
 
-// ============================================================================
-// UI 控制與事件綁定
-// ============================================================================
+// ---------- UI 控制與事件綁定 ----------
 const refreshBtn  = document.querySelector('.refresh-button');
 const pauseBtn    = document.querySelector('.pause-button');
 const pauseIcon   = pauseBtn?.querySelector('.material-icons');
@@ -117,9 +109,7 @@ tabs.forEach(({ btn, tab }) => {
 const analyzeTab = tabs[2].tab;
 
 
-// ============================================================================
-// 數據同步與參數控制
-// ============================================================================
+// ---------- 數據同步與參數控制 ----------
 const pointInput   = document.querySelector('#point-time-input');
 const pointTooltip = document.querySelector('.range-tooltip');
 
@@ -272,9 +262,7 @@ function syncAnalyzeData(timestamp) {
 }
 
 
-// ============================================================================
-// 核心物理類別: 星體
-// ============================================================================
+// ---------- 核心物理類別: 星體 ----------
 // 宣告全域暫存向量，避免在迴圈或渲染週期內頻繁 GC (Garbage Collection)
 const tmpPos = new THREE.Vector3();
 const capPos = new THREE.Vector3();
@@ -378,15 +366,11 @@ class Star {
 }
 
 
-// ============================================================================
-// 應用實例化
-// ============================================================================
+// ---------- 應用實例化 ----------
 let stars = starInitConfig.map(cfg => new Star(cfg.color, cfg.mass, cfg.pos, cfg.vel));
 
 
-// ============================================================================
-// 物理模擬主迴圈
-// ============================================================================
+// ---------- 物理模擬主迴圈 ----------
 const vector       = new THREE.Vector3();  // 位移矢量
 const accG         = new THREE.Vector3();  // 加速度
 const centerMassPos = new THREE.Vector3(); // 質心位置
@@ -459,9 +443,7 @@ syncInputVar();
 stars.forEach(s => { s.pointCount = 0; s.lineGeo.setDrawRange(0, 0); });
 requestAnimationFrame(animate);
 
-// ============================================================================
-// 背景星空系統
-// ============================================================================
+// ---------- 背景星空系統 ----------
 const maxStarNum = 5000;
 const createBackgroundStars = () => {
   const array = [];
@@ -496,9 +478,7 @@ const createBackgroundStars = () => {
 createBackgroundStars();
 
 
-// ============================================================================
-// 視窗事件監聽
-// ============================================================================
+// ---------- 視窗事件監聽 ----------
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();

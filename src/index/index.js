@@ -1,6 +1,4 @@
-// ============================================================================
-// 全域狀態與事件綁定
-// ============================================================================
+// ---------- 全域狀態與事件綁定 ----------
 const wrapper = document.querySelector('.main-wrapper');
 const sections = document.querySelectorAll('.page-section');
 const totalPages = sections.length;
