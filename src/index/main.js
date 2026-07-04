@@ -51,7 +51,7 @@ function handleParallax(clientX, clientY) {
 
       // 反向移動 (-mouseX) 製造景深感
       stars?.style.setProperty('transform', `translate3d(${-mouseX * starSpeed}px, ${-mouseY * starSpeed}px, 0)`);
-      nebula?.style.setProperty('transform', `translate3d((-50% + ${-mouseX * nebulaSpeed}px), ${-mouseY * nebulaSpeed}px, 0)`);
+      nebula?.style.setProperty('transform', `translate3d(${-mouseX * nebulaSpeed}px, ${-mouseY * nebulaSpeed}px, 0)`);
 
       lock = false;
     });
