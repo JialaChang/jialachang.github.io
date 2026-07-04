@@ -2,11 +2,19 @@
    全域變數與重置
    ========================================================================== */
 :root {
-  --text-color: rgba(255, 255, 255, 0.8);
-  --text-input: rgba(255, 255, 255, 0.8);
-  --input-color: rgba(255, 255, 255, 0.05);
-  --input-border: rgba(255, 255, 255, 0.2);
-  --panel-bg: rgba(255, 255, 255, 0.1);
+  --accent: #7c9eff;
+  --accent-soft: rgba(124, 158, 255, 0.16);
+  --accent-glow: rgba(124, 158, 255, 0.35);
+
+  --text-color: rgba(255, 255, 255, 0.88);
+  --text-dim: rgba(255, 255, 255, 0.5);
+  --text-input: rgba(255, 255, 255, 0.88);
+
+  --input-color: rgba(255, 255, 255, 0.06);
+  --input-border: rgba(255, 255, 255, 0.14);
+
+  --panel-bg: rgba(13, 17, 30, 0.55);
+  --panel-border: rgba(255, 255, 255, 0.12);
 }
 
 body {
@@ -46,82 +54,127 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.25rem;
 }
 
+/* 頂部功能控制列：圓形玻璃按鈕 */
 .control-container {
   display: flex;
-  margin-right: 5%;
-  width: auto;
   align-self: flex-end;
-  justify-content: flex-end;
-  gap: 50%;
+  gap: 0.75rem;
 }
 
 .control-container > span {
-  opacity: 0.5;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+
+  color: var(--text-dim);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease,
+              transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .control-container > span:hover {
-  opacity: 1;
-  scale: 1.1;
+  color: var(--text-color);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .control-container > span:active {
-  scale: 0.9;
+  transform: translateY(0) scale(0.92);
 }
 
+/* 設定參數面板：玻璃擬態卡片 */
 .setting-panel {
   display: none;
   width: 100%;
-  border-radius: 2.5rem;
-
   height: 80vh;
+  border-radius: 1.5rem;
 
   background: var(--panel-bg);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  border: 1px solid var(--panel-border);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08),
+              0 24px 60px rgba(0, 0, 0, 0.45);
 
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .setting-panel.show {
   display: flex;
+  animation: panel-in 0.28s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+/* 頁籤切換導航：膠囊式分段控制 */
 .setting-panel .tab-header {
   display: flex;
-  margin: 1rem;
-  width: 60%;
-  justify-content: space-between;
+  gap: 0.4rem;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0.3rem;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--input-border);
+  border-radius: 999px;
 }
 
 .setting-panel .tab-header > span {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 2.25rem;
+  border-radius: 999px;
+
   cursor: pointer;
   opacity: 0.4;
-  transition: all 0.1s ease;
+  transition: opacity 0.2s ease, background 0.2s ease,
+              box-shadow 0.2s ease, transform 0.1s ease;
 }
 
-.setting-panel .tab-header > span:hover{
-  scale: 1.05;
-}
-
-.setting-panel .tab-header > span:active{
-  scale: 0.95;
-}
-
-.tab-header > span.show {
+.setting-panel .tab-header > span:hover {
   opacity: 0.8;
 }
 
+.setting-panel .tab-header > span:active {
+  transform: scale(0.95);
+}
+
+.tab-header > span.show {
+  opacity: 1;
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* 分頁內容：可獨立捲動 */
 .value-tab, .solution-tab, .analyze-tab {
   display: none;
   width: 100%;
+  flex: 1;
+  min-height: 0;
   flex-direction: column;
   align-items: center;
+  overflow-y: auto;
+  padding-bottom: 1.5rem;
 }
 
 .value-tab.active, .solution-tab.active, .analyze-tab.active {
@@ -129,8 +182,31 @@ body {
 }
 
 h4 {
-  color: var(--text-color);
-  margin: 0;
+  color: var(--text-dim);
+  margin: 0.75rem 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+}
+
+/* 自訂捲軸 */
+.setting-panel ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.setting-panel ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.setting-panel ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.value-tab, .solution-tab, .analyze-tab {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
 /* ==========================================================================
@@ -140,25 +216,33 @@ h4 {
   display: flex;
   flex-direction: column;
   width: 80%;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-top: 1.5rem;
-  padding-bottom: 2rem;
-  overflow-y: auto;
 }
 
 .solution-list button {
   background: var(--input-color);
   border: 1px solid var(--input-border);
   color: var(--text-color);
-  padding: 0.8rem;
-  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
   font-family: inherit;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  transition: background 0.2s ease, border-color 0.2s ease,
+              box-shadow 0.2s ease, transform 0.15s ease;
 }
 
 .solution-list button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--accent-soft);
+  border-color: var(--accent-glow);
+  box-shadow: 0 0 16px rgba(124, 158, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.solution-list button:active {
+  transform: translateY(0) scale(0.98);
 }
 
 /* ==========================================================================
@@ -168,28 +252,33 @@ h4 {
   width: 70%;
   background: var(--input-color);
   border: 1px solid var(--input-border);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  box-sizing: border-box;
 }
 
 .data-card .data-title {
-  font-weight: bold;
+  font-weight: 400;
+  font-size: 1.0rem;
+  letter-spacing: 0.08em;
   color: var(--text-color);
   margin-bottom: 0.2rem;
 }
 
 .data-card .data-row {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-dim);
 }
 
 .data-card .data-row span {
   float: right;
   color: var(--text-color);
+  font-family: Consolas, 'SF Mono', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ==========================================================================
@@ -197,6 +286,7 @@ h4 {
    ========================================================================== */
 .input-container {
   display: flex;
+  align-items: center;
   flex: 1 1;
   justify-content: center;
   width: 70%;
@@ -205,23 +295,45 @@ h4 {
 
 .input-container label {
   margin-right: 1rem;
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  white-space: nowrap;
 }
 
 .input-container input {
   width: 0;
   flex-grow: 1;
-  height: 1.5rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+
   border: 1px solid var(--input-border);
   background: var(--input-color);
   color: var(--text-input);
   border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+              background 0.2s ease;
+}
+
+.input-container input:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.input-container input:focus {
+  border-color: var(--accent);
+  background: rgba(124, 158, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(124, 158, 255, 0.18);
 }
 
 .input-container .vector-inputs {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   flex: 1 1;
 }
 
@@ -240,20 +352,22 @@ h4 {
 
 .range-wrapper .range-tooltip {
   position: absolute;
-  top: -1.5rem;
+  top: -1.75rem;
   left: 0;
   transform: translateX(-50%);
-  
-  background: var(--panel-bg);
-  border: 1px solid var(--input-color);
+
+  background: rgba(13, 17, 30, 0.85);
+  border: 1px solid var(--input-border);
   color: var(--text-color);
   padding: 2px 8px;
   border-radius: 6px;
   font-size: 0.8rem;
   font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   pointer-events: none;
-  
-  opacity: 0; 
+
+  opacity: 0;
   transition: opacity 0.2s ease;
 }
 
@@ -278,21 +392,45 @@ input[type="range"] {
   background: transparent;
   border: none;
   outline: none;
+  padding: 0;
+  box-shadow: none;
 }
 input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 6px;
+  height: 5px;
   cursor: pointer;
   background: var(--input-border);
   border-radius: 3px;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  margin-top: -5px;
+  margin-top: -5.5px;
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: var(--text-color);
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 14px var(--accent-glow);
+}
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  background: var(--input-border);
+  border-radius: 3px;
+}
+input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
   cursor: pointer;
 }
 
@@ -305,23 +443,27 @@ input[type="range"]::-webkit-slider-thumb {
   .ui-container {
     top: 1rem;
     right: 1rem;
-    width: 80vw;
+    width: calc(100vw - 2rem);
     height: auto;
+    gap: 1rem;
   }
 
   .control-container {
-    width: 100%;
-    justify-content: flex-end;
-    gap: 1rem;
+    gap: 0.6rem;
+  }
+
+  .control-container > span {
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   .setting-panel {
     height: 80vh;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
   }
 
-  .input-container input {
-    height: 1rem;
+  .input-container {
+    width: 85%;
   }
 
 }
