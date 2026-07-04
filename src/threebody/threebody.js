@@ -45,7 +45,7 @@ composer.addPass(bloomPass);
 const Gconst = 1;      // 萬有引力常數
 const dt = 0.005;      // 時間步長
 const epsilon = 1e-6;  // 軟化係數
-let pointsMax = 2000;  // 最大軌跡點數
+let pointsMax = 1800;  // 最大軌跡點數
 const stepInterval = 1 / 120;  // 渲染每步在真實時間中佔多少秒
 
 const starInitConfig = [
@@ -147,17 +147,28 @@ pointInput?.addEventListener('input', (e) => {
   pointsMax = parseInt(e.target.value) / stepInterval;
 
   stars.forEach(s => {
-    while (s.points.length > pointsMax) s.points.shift();
+    // 若軌跡點數超出新的上限，原地左移捨棄最舊的多餘點
+    if (s.pointCount > pointsMax) {
+      const excess = s.pointCount - pointsMax;
+      s.positionArr.copyWithin(0, excess * 3, s.pointCount * 3);
+      s.pointCount = pointsMax;
+    }
 
-    // 若新的上限超過現有 colorArr 容量，重新分配更大的 TypedArray
-    if (s.colorArr.length < pointsMax * 3) {
+    // 若新的上限超過現有容量，重新分配更大的 TypedArray
+    if (s.positionArr.length < pointsMax * 3) {
+      const newPositionArr = new Float32Array(pointsMax * 3);
+      newPositionArr.set(s.positionArr);
+      s.positionArr = newPositionArr;
+      // 替換 BufferAttribute 讓 WebGL 知道緩衝區大小已改變
+      s.lineGeo.setAttribute('position', new THREE.BufferAttribute(s.positionArr, 3));
+
       const newColorArr = new Float32Array(pointsMax * 3);
       newColorArr.fill(1.0);
       newColorArr.set(s.colorArr);
       s.colorArr = newColorArr;
-      // 替換 BufferAttribute 讓 WebGL 知道緩衝區大小已改變
       s.lineGeo.setAttribute('color', new THREE.BufferAttribute(s.colorArr, 3));
     }
+    s.lineGeo.setDrawRange(0, s.pointCount);
   });
 });
 
@@ -220,10 +231,10 @@ refreshBtn?.addEventListener('click', () => {
     // 重置為初始動量狀態 S₀ = S - v * dt
     s.oldPos.copy(s.currPos).sub(s.velocity.clone().multiplyScalar(dt));
 
-    s.points = [];
+    s.pointCount = 0;
     s.updateTick = 0;
     // 清理 GPU Buffer
-    s.lineGeo.setFromPoints([]);
+    s.lineGeo.setDrawRange(0, 0);
   });
 
   syncCenterMass();
@@ -282,6 +293,10 @@ class Star {
     this.colorArr = new Float32Array(pointsMax * 3);
     this.colorArr.fill(1.0);  // 1.0 對應 RGB 白色
 
+    // 預先分配 TypedArray 作為軌跡頂點位置的記憶體區塊
+    this.positionArr = new Float32Array(pointsMax * 3);
+    this.pointCount = 0;
+
     // 建立視覺化球體 (Mesh)
     const starGeo = new THREE.SphereGeometry(0.05, 32, 32);
     const starMat = new THREE.MeshStandardMaterial({
@@ -296,10 +311,11 @@ class Star {
     this.mesh.position.copy(this.currPos);
     scene.add(this.mesh);
 
-    this.points = [];
     // 初始化軌跡線段 (BufferGeometry 提升效能)
     this.lineGeo = new THREE.BufferGeometry();
+    this.lineGeo.setAttribute('position', new THREE.BufferAttribute(this.positionArr, 3));
     this.lineGeo.setAttribute('color', new THREE.BufferAttribute(this.colorArr, 3));
+    this.lineGeo.setDrawRange(0, 0);
     const lineMat = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
@@ -328,13 +344,25 @@ class Star {
     this.oldPos.copy(tmpPos);
     this.mesh.position.copy(this.currPos);
 
-    this.points.push(this.currPos.clone());
-    if (this.points.length > pointsMax) this.points.shift();
-    this.lineGeo.setFromPoints(this.points);
+    if (this.pointCount < pointsMax) {
+      // 緩衝區尚未填滿：直接寫入下一個插槽
+      this.positionArr[this.pointCount * 3]     = this.currPos.x;
+      this.positionArr[this.pointCount * 3 + 1] = this.currPos.y;
+      this.positionArr[this.pointCount * 3 + 2] = this.currPos.z;
+      this.pointCount++;
+    } else {
+      // 緩衝區已滿：原地左移捨棄最舊的點，新點寫入尾端
+      this.positionArr.copyWithin(0, 3, this.pointCount * 3);
+      this.positionArr[(this.pointCount - 1) * 3]     = this.currPos.x;
+      this.positionArr[(this.pointCount - 1) * 3 + 1] = this.currPos.y;
+      this.positionArr[(this.pointCount - 1) * 3 + 2] = this.currPos.z;
+    }
+    this.lineGeo.attributes.position.needsUpdate = true;
+    this.lineGeo.setDrawRange(0, this.pointCount);
 
     // 軌跡尾巴漸變淡出運算
     if (this.updateTick >= 10) {  // 降低頻率以優化效能
-      const pointCount = this.points.length;
+      const pointCount = this.pointCount;
       for (let i = 0; i < pointCount; ++i) {
         const part = i / (pointCount - 1);
         const ratio = (part < 0.2) ? (0.1 + 0.9 * (part / 0.2)) : 1.0;
@@ -428,7 +456,7 @@ function syncCenterMass() {
 syncCenterMass();
 syncInputVar();
 
-stars.forEach(s => s.points = []);
+stars.forEach(s => { s.pointCount = 0; s.lineGeo.setDrawRange(0, 0); });
 requestAnimationFrame(animate);
 
 // ============================================================================
@@ -440,7 +468,6 @@ const createBackgroundStars = () => {
   for (let i = 0; i < maxStarNum; ++i) {
     let x, y, z;
     do {
-      // 生成分佈於 2000 單位立方體內的座標，但避開中心 100 單位區域
       x = (Math.random() - 0.5) * 2000;
       y = (Math.random() - 0.5) * 2000;
       z = (Math.random() - 0.5) * 2000;
@@ -461,7 +488,7 @@ const createBackgroundStars = () => {
     map: starTexture,
     sizeAttenuation: true,  // 開啟透視尺寸衰減
     transparent: true,
-    alphaTest: 0.5,         // 捨棄透明度低於此閾值的像素以節省效能
+    alphaTest: 0.5,         // 捨棄透明度低於此閾值的像素
   });
   const backgroundStars = new THREE.Points(geometry, material);
   scene.add(backgroundStars);
