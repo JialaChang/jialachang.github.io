@@ -103,22 +103,6 @@
   }
 }
 
-/* 面板內容進場動畫 */
-.glass-panel header,
-.glass-panel .nav-item {
-  animation: rise-in 0.9s var(--ease-spring) both;
-}
-
-.glass-panel .nav-item:nth-child(1) { animation-delay: 0.15s; }
-.glass-panel .nav-item:nth-child(2) { animation-delay: 0.25s; }
-
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-}
-
 .nav-item {
   display: block;
   position: relative;
@@ -249,6 +233,7 @@ header .subtitle {
   color: var(--text-secondary);
 }
 
+
 /* ---------- 時鐘顯示元件 ---------- */
 .clock {
   z-index: var(--layer-content);
@@ -314,6 +299,27 @@ header .subtitle {
     transform: scale(0.96);
   }
 }
+
+
+/* ---------- 進場動畫 ---------- */
+.clock,
+.glass-panel,
+.glass-panel header,
+.glass-panel .nav-item {
+  animation: rise-in 0.9s var(--ease-spring) both;
+}
+
+.glass-panel .nav-item:nth-child(1) { animation-delay: 0.15s; }
+.glass-panel .nav-item:nth-child(2) { animation-delay: 0.25s; }
+.glass-panel .nav-item:nth-child(3) { animation-delay: 0.35s; }
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
 
 /* ---------- 響應式設計 ---------- */
 /* 直向手機 */

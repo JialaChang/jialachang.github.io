@@ -205,6 +205,7 @@ h4 {
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
+
 /* ---------- 特殊解選單樣式 ---------- */
 .solution-list {
   display: flex;
@@ -239,6 +240,7 @@ h4 {
   transform: translateY(0) scale(0.98);
 }
 
+
 /* ---------- 數據監測面板樣式 ---------- */
 .data-card {
   width: 70%;
@@ -272,6 +274,7 @@ h4 {
   font-family: Consolas, 'SF Mono', monospace;
   font-variant-numeric: tabular-nums;
 }
+
 
 /* ---------- 表單元件 ---------- */
 .input-container {

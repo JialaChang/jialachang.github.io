@@ -28,6 +28,7 @@ StarleWeb/
     │   └── solutions.js    ← 特殊解初始條件資料庫
     └── poem/               ← 詩詞推薦頁
         ├── poem.html
+        ├── poem.js         ← 水平卡片捲動
         └── poem.css
 ```
 

@@ -4,20 +4,23 @@
   --text-poem: rgb(68, 68, 68);
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 
   background-color: #f4f7f6;
   background-image: radial-gradient(var(--text-main) 0.4px, transparent 0.8px);
   background-size: 30px 30px;
-  background-attachment: fixed;
-  
+
   font-size: 16px;
   color: rgb(51, 51, 51);
   font-family: 'Noto Serif TC', "PMingLiU", "標楷體", cursive;
@@ -26,36 +29,108 @@ body {
 
 /* ---------- 頁面元素 ---------- */
 h1 {
-  display: inline-block;  /* 讓底線寬度符合文字寬度 */
+  flex-shrink: 0;
   padding-bottom: 0.3rem;
-  margin: 5rem;
+  margin: clamp(1.5rem, 5vh, 3rem) 0 0;
 
-  font-size: 4rem;
+  font-size: clamp(2.2rem, 6vh, 3.5rem);
   font-weight: 1000;
   letter-spacing: 0.5rem;
+  text-indent: 0.5rem;  /* 平衡字距造成的置中偏移 */
   color: var(--text-main);
   border-bottom: 0.25rem solid var(--text-main);
 }
 
+/* 返回主頁：固定於左上角的膠囊按鈕 */
 .back-link {
-  margin-bottom: 5rem;
-  font-size: 1rem;
-  text-decoration: none;  /* 移除下劃線 */
+  z-index: 10;
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(47, 79, 79, 0.25);
+
+  font-size: 0.95rem;
+  text-decoration: none;
   color: #708090;
-  transition: color 0.5s ease;
+  transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    color: var(--text-main);
+    border-color: var(--text-main);
+    box-shadow: 0 2px 10px rgba(47, 79, 79, 0.15);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
-.back-link:hover {
+
+/* 底部操作提示 */
+.scroll-hint {
+  flex-shrink: 0;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.3rem;
   color: var(--text-main);
-  text-decoration: underline;
+  opacity: 0.45;
 }
 
+
+/* ---------- 水平捲動軌道 ---------- */
+.poem-track {
+  /* 卡片寬度與重疊量：相鄰卡片間距 = 卡寬 - 2×重疊量 (約剩 20%) */
+  --card-w: min(40rem, 80vw);
+  --overlap: calc(var(--card-w) * 0.4);
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  /* 讓首尾卡片也能捲至畫面中央 (補回首尾的負邊距) */
+  padding-inline: calc((100vw - var(--card-w)) / 2 + var(--overlap));
+
+  cursor: grab;
+  scrollbar-width: none;
+}
+
+.poem-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* 拖曳期間停用吸附避免跳動，放開後由 JS 吸附至最近卡片 */
+.poem-track.dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+
+/* ---------- 詩詞卡片 ---------- */
 .poem-card {
   position: relative;
-  padding: 5rem;
-  margin-bottom: 5rem;
+  flex: 0 0 var(--card-w);
+  margin-inline: calc(-1 * var(--overlap));  /* 負邊距讓卡片互相堆疊 */
+  box-sizing: border-box;
+  max-height: 100%;
+  overflow-y: auto;
+  scroll-snap-align: center;
 
-  width: 40vw;
+  padding: clamp(2rem, 6vh, 4rem);
   border-radius: 8px;
 
   background-color: white;
@@ -64,26 +139,33 @@ h1 {
   border-right: 5px solid var(--text-main);
   text-align: center;
 
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  animation: fadeInUp 1s ease-out forwards;
+  /* transform 與 opacity 由 JS 依捲動位置即時更新，不參與過渡 */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  animation: fade-in 1s ease-out backwards;
+  will-change: transform, opacity;
 }
 
+/* 進場動畫依序浮現 */
+.poem-card:nth-child(2) { animation-delay: 0.1s; }
+.poem-card:nth-child(3) { animation-delay: 0.2s; }
+.poem-card:nth-child(4) { animation-delay: 0.3s; }
+.poem-card:nth-child(5) { animation-delay: 0.4s; }
+
 .poem-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(47, 79, 79, 0.7);
 }
 
 .poem-card::after {
   content: "◈";
   display: block;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   color: var(--text-main);
   opacity: 0.5;
   font-size: 1.5em;
-} 
+}
 
 .poem-card h2 {
-  margin-bottom: 2rem;
+  margin-block: 0 2rem;
   font-size: 1.7rem;
   font-weight: 700;
   color: var(--text-poem);
@@ -118,22 +200,49 @@ h1 {
 }
 
 .poem-card p {
-  margin-top: 1.5rem;
+  margin-block: 1.5rem 0;
   font-size: 1.3rem;
   font-weight: 400;
   letter-spacing: 0.3rem;
-  line-height: 4rem;
+  line-height: clamp(2.8rem, 7vh, 4rem);
 }
 
 
 /* ---------- 動畫定義 ---------- */
-@keyframes fadeInUp {
+/* 只做淡入：結束後透明度交還給 JS 的弧形計算 */
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(1.5rem);;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);;
+}
+
+
+/* ---------- 響應式設計 ---------- */
+@media screen and (max-width: 768px) {
+
+  h1 {
+    font-size: 2rem;
+    letter-spacing: 0.3rem;
+    text-indent: 0.3rem;
+    margin-top: 4.5rem;  /* 避開左上角返回按鈕 */
   }
+
+  .poem-track {
+    --card-w: 85vw;
+  }
+
+  .poem-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .poem-card h2 {
+    font-size: 1.4rem;
+  }
+
+  .poem-card p {
+    font-size: 1.1rem;
+    letter-spacing: 0.2rem;
+    line-height: 2.6rem;
+  }
+
 }
