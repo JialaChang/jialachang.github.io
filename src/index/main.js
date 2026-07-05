@@ -34,6 +34,9 @@ if (stars) {
 // ============================================================================
 let lock = false;  // 頻率鎖
 
+// 觸控裝置不啟用視差效果
+const isTouchDevice = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+
 /**
  * 處理背景星空與星雲的視差滾動效果
  * @param {number} clientX - 游標的 X 軸位置
@@ -59,7 +62,9 @@ function handleParallax(clientX, clientY) {
   }
 }
 
-window.addEventListener('pointermove', (e) => handleParallax(e.clientX, e.clientY));
+if (!isTouchDevice) {
+  window.addEventListener('pointermove', (e) => handleParallax(e.clientX, e.clientY));
+}
 
 
 // ============================================================================

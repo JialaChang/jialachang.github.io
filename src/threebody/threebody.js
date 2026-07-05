@@ -77,7 +77,9 @@ const starPrefixes = ['star1', 'star2', 'star3'];
 // ============================================================================
 const refreshBtn  = document.querySelector('.refresh-button');
 const pauseBtn    = document.querySelector('.pause-button');
-const pauseIcon   = pauseBtn?.querySelector('.material-icons');
+const pauseIcon   = pauseBtn?.querySelector('#pause-icon path');
+const PAUSE_PATH_D = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
+const PLAY_PATH_D  = 'M8 5v14l11-7z';
 const settingBtn  = document.querySelector('.setting-button');
 const homeBtn     = document.querySelector('.home-button');
 const settingPanel = document.querySelector('.setting-panel');
@@ -87,7 +89,7 @@ let isPause = false;
 
 pauseBtn?.addEventListener('click', () => {
   isPause = !isPause;
-  pauseIcon.textContent = isPause ? 'play_arrow' : 'pause';
+  pauseIcon.setAttribute('d', isPause ? PLAY_PATH_D : PAUSE_PATH_D);
 });
 
 settingBtn?.addEventListener('click', () => {
@@ -245,7 +247,7 @@ refreshBtn?.addEventListener('click', () => {
 
   setTimeout(() => {
     isPause = false;
-    pauseIcon.textContent = 'pause';
+    pauseIcon.setAttribute('d', PAUSE_PATH_D);
   }, 100);
 });
 

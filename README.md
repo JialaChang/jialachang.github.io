@@ -42,7 +42,6 @@ StarleWeb/
 | Google Fonts — Montserrat | 主頁英文字型 |
 | Google Fonts — LXGW WenKai Mono TC | 主頁中文字型 |
 | Google Fonts — Noto Serif TC | 詩詞頁字型 |
-| Material Icons | 三體模擬器 UI 圖示按鈕 |
 
 ## 本地預覽
 

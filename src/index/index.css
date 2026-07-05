@@ -1,6 +1,7 @@
 /* ---------- 全域變數與載入設定 ---------- */
 @import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('./main.css');
+@import url('./about.css');
 
 :root {
   /* 基礎色 */

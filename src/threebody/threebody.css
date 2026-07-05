@@ -60,6 +60,12 @@ body {
   gap: 0.75rem;
 }
 
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
+}
+
 .control-container > span {
   display: grid;
   place-items: center;
