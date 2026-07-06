@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="author" content="Starle">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starle Web — 抗戰到底</title>
+
+  <link rel="icon" href="../../favicon.png" type="image/png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./resistance.css" />
+
+</head>
+
+<body>
+
+	<header class="topbar">
+    <h1 class="title">抗戰到底<span class="title-year">・一九三七</span></h1>
+    <div class="turn-box">
+      <span class="turn-label">當前行動方</span>
+      <span id="turn-faction" class="turn-faction">國民政府</span>
+      <span class="turn-label">第 <span id="turn-number">1</span> 回合</span>
+      <button id="end-turn" class="end-turn-btn">結束回合</button>
+    </div>
+    <a class="home-btn" href="../../index.html">返回主頁</a>
+  </header>
+
+	<main class="layout">
+    <!-- 地圖圖紙 -->
+    <section class="map-sheet">
+      <div id="map-container" class="map-container">
+        <!-- SVG 地圖由 main.ts 動態生成 -->
+      </div>
+      <div class="cartouche" aria-hidden="true">
+        <span class="cartouche-title">中華民國全圖・戰略要覽</span>
+        <span class="seal">參謀本部</span>
+      </div>
+    </section>
+
+    <!-- 作戰面板 -->
+    <aside class="panel">
+      <details class="panel-block" open>
+        <summary class="panel-heading">省份情報</summary>
+        <div id="province-info" class="province-info">
+          <p class="muted">點選地圖上的省份以查看情報。</p>
+        </div>
+      </details>
+
+      <details class="panel-block">
+        <summary class="panel-heading">行動指示</summary>
+        <ol class="howto">
+          <li>點選己方且有駐軍的省份。</li>
+          <li>虛線會指向可行動省份的省會。</li>
+          <li>點選目標後以滑桿決定出兵數量。</li>
+          <li>已行動的部隊該回合不能再行動。</li>
+        </ol>
+      </details>
+
+      <details class="panel-block panel-log" open>
+        <summary class="panel-heading">戰報</summary>
+        <ul id="battle-log" class="battle-log"></ul>
+      </details>
+
+      <details class="panel-block legend" open>
+        <summary class="panel-heading">圖例</summary>
+        <div class="legend-row"><span class="swatch swatch-roc"></span>國民政府</div>
+        <div class="legend-row"><span class="swatch swatch-japan"></span>大日本帝國（含滿洲國）</div>
+        <div class="legend-row"><span class="badge-demo">12</span>駐軍數（單位：萬人）</div>
+        <div class="legend-row"><span class="dot-demo"></span>院轄市</div>
+        <div class="legend-row"><span class="star-demo">★</span>首都</div>
+        <p class="muted credit">底圖改繪自 Wikimedia Commons《空白中華民國全圖》（CC BY-SA 4.0）</p>
+      </details>
+    </aside>
+  </main>
+
+  <!-- 調兵對話框 -->
+  <div id="move-dialog" class="move-dialog hidden">
+    <div class="move-card">
+      <h3 id="move-title" class="move-title"></h3>
+      <div class="move-count-row"><span id="move-count" class="move-count">0</span><span class="move-unit">萬人</span></div>
+      <input id="move-slider" type="range" min="1" max="10" value="10" />
+      <div class="move-quick">
+        <button id="move-one" type="button">1</button>
+        <button id="move-half" type="button">一半</button>
+        <button id="move-all" type="button">全部</button>
+      </div>
+      <div class="move-actions">
+        <button id="move-cancel" type="button" class="btn-ghost">取消</button>
+        <button id="move-confirm" type="button" class="btn-solid">出發</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./resistance.js"></script>
+
+</body>

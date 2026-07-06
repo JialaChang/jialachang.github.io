@@ -17,19 +17,25 @@ StarleWeb/
 ├── docs/                   ← README 截圖
 └── src/
     ├── index/              ← 主頁
-    │   ├── index.js        ← 滾輪分頁切換
-    │   ├── main.js         ← 星空、流星、視差與時鐘特效
+    │   ├── index.js
+    │   ├── main.js
     │   ├── index.css
-    │   └── main.css
+    │   ├── main.css
+    │   └── about.css
     ├── threebody/          ← 三體模擬器
     │   ├── threebody.html
-    │   ├── threebody.js    ← 物理引擎與 3D 渲染
+    │   ├── threebody.js
     │   ├── threebody.css
-    │   └── solutions.js    ← 特殊解初始條件資料庫
-    └── poem/               ← 詩詞推薦頁
-        ├── poem.html
-        ├── poem.js         ← 水平卡片捲動
-        └── poem.css
+    │   └── solutions.js
+    ├── poem/               ← 詩詞推薦頁
+    │   ├── poem.html
+    │   ├── poem.js
+    │   └── poem.css
+    └── resistance/         ← 抗戰到底・一九三七
+        ├── resistance.html
+        ├── resistance.ts
+        ├── mapdata.ts
+        └── resistance.css
 ```
 
 ## 外部依賴
@@ -41,7 +47,7 @@ StarleWeb/
 | Three.js r160 | 三體模擬器 3D 渲染 |
 | Google Fonts — Montserrat | 主頁英文字型 |
 | Google Fonts — LXGW WenKai Mono TC | 主頁中文字型 |
-| Google Fonts — Noto Serif TC | 詩詞頁字型 |
+| Google Fonts — Noto Serif TC | 詩詞頁、抗戰頁中文字型 |
 
 ## 本地預覽
 

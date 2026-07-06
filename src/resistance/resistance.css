@@ -1,0 +1,646 @@
+/* ============================================================
+   抗戰戰略圖・一九三七
+   視覺基調：1930 年代參謀本部作戰地圖
+   - 桌面墨黑 #17140f（戰情室桌面）
+   - 圖紙陳黃 #e3d9bc（泛黃圖紙）
+   - 國府藍   #2f5d8f
+   - 日軍緋紅 #a83a2e
+   - 硃砂印   #b5482f / 描圖墨線 #3a3226
+   ============================================================ */
+
+:root {
+  --table: #17140f;
+  --paper: #e3d9bc;
+  --paper-dim: #d8cca9;
+  --ink: #3a3226;
+  --ink-soft: #6b5f4b;
+  --roc: #2f5d8f;
+  --roc-light: #3f76b3;
+  --japan: #a83a2e;
+  --japan-light: #c4523f;
+  --gold: #c9a227;
+  --seal: #b5482f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  background:
+    radial-gradient(1200px 700px at 45% 30%, rgba(255, 240, 200, 0.05), transparent 70%),
+    var(--table);
+  color: var(--paper);
+  font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---------- 頂欄 ---------- */
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(227, 217, 188, 0.18);
+}
+
+.title {
+  font-weight: 900;
+  font-size: 1.55rem;
+  letter-spacing: 0.35em;
+  color: var(--paper);
+}
+
+.title-year {
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.25em;
+  color: var(--ink-soft);
+  color: rgba(227, 217, 188, 0.55);
+}
+
+.turn-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.9rem;
+  justify-self: center;
+}
+
+.turn-label { color: rgba(227, 217, 188, 0.55); letter-spacing: 0.1em; }
+
+.turn-faction {
+  font-weight: 900;
+  font-size: 1.05rem;
+  letter-spacing: 0.2em;
+  padding: 4px 14px;
+  border: 1.5px solid currentColor;
+}
+
+.turn-faction.roc { color: #7fa8d4; }
+.turn-faction.japan { color: #d97b6b; }
+
+.end-turn-btn {
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  padding: 8px 20px 8px 24px; /* 平衡字距造成的右側空白 */
+  color: var(--table);
+  background: var(--paper);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.end-turn-btn:hover { background: #fff3d6; }
+.end-turn-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* 返回主頁：描邊幽靈按鈕，與面板邊框同色 */
+.home-btn {
+  justify-self: end;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  padding: 8px 16px 8px 20px; /* 平衡字距造成的右側空白 */
+  color: rgba(227, 217, 188, 0.75);
+  background: none;
+  border: 1px solid rgba(227, 217, 188, 0.35);
+  text-decoration: none;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.home-btn:hover {
+  color: var(--paper);
+  background: rgba(227, 217, 188, 0.12);
+}
+
+.home-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* ---------- 版面 ---------- */
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  padding: 18px 24px 24px;
+}
+
+/* ---------- 地圖圖紙 ---------- */
+.map-sheet {
+  position: relative;
+  background:
+    linear-gradient(160deg, rgba(255, 250, 230, 0.5), rgba(160, 140, 95, 0.22)),
+    var(--paper);
+  border: 1px solid #0c0a07;
+  box-shadow:
+    inset 0 0 0 6px rgba(58, 50, 38, 0.85),
+    inset 0 0 0 8px var(--paper),
+    inset 0 0 60px rgba(90, 70, 40, 0.35),
+    0 10px 40px rgba(0, 0, 0, 0.6);
+  padding: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 520px;
+}
+
+.map-container { width: 100%; max-width: 1080px; }
+.map-container svg { width: 100%; height: auto; display: block; }
+
+/* 直排圖名與朱印（本頁的簽名元素） */
+.cartouche {
+  position: absolute;
+  top: 34px;
+  right: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.cartouche-title {
+  writing-mode: vertical-rl;
+  font-weight: 600;
+  font-size: 1.02rem;
+  letter-spacing: 0.5em;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 14px 6px;
+  background: rgba(255, 250, 230, 0.45);
+}
+
+.seal {
+  writing-mode: vertical-rl;
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--seal);
+  border: 2px solid var(--seal);
+  padding: 6px 3px;
+  transform: rotate(-3deg);
+  opacity: 0.85;
+}
+
+/* ---------- SVG 省份 ---------- */
+.province {
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  cursor: pointer;
+  transition: filter 0.12s ease;
+}
+
+.province.roc { fill: var(--roc); }
+.province.japan { fill: var(--japan); }
+
+.province:hover { filter: brightness(1.18); }
+
+/* 已行動部隊所在省份 */
+.province.acted { filter: saturate(0.55) brightness(0.9); }
+.province.acted:hover { filter: saturate(0.55) brightness(1.0); }
+
+/* 選取中：提亮（金框由 .selection-outline 覆蓋層繪製） */
+.province.selected { filter: brightness(1.12); }
+
+/* 選取金框覆蓋層：畫在所有省份填色之上，粗細均勻 */
+.selection-outline {
+  fill: none;
+  stroke: #e8c547;
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+  pointer-events: none;
+  filter: drop-shadow(0 0 5px rgba(232, 197, 71, 0.75));
+}
+
+/* 省名 */
+.province-label {
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-weight: 600;
+  fill: #f4ecd6;
+  paint-order: stroke;
+  stroke: rgba(20, 16, 10, 0.55);
+  stroke-width: 2.4;
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+/* ---------- 兵力徽章（AOE 式數字） ---------- */
+.army-badge { pointer-events: none; }
+
+.army-badge circle {
+  fill: #1c1811;
+  stroke-width: 2.6;
+}
+
+.army-badge.roc circle { stroke: #6fa3dd; }
+.army-badge.japan circle { stroke: #e0705a; }
+
+.army-badge text {
+  fill: #fff8e4;
+  font-family: "Noto Serif TC", serif;
+  font-weight: 900;
+  font-size: 15px;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* ---------- 側邊作戰面板 ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.panel-block {
+  border: 1px solid rgba(227, 217, 188, 0.22);
+  padding: 14px 16px;
+  background: rgba(227, 217, 188, 0.04);
+}
+
+.panel-heading {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  color: rgba(227, 217, 188, 0.6);
+  border-bottom: 1px solid rgba(227, 217, 188, 0.18);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  position: relative;
+  transition: color 0.15s ease;
+}
+
+.panel-heading::-webkit-details-marker { display: none; }
+
+.panel-heading:hover { color: rgba(227, 217, 188, 0.9); }
+
+/* 展開指示箭頭 */
+.panel-heading::after {
+  content: "▾";
+  position: absolute;
+  right: 2px;
+  top: 0;
+  font-size: 0.8rem;
+  transform: rotate(-90deg);
+  transition: transform 0.18s ease;
+}
+
+details[open] > .panel-heading::after { transform: rotate(0deg); }
+
+details.panel-block:not([open]) > .panel-heading {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.province-info { font-size: 0.95rem; line-height: 1.9; }
+
+.province-info .info-name {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+}
+
+.province-info .info-owner.roc { color: #7fa8d4; }
+.province-info .info-owner.japan { color: #d97b6b; }
+
+.muted { color: rgba(227, 217, 188, 0.45); font-size: 0.88rem; }
+
+.howto {
+  font-size: 0.84rem;
+  line-height: 1.75;
+  color: rgba(227, 217, 188, 0.75);
+  padding-left: 1.4em;
+}
+
+.howto li + li { margin-top: 4px; }
+
+/* 戰報：電文式紀錄 */
+.panel-log[open] { flex: 1; display: flex; flex-direction: column; min-height: 140px; }
+
+.battle-log {
+  list-style: none;
+  overflow-y: auto;
+  max-height: 260px;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  /* 捲軸主題化（Firefox） */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(227, 217, 188, 0.35) rgba(227, 217, 188, 0.06);
+}
+
+/* 捲軸主題化（WebKit） */
+.battle-log::-webkit-scrollbar { width: 6px; }
+.battle-log::-webkit-scrollbar-track { background: rgba(227, 217, 188, 0.06); }
+.battle-log::-webkit-scrollbar-thumb {
+  background: rgba(227, 217, 188, 0.3);
+  border-left: 1px solid rgba(23, 20, 15, 0.6);
+}
+.battle-log::-webkit-scrollbar-thumb:hover { background: rgba(227, 217, 188, 0.5); }
+
+.battle-log li {
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(227, 217, 188, 0.14);
+  color: rgba(227, 217, 188, 0.85);
+}
+
+.battle-log li .log-turn {
+  color: rgba(227, 217, 188, 0.4);
+  margin-right: 6px;
+  font-size: 0.78rem;
+}
+
+.battle-log li.log-battle { color: #e2a08f; }
+.battle-log li.log-capture { color: #ffd977; }
+
+/* 圖例 */
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  padding: 4px 0;
+  color: rgba(227, 217, 188, 0.8);
+}
+
+.swatch {
+  width: 22px;
+  height: 14px;
+  border: 1px solid var(--ink);
+  display: inline-block;
+}
+
+.swatch-roc { background: var(--roc); }
+.swatch-japan { background: var(--japan); }
+
+.badge-demo {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1c1811;
+  border: 2px solid #6fa3dd;
+  color: #fff8e4;
+  font-weight: 900;
+  font-size: 0.72rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 響應式 ---------- */
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; }
+  .cartouche { display: none; }
+
+  /* 頂欄改兩列：標題與返回鍵一列，回合資訊置中換列 */
+  .topbar { grid-template-columns: 1fr auto; }
+  .turn-box { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+.credit { margin-top: 10px; font-size: 0.72rem; line-height: 1.5; }
+
+/* ---------- 院轄市 ---------- */
+.province.city { stroke-width: 0.9; }
+
+/* 休眠院轄市：融入所屬省，不可互動 */
+.province.dormant { pointer-events: none; stroke: none; }
+
+
+/* 城市節點：放大點擊區＋圓點＋外置名稱 */
+.city-node { cursor: pointer; }
+.city-hit { fill: transparent; pointer-events: all; }
+
+.city-leader {
+  stroke: rgba(244, 236, 214, 0.75);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.city-dot {
+  fill: #1c1811;
+  stroke: #f4ecd6;
+  stroke-width: 1.6;
+  pointer-events: none;
+}
+
+.city-node.has-army .city-dot { display: none; }
+
+.city-label {
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-weight: 600;
+  font-size: 11px;
+  fill: #f4ecd6;
+  paint-order: stroke;
+  stroke: rgba(20, 16, 10, 0.6);
+  stroke-width: 2.6;
+  pointer-events: none;
+}
+
+/* 節點懸停／選取／可行動狀態 */
+.city-node:hover .city-dot,
+.city-node:hover .city-label { filter: brightness(1.25); }
+
+/* 選取光環：平時隱藏 */
+.sel-ring {
+  display: none;
+  fill: none;
+  stroke: #e8c547;
+  stroke-width: 2.6;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(232, 197, 71, 0.8));
+}
+
+.city-node.selected .sel-ring { display: block; }
+
+.city-node.selected .city-dot {
+  stroke: #e8c547;
+  stroke-width: 2.4;
+}
+
+.city-node.selected .city-label { fill: #e8c547; }
+
+.city-node.targetable .city-dot {
+  stroke: #fff6dd;
+  stroke-width: 2.2;
+}
+
+.city-node.targetable .city-label { fill: #fff6dd; }
+
+/* 首都南京：金色五角星與加重名牌 */
+.capital-star {
+  fill: #e8c547;
+  stroke: #1c1811;
+  stroke-width: 1.2;
+  pointer-events: none;
+}
+
+/* 現任國都：城市圓點由星標覆蓋，名牌轉金 */
+.city-node.capital .city-dot { display: none; }
+.city-node.capital .city-label {
+  fill: #e8c547;
+  font-weight: 900;
+  font-size: 12.5px;
+}
+
+
+.city-badge circle { stroke-width: 2.2; }
+.city-badge text { font-weight: 900; }
+
+/* ---------- 調兵對話框 ---------- */
+.move-dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 5, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  padding: 20px;
+}
+
+.move-dialog.hidden { display: none; }
+
+.move-card {
+  width: min(360px, 100%);
+  background: #201c15;
+  border: 1px solid rgba(227, 217, 188, 0.35);
+  box-shadow: 0 14px 50px rgba(0, 0, 0, 0.65);
+  padding: 20px 22px;
+}
+
+.move-title {
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+  color: var(--paper);
+}
+
+.move-count-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.move-count {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--gold);
+}
+
+.move-unit { color: rgba(227, 217, 188, 0.6); font-size: 0.85rem; }
+
+.move-card input[type="range"] {
+  width: 100%;
+  accent-color: var(--gold);
+  margin: 10px 0 14px;
+}
+
+.move-quick { display: flex; gap: 8px; margin-bottom: 16px; }
+
+.move-quick button {
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.86rem;
+  padding: 7px 0;
+  background: none;
+  border: 1px solid rgba(227, 217, 188, 0.35);
+  color: var(--paper);
+  cursor: pointer;
+}
+
+.move-quick button:hover { background: rgba(227, 217, 188, 0.12); }
+
+.move-actions { display: flex; gap: 10px; }
+
+.move-actions button {
+  flex: 1;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.btn-ghost {
+  background: none;
+  border: 1px solid rgba(227, 217, 188, 0.35);
+  color: rgba(227, 217, 188, 0.75);
+}
+
+.btn-solid {
+  background: var(--paper);
+  border: none;
+  color: var(--table);
+}
+
+.btn-solid:hover { background: #fff3d6; }
+
+.dot-demo {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1c1811;
+  border: 2px solid #f4ecd6;
+  display: inline-block;
+  margin: 0 6px;
+}
+
+/* ---------- 行動提示：虛線指向鄰省省會 ---------- */
+.move-hint {
+  stroke: #fff6dd;
+  stroke-width: 1.7;
+  stroke-dasharray: 7 5;
+  fill: none;
+  opacity: 0.95;
+  pointer-events: none;
+  animation: march 1.1s linear infinite;
+}
+
+@keyframes march {
+  to { stroke-dashoffset: -24; }
+}
+
+.capital-target {
+  fill: #fff6dd;
+  stroke: #1c1811;
+  stroke-width: 1.4;
+  pointer-events: none;
+}
+
+.capital-name {
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 10px;
+  font-weight: 600;
+  fill: #fff6dd;
+  paint-order: stroke;
+  stroke: rgba(20, 16, 10, 0.65);
+  stroke-width: 2.4;
+  pointer-events: none;
+}
+
+/* 選取省本身的省會 */
+.capital-origin { fill: #e8c547; }
+.capital-origin-name { fill: #e8c547; font-weight: 900; }
+
+.star-demo {
+  color: var(--gold);
+  font-size: 0.95rem;
+  margin: 0 4px;
+}
