@@ -8,6 +8,10 @@
   <img src="./docs/main.png" width="48%" alt="主頁">
   <img src="./docs/threebody.png" width="48%" alt="三體模擬器">
 </p>
+<p align="center">
+  <img src="./docs/poem.png.png" width="48%" alt="主頁">
+  <img src="./docs/resistance.png" width="48%" alt="三體模擬器">
+</p>
 
 ## 專案結構
 
