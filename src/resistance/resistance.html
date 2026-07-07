@@ -32,6 +32,13 @@
 	<main class="layout">
     <!-- 地圖圖紙 -->
     <section class="map-sheet">
+      <!-- 海報式史料照片層：墊在地圖之後 -->
+      <div class="poster-backdrop" aria-hidden="true">
+        <img class="poster-photo photo-charge" src="./assets/shanghai-street-charge.jpg" alt="" />
+        <img class="poster-photo photo-rally" src="./assets/resist-japan-rally.jpg" alt="" />
+        <img class="poster-photo photo-rubble" src="./assets/rubble-defense.webp" alt="" />
+        <img class="poster-photo photo-gate" src="./assets/nanjing-gate-of-china.jpg" alt="" />
+      </div>
       <div id="map-container" class="map-container">
         <!-- SVG 地圖由 main.ts 動態生成 -->
       </div>
@@ -68,7 +75,7 @@
       <details class="panel-block legend" open>
         <summary class="panel-heading">圖例</summary>
         <div class="legend-row"><span class="swatch swatch-roc"></span>國民政府</div>
-        <div class="legend-row"><span class="swatch swatch-japan"></span>大日本帝國（含滿洲國）</div>
+        <div class="legend-row"><span class="swatch swatch-jap"></span>大日本帝國（含滿洲國）</div>
         <div class="legend-row"><span class="badge-demo">12</span>駐軍數（單位：萬人）</div>
         <div class="legend-row"><span class="dot-demo"></span>院轄市</div>
         <div class="legend-row"><span class="star-demo">★</span>首都</div>

@@ -9,8 +9,8 @@
   <img src="./docs/threebody.png" width="48%" alt="三體模擬器">
 </p>
 <p align="center">
-  <img src="./docs/poem.png.png" width="48%" alt="主頁">
-  <img src="./docs/resistance.png" width="48%" alt="三體模擬器">
+  <img src="./docs/poem.png" width="48%" alt="詩詞推薦頁">
+  <img src="./docs/resistance.png" width="48%" alt="抗戰到底・一九三七">
 </p>
 
 ## 專案結構
@@ -39,7 +39,8 @@ StarleWeb/
         ├── resistance.html
         ├── resistance.ts
         ├── mapdata.ts
-        └── resistance.css
+        ├── resistance.css
+        └── assets/         ← 背景史料照片
 ```
 
 ## 外部依賴

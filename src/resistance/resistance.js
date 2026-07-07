@@ -386,7 +386,7 @@ class MapView {
         for (const p of game.provinces.values()) {
             const el = this.els.get(p.id);
             el.path.classList.toggle("roc", p.owner === "roc");
-            el.path.classList.toggle("japan", p.owner === "jap");
+            el.path.classList.toggle("jap", p.owner === "jap");
             el.path.classList.toggle("selected", p.id === game.selectedId);
             el.path.classList.toggle("acted", p.acted && p.owner === game.currNation && p.army > 0);
             if (el.label)
@@ -395,7 +395,7 @@ class MapView {
             if (p.army > 0) {
                 el.badge.style.display = "";
                 el.badge.classList.toggle("roc", p.owner === "roc");
-                el.badge.classList.toggle("japan", p.owner === "jap");
+                el.badge.classList.toggle("jap", p.owner === "jap");
                 el.badgeText.textContent = String(p.army);
             }
             else {
@@ -404,7 +404,7 @@ class MapView {
             // 城市節點狀態
             if (el.marker) {
                 el.marker.classList.toggle("roc", p.owner === "roc");
-                el.marker.classList.toggle("japan", p.owner === "jap");
+                el.marker.classList.toggle("jap", p.owner === "jap");
                 el.marker.classList.toggle("selected", p.id === game.selectedId);
                 el.marker.classList.toggle("targetable", targets.has(p.id));
                 el.marker.classList.toggle("has-army", p.army > 0);
@@ -415,7 +415,7 @@ class MapView {
         for (const { el, host } of this.dormantEls) {
             const owner = game.get(host).owner;
             el.classList.toggle("roc", owner === "roc");
-            el.classList.toggle("japan", owner === "jap");
+            el.classList.toggle("jap", owner === "jap");
         }
         // 選取金框
         if (game.selectedId) {
