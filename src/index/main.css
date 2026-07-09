@@ -35,6 +35,8 @@
   pointer-events: none;
   animation: sstar-tail 3s linear infinite, sstar-shooting 3s linear infinite;
 
+  /* 固定在頭部（左邊緣），避免 width 增長時中心點跟著飄移，導致路徑偏離 rotate 角度 */
+  transform-origin: left center;
   will-change: transform;
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);

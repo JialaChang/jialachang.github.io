@@ -482,6 +482,32 @@ requestAnimationFrame(animate);
 // ============================================================================
 const maxStarNum = 5000;
 /**
+ * 以 Canvas 動態繪製一張圓形漸層貼圖，作為星點 sprite 使用。
+ */
+const createStarSpriteTexture = () => {
+  const size = 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  const gradient = ctx.createRadialGradient(
+    size / 2, size / 2, 0,
+    size / 2, size / 2, size / 2
+  );
+  gradient.addColorStop(0,   'rgba(255,255,255,1)');
+  gradient.addColorStop(0.2, 'rgba(255,255,255,1)');
+  gradient.addColorStop(1,   'rgba(255,255,255,0)');
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, size, size);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+};
+
+/**
  * 產生大量隨機分布的背景星點並加入場景。
  */
 const createBackgroundStars = () => {
@@ -499,8 +525,7 @@ const createBackgroundStars = () => {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(array, 3));
 
-  const loader = new THREE.TextureLoader();
-  const starTexture = loader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/sprites/disc.png');
+  const starTexture = createStarSpriteTexture();
 
   // 使用 Points 材質進行大規模粒子渲染
   const material = new THREE.PointsMaterial({
