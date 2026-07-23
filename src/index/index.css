@@ -27,9 +27,6 @@
 
   --layer-background: -1;
   --layer-content: 1;
-
-  /* 讓 height: 0 → auto 可參與過渡 */
-  interpolate-size: allow-keywords;
 }
 
 /* ---------- 基礎重置與佈局 ---------- */

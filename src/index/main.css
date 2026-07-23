@@ -69,7 +69,6 @@
 
   width: 80%;
   max-width: 450px;
-  height: fit-content;
   margin-block: 1.5rem;
   padding: clamp(1.5rem, 3vw, 3rem);
   border-radius: 2rem;
@@ -86,12 +85,18 @@
   box-shadow:
     0 24px 60px rgb(0 0 0 / 0.45),
     inset 0 1px 0 rgb(255 255 255 / 0.1);
+}
+
+/* 主頁可收合面板：以 grid-template-rows 1fr→0fr 收合高度 */
+#main .glass-panel {
+  display: grid;
+  grid-template-rows: 1fr;
+  padding-block: 0;
   transition:
     opacity 1s var(--ease-spring),
     transform 1s var(--ease-spring),
-    height 1s var(--ease-glide),
-    margin 1s var(--ease-glide),
-    padding 1s var(--ease-glide);
+    grid-template-rows 1s var(--ease-glide),
+    margin 1s var(--ease-glide);
   will-change: opacity, transform;
 
   /* 隱藏時同步收合佔位高度，讓 flex 置中自動把時鐘帶到畫面正中 */
@@ -99,10 +104,20 @@
     opacity: 0;
     pointer-events: none;
     transform: translateY(50vh) scale(0.9);
-    height: 0;
+    grid-template-rows: 0fr;
     margin-block: 0;
-    padding-block: 0;
+
+    .panel-inner {
+      padding-block: 0;
+    }
   }
+}
+
+.panel-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding-block: clamp(1.5rem, 3vw, 3rem);
+  transition: padding 1s var(--ease-glide);
 }
 
 .nav-item {
@@ -259,13 +274,12 @@ header .subtitle {
       transform 0.3s var(--ease-smooth);
   }
 
+  /* 收合狀態以 font-size: 0 將佔位高度歸零 */
   .date {
-    height: 0;
+    font-size: 0;
     opacity: 0;
-    overflow: hidden;
     letter-spacing: 3px;
     transition:
-      height 0.5s ease,
       opacity 0.5s ease,
       margin 0.5s ease,
       font-size 0.5s ease;
@@ -281,7 +295,6 @@ header .subtitle {
     }
 
     .date {
-      height: auto;
       opacity: 1;
       font-size: clamp(1.2rem, 5vw, 2rem);
       margin: 2.5rem;
@@ -304,11 +317,12 @@ header .subtitle {
 
 
 /* ---------- 進場動畫 ---------- */
+/* fill-mode 用 backwards：both 會永久佔用 opacity/transform，擋住後續 transition */
 .clock,
 .glass-panel,
 .glass-panel header,
 .glass-panel .nav-item {
-  animation: rise-in 0.9s var(--ease-spring) both;
+  animation: rise-in 0.9s var(--ease-spring) backwards;
 }
 
 .glass-panel .nav-item:nth-child(1) { animation-delay: 0.15s; }
@@ -347,6 +361,10 @@ header .subtitle {
 
   .glass-panel {
     margin-block: 1rem;
+    padding-block: 1.25rem;
+  }
+
+  .panel-inner {
     padding-block: 1.25rem;
   }
 
